@@ -1,0 +1,399 @@
+<style>
+/* SPE SETTINGS PAGE
+---------------------------------------------- */
+textarea#display_classes {
+    width: 100%;
+    max-width: 300px;
+    height: 60px;
+}
+
+/* SPE MESSAGES EDIT PAGE
+---------------------------------------------- */
+
+th.column-messageid,
+td.column-messageid {
+    width: 3em !important;
+}
+
+/* WOO PRODUCT EDIT PAGE
+---------------------------------------------- */
+
+#woocommerce-product-data ul.wc-tabs li.smart-product-emails_options a:before {
+    font-family: WooCommerce;
+    content: '\e02d';
+}
+
+#woocommerce-product-data #smart_product_emails_product_data textarea {
+    height: 170px;
+}
+
+#woocommerce-product-data #smart_product_emails_product_data textarea#custom_content {
+    min-height: 170px;
+    font-size: 12px;
+    font-family: 'Courier', serif;
+    line-height: normal;
+}
+
+.spemail_search_results_field {
+    display: block;
+    position: relative;
+    overflow: hidden;
+    padding: 5px 20px 5px 162px !important;
+}
+
+.spemail_search_results_field .spemail_search_results {
+    display: inline-block;
+    position: relative;
+    overflow-y: scroll;
+    width: 90%;
+    height: 100px;
+    border: 1px solid #ddd;
+}
+
+.spemail_search_results_field .spemail_search_results .spemail_search_results_wrap {
+    overflow: hidden;
+}
+
+.spemail_search_results_field .spemail_search_results p {
+    margin-top: 0;
+    margin-bottom: 2px;
+    padding: 0;
+}
+
+.spemail_search_results_wrap p:hover {
+    background: #eee;
+}
+
+.spemail_search_results_field .spemail_search_results p a {
+    display: block;
+    padding: 5px;
+    font-size: 11px;
+    background: #f4f4f4;
+}
+
+.spemail_search_results_field .spemail_search_results .placeholder {
+    background: #fff;
+    color: #ccc;
+    padding: 5px;
+    font-style: italic;
+    margin-right: 1px;
+}
+
+.spemail_search_results_field .spemail_search_results .placeholder.error,
+.spemail_search_results_field .spemail_search_results .placeholder.error a {
+    color: #ff0000;
+    line-height: normal;
+}
+
+.spemail_search_results_field .spemail_search_results .placeholder.error a {
+    display: inline;
+    padding: 0;
+    background: none;
+}
+
+input#spemail_search {
+    padding: 6px;
+}
+
+input#spemail_search::placeholder {
+    font-size: 12px;
+    color: #999;
+    line-height: normal;
+}
+
+.spemail_search_saved {
+    display: block;
+    position: relative;
+    overflow: hidden;
+    font-size: 17px;
+    font-weight: bold;
+    line-height: 24px;
+    color: #0073aa;
+}
+
+.spemail_search_saved .just-added {
+    color: #00a651;
+    font-style: italic;
+}
+
+.spemail_search_saved .color-gray {
+    color: #aaa;
+}
+
+.spemail_controls {
+    display: block;
+    position: relative;
+    overflow: hidden;
+    padding-bottom: 2px;
+}
+
+.spemail_controls .button {
+    font-size: 10px;
+    font-weight: normal;
+}
+
+#smart_product_emails_product_data .button .dashicons {
+    line-height: inherit;
+}
+
+.spemail_controls .button.remove-spemail {
+    color: #ff0000;
+    margin-left: 10px;
+}
+
+.spemail_controls .button.select-spemail {
+    display: inline-block;
+}
+
+.spemail_search_results_field .button.cancel-select-spemail {
+    padding: 4px 7px;
+    line-height: 20px;
+    font-size: 11px;
+    height: auto;
+}
+
+.spemail_controls .hide,
+.spemail_search_results_field.hide,
+.spe-product-options-table .hide {
+    display: none !important;
+}
+
+.spe-product-options-table {
+    margin: 13px;
+}
+
+.spe-product-options-table .table-header,
+.spe-product-options-table .table-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+}
+
+.spe-product-options-table .table-row label {
+    display: none;
+}
+
+.spe-product-options-table .table-header {
+    border: 1px solid #e1e1e1;
+}
+
+.spe-product-options-table > :nth-child(even):not(.table-header) {
+    background-color: #f9f9f9;
+}
+
+.spe-product-options-table .status {
+    flex: 0 0 110px;
+    padding-right: 30px;
+}
+
+.spe-product-options-table .message {
+    width: 100%;
+    padding-right: 30px;
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.spe-product-options-table .message > .form-field {
+    width: 100%;
+}
+
+.spe-product-options-table .message > .form-field input {
+    width: 100%;
+    padding: 6px 10px;
+    border: 1px solid #d8d8d8;
+    border-radius: 4px;
+    cursor: text;
+}
+
+.spe-product-options-table .message > .form-field input::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  color: #999 !important;
+}
+.spe-product-options-table .message > .form-field input::-moz-placeholder { /* Firefox 19+ */
+  color: #999 !important;
+}
+.spe-product-options-table .message > .form-field input:-ms-input-placeholder { /* IE 10+ */
+  color: #999 !important;
+}
+.spe-product-options-table .message > .form-field input:-moz-placeholder { /* Firefox 18- */
+  color: #999 !important;
+}
+
+.spe-product-options-table .message .spemail_search_results {
+    position: absolute;
+    top: 30px;
+    left: 0;
+    width: calc(100% - 100px);
+    max-height: 180px;
+    overflow-y: auto;
+    background: #fff;
+    box-shadow: 0 1px 1px rgba(0,0,0,.1);
+    z-index: 99;
+}
+
+.spe-product-options-table .message #spemail_processing_search_results {
+    max-height: 120px;
+}
+
+.spe-product-options-table .message #spemail_completed_search_results {
+    bottom: 30px;
+    top: auto;
+}
+
+.spe-product-options-table .message .spemail_search_results .placeholder {
+    margin: 0;
+    padding: 8px;
+}
+
+a.spe-search-result {
+    display: block;
+}
+
+.spe-product-options-table .message .button-container {
+    margin-left: 10px;
+}
+
+body:not(.spe-pro-active) .spe-product-options-table .message .button-container {
+    flex: 0 0 70px;
+}
+
+body.spe-pro-installed.spe-pro-active .spe-product-options-table .message .button-container {
+    flex: 0 0 140px;
+}
+
+.spe-product-options-table .message .button-container .button {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    padding: 0;
+    text-align: center;
+    color: #fff;
+    border: none;
+    box-shadow: none;
+}
+
+.spe-product-options-table .message .button-container .button.preview-spemail {
+    background-color: #45c688;
+    margin-left: 0;
+}
+
+.spe-product-options-table .message .button-container .button.preview-spemail:hover {
+    background-color: #319e69;
+}
+
+.spe-product-options-table .message .button-container .button.test-spemail {
+    background-color: #96588a;
+    margin-left: 5px;
+}
+
+.spe-product-options-table .message .button-container .button.test-spemail:hover {
+    background-color: #723967;
+}
+
+.spe-product-options-table .message .button-container .button.edit-spemail {
+    background-color: #5badeb;
+    margin-left: 5px;
+}
+
+.spe-product-options-table .message .button-container .button.edit-spemail:hover {
+    background-color: #4887b8;
+}
+
+.spe-product-options-table .message .button-container .button.remove-spemail {
+    background-color: #da4d4d;
+    margin-left: 5px;
+}
+
+.spe-product-options-table .message .button-container .button.remove-spemail:hover {
+    background-color: #a63a3a;
+}
+
+.spe-product-options-table .location {
+    width: 66%;
+}
+
+.spe-product-options-table .location select {
+    width: 100%;
+}
+
+.spe-product-options-table .location p.form-field {
+    padding-left: 0 !important;
+}
+
+.spe-product-options-table .location p.form-field > label {
+    display: none;
+}
+
+.fullwidth-text {
+    width: 100%;
+}
+
+/* Responsive */
+@media (max-width: 1280px) {
+
+    .spe-product-options-table .table-header {
+        display: none;
+    }
+    
+    .spe-product-options-table .table-row {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .spe-product-options-table .table-row label {
+        float: none;
+        display: block;
+        width: 100%;
+        margin: 0 auto;
+    }
+
+    .spe-product-options-table .status {
+        flex: 0 auto;
+        width: 100%;
+        padding-right: 0;
+    }
+
+    .spe-product-options-table .status .order-status {
+        display: block;
+        text-align: center;
+    }
+
+    .spe-product-options-table .message {
+        /* display: block; */
+        /* width: 100%; */
+        padding-right: 0;
+    }
+
+    .spe-product-options-table .message .button-container .button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        height: auto;
+        line-height: normal;
+    }
+
+    #smart_product_emails_product_data .button .dashicons {
+        line-height: 20px;
+    }
+
+    .spe-product-options-table .location {
+        width: 100%;
+        padding-right: 0;
+    }
+
+    .spe-product-options-table .location p.form-field {
+        padding-right: 0 !important;
+        padding-top: 0;
+        padding-bottom: 0;
+        margin: 0 !important;
+    }
+
+    .spe-product-options-table .location p.form-field select {
+        max-width: 100%;
+    }
+
+}
+
+</style>
