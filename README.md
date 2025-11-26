@@ -10,23 +10,17 @@ Instead of sending generic order confirmations, automatically deliver the right 
 
 ### Core Features
 
-**Dynamic Product-Based Content**
-Create custom content blocks that automatically appear based on what customers purchase. From setup instructions to warranty information, your messages adapt to each order without manual intervention.
+**Dynamic Product-Based Content** — Create custom content blocks that automatically appear based on what customers purchase. From setup instructions to warranty information, your messages adapt to each order without manual intervention.
 
-**Intelligent Placement Control**
-Position your content exactly where it makes the most impact — before order details, after customer information, or anywhere in between. Your emails, your rules.
+**Intelligent Placement Control** — Position your content exactly where it makes the most impact — before order details, after customer information, or anywhere in between. Your emails, your rules.
 
-**Customer Segmentation** *(PRO)*
-Target messages based on purchase history, order value, customer location, and more. Speak directly to first-time buyers differently than loyal customers.
+**Customer Segmentation** *(PRO)* — Target messages based on purchase history, order value, customer location, and more. Speak directly to first-time buyers differently than loyal customers.
 
-**A/B Testing** *(PRO)*
-Test different messages, calls-to-action, and content strategies. Data-driven insights show you what resonates with your customers.
+**A/B Testing** *(PRO)* — Test different messages, calls-to-action, and content strategies. Data-driven insights show you what resonates with your customers.
 
-**Performance Analytics** *(PRO)*
-Track email opens, click-through rates, and conversion metrics. Know exactly which messages drive results and which need refinement.
+**Performance Analytics** *(PRO)* — Track email opens, click-through rates, and conversion metrics. Know exactly which messages drive results and which need refinement.
 
-**Email Preview & Testing**
-See exactly how your emails will look before they go out. Send test emails to verify formatting, links, and content placement.
+**Email Preview & Testing** — See exactly how your emails will look before they go out. Send test emails to verify formatting, links, and content placement.
 
 ### How It Works
 
