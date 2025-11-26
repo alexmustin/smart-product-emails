@@ -54,17 +54,13 @@ Instead of sending generic order confirmations, automatically deliver the right 
 
 ### Why WooCommerce Store Owners Choose Smart Product Emails
 
-**Professional Communication Without the Complexity**
-No need for expensive third-party email platforms. Everything runs inside WooCommerce's trusted email system, maintaining brand consistency and customer trust.
+**Professional Communication Without the Complexity** — No need for expensive third-party email platforms. Everything runs inside WooCommerce's trusted email system, maintaining brand consistency and customer trust.
 
-**More Revenue, Less Effort**
-Automate personalized communication that used to require manual work. Your email marketing runs 24/7 while you focus on growing your business.
+**More Revenue, Less Effort** — Automate personalized communication that used to require manual work. Your email marketing runs 24/7 while you focus on growing your business.
 
-**Data-Driven Decisions**
-Stop guessing what works. Analytics and A/B testing show you exactly which messages drive sales, reduce returns, and improve customer satisfaction.
+**Data-Driven Decisions** — Stop guessing what works. Analytics and A/B testing show you exactly which messages drive sales, reduce returns, and improve customer satisfaction.
 
-**Seamless Integration**
-Works perfectly with WooCommerce's native emails — no theme conflicts, no complicated setup, no learning curve. If you can edit a WordPress page, you can master Smart Product Emails.
+**Seamless Integration** — Works perfectly with WooCommerce's native emails — no theme conflicts, no complicated setup, no learning curve. If you can edit a WordPress page, you can master Smart Product Emails.
 
 ---
 
