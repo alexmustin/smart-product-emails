@@ -57,35 +57,20 @@ class Smart_Product_Emails_CPT {
 		$opts['capabilities']['read_post']              = "read_{$cap_type}";
 		$opts['capabilities']['read_private_posts']     = "read_private_{$cap_type}s";
 
-		// $opts['labels']['add_new']            = esc_html__( 'Add New Smart Product Email', 'smart_product_emails_domain' );
-		// $opts['labels']['add_new_item']       = esc_html__( 'Add New Smart Product Email', 'smart_product_emails_domain' );
-		// $opts['labels']['all_items']          = esc_html__( 'Smart Product Emails', 'smart_product_emails_domain' );
-		// $opts['labels']['edit_item']          = esc_html__( 'Edit Smart Product Email', 'smart_product_emails_domain' );
-		// $opts['labels']['menu_name']          = esc_html__( 'Smart Product Emails', 'smart_product_emails_domain' );
-		// $opts['labels']['name']               = esc_html__( 'Smart Product Emails', 'smart_product_emails_domain' );
-		// $opts['labels']['name_admin_bar']     = esc_html__( 'Smart Product Email', 'smart_product_emails_domain' );
-		// $opts['labels']['new_item']           = esc_html__( 'New Smart Product Email', 'smart_product_emails_domain' );
-		// $opts['labels']['not_found']          = esc_html__( 'No Smart Product Emails Found', 'smart_product_emails_domain' );
-		// $opts['labels']['not_found_in_trash'] = esc_html__( 'No Smart Product Emails Found in Trash', 'smart_product_emails_domain' );
-		// $opts['labels']['parent_item_colon']  = esc_html__( 'Parent Smart Product Emails :', 'smart_product_emails_domain' );
-		// $opts['labels']['search_items']       = esc_html__( 'Search Smart Product Emails', 'smart_product_emails_domain' );
-		// $opts['labels']['singular_name']      = esc_html__( 'Smart Product Email', 'smart_product_emails_domain' );
-		// $opts['labels']['view_item']          = esc_html__( 'View Smart Product Email', 'smart_product_emails_domain' );
-
-		$opts['labels']['add_new']            = 'Add New Smart Product Email';
-		$opts['labels']['add_new_item']       = 'Add New Smart Product Email';
-		$opts['labels']['all_items']          = 'Smart Product Emails';
-		$opts['labels']['edit_item']          = 'Edit Smart Product Email';
-		$opts['labels']['menu_name']          = 'Smart Product Emails';
-		$opts['labels']['name']               = 'Smart Product Emails';
-		$opts['labels']['name_admin_bar']     = 'Smart Product Email';
-		$opts['labels']['new_item']           = 'New Smart Product Email';
-		$opts['labels']['not_found']          = 'No Smart Product Emails Found';
-		$opts['labels']['not_found_in_trash'] = 'No Smart Product Emails Found in Trash';
-		$opts['labels']['parent_item_colon']  = 'Parent Smart Product Emails :';
-		$opts['labels']['search_items']       = 'Search Smart Product Emails';
-		$opts['labels']['singular_name']      = 'Smart Product Email';
-		$opts['labels']['view_item']          = 'View Smart Product Email';
+		$opts['labels']['add_new']            = 'Add New Smart Product Emails Message';
+		$opts['labels']['add_new_item']       = 'Add New Smart Product Emails Message';
+		$opts['labels']['all_items']          = 'Smart Product Emails Messages';
+		$opts['labels']['edit_item']          = 'Edit Smart Product Emails Message';
+		$opts['labels']['menu_name']          = 'Smart Product Emails Messages';
+		$opts['labels']['name']               = 'Smart Product Emails Messages';
+		$opts['labels']['name_admin_bar']     = 'Smart Product Emails Message';
+		$opts['labels']['new_item']           = 'New Smart Product Emails Message';
+		$opts['labels']['not_found']          = 'No Smart Product Emails Messages Found';
+		$opts['labels']['not_found_in_trash'] = 'No Smart Product Emails Messages Found in Trash';
+		$opts['labels']['parent_item_colon']  = 'Parent Smart Product Emails Messages:';
+		$opts['labels']['search_items']       = 'Search Smart Product Emails Messages';
+		$opts['labels']['singular_name']      = 'Smart Product Emails Message';
+		$opts['labels']['view_item']          = 'View Smart Product Emails Message';
 
 		$opts = apply_filters( 'smartproductemails-cpt-options', $opts );
 

@@ -210,7 +210,7 @@ class Smart_Product_Emails_Output {
 					 * @param array $shown_messages Array of already shown message IDs
 					 * @param string $this_email_template_location Current email template location
 					 */
-					do_action('spe_output_message_before_processing', $product, $order, $shown_messages, $this_email_template_location);
+					do_action('spe_output_message_before_processing', $product, $order, $sent_to_admin, $shown_messages, $this_email_template_location);
 
 					// PROCESSING Status.
 					// --------------------------------
@@ -218,8 +218,9 @@ class Smart_Product_Emails_Output {
 
 						// If there is an email assigned for 'Processing' status and this message is not already shown,
 						// AND if the message location set for the 'Processing' message is the current email template location...
+						// AND if this email is NOT being sent to admin...
 						if ( !in_array( $spemail_id_processing, $shown_messages, true ) &&
-                			$spemail_location_processing === $this_email_template_location ) {
+                			$spemail_location_processing === $this_email_template_location && !$sent_to_admin ) {
 
 							// Show the message.
 
@@ -257,7 +258,7 @@ class Smart_Product_Emails_Output {
 					 * @param array $shown_messages Array of already shown message IDs
 					 * @param string $this_email_template_location Current email template location
 					 */
-					do_action('spe_output_message_after_processing', $product, $order, $shown_messages, $this_email_template_location);
+					do_action('spe_output_message_after_processing', $product, $order, $sent_to_admin, $shown_messages, $this_email_template_location);
 					
 				}
 

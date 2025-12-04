@@ -206,7 +206,7 @@ class SPE_Product_Data_Admin {
 							$spemail_saved_text = $spemail_title . '';
 						}
 
-						$default_search_msg = __( 'Search Smart Product Emails...', 'smart_product_emails_domain' );
+						$default_search_msg = __( 'Search Smart Product Emails Messages...', 'smart_product_emails_domain' );
 
 						$return_str = '<input class="spemail_search_field_input" type="text" value="' . $spemail_saved_text . '" name="spemail_search_' . $status_name . '" id="spemail_search_' . $status_name . '" placeholder="' . $default_search_msg . '" autocomplete="off"></input>';
 
@@ -304,7 +304,7 @@ class SPE_Product_Data_Admin {
 								// No previous SPE email is saved.
 								$spemail_controls = $extra_btn_container_open . $extra_btn_container_close;
 								?>
-								<input class="spemail_search_field_input" type="text" name="spemail_search_<?php echo esc_attr( $status_name ); ?>" id="spemail_search_<?php echo esc_attr( $status_name ); ?>" placeholder="<?php echo esc_html__( 'Search Smart Product Emails...', 'smart_product_emails_domain' ); ?>" autocomplete="off"></input>
+								<input class="spemail_search_field_input" type="text" name="spemail_search_<?php echo esc_attr( $status_name ); ?>" id="spemail_search_<?php echo esc_attr( $status_name ); ?>" placeholder="<?php echo esc_html__( 'Search Smart Product Emails Messages...', 'smart_product_emails_domain' ); ?>" autocomplete="off"></input>
 								<?php
 							}
 							?>
