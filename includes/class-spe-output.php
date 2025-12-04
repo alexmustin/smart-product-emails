@@ -187,10 +187,6 @@ class Smart_Product_Emails_Output {
 						continue;
 					}
 
-					// Use WooCommerce CRUD methods for meta data
-					$spemail_id_processing = (int) $product->get_meta('spemail_id_processing');
-					$spemail_location_processing = $product->get_meta('location_processing');
-
 					// Legacy support - still check old meta structure
 					$orderstatus_meta = (string) get_post_meta($this_product_id, 'order_status', true);
 					$spemail_id = get_post_meta($this_product_id, 'spemail_id', true);
@@ -202,7 +198,7 @@ class Smart_Product_Emails_Output {
 					/**
 					 * Hook: spe_output_message_before_processing
 					 *
-					 * Allows PRO version to output messages for additional order statuses before Processing
+					 * Allows PRO version to output messages for additional order statuses before "Processing"
 					 * (e.g., On-Hold status)
 					 *
 					 * @param WC_Product $product The product object
@@ -214,6 +210,12 @@ class Smart_Product_Emails_Output {
 
 					// PROCESSING Status.
 					// --------------------------------
+
+					// Use WooCommerce CRUD methods for meta data
+					$spemail_id_processing = (int) $product->get_meta('spemail_id_processing');
+					$spemail_location_processing = $product->get_meta('location_processing');
+
+					// Begin logic for adding message content
 					if ( 'woocommerce_order_status_processing' === $this_order_status_action && !empty( $spemail_id_processing ) ) {
 
 						// If there is an email assigned for 'Processing' status and this message is not already shown,
@@ -250,7 +252,7 @@ class Smart_Product_Emails_Output {
 					/**
 					 * Hook: spe_output_message_after_processing
 					 *
-					 * Allows PRO version to output messages for additional order statuses after Processing
+					 * Allows PRO version to output messages for additional order statuses after "Processing"
 					 * (e.g., Completed status)
 					 *
 					 * @param WC_Product $product The product object
@@ -267,11 +269,33 @@ class Smart_Product_Emails_Output {
 
 
 
+		// Wrapper function for email header hook (different parameters)
+		function smart_product_emails_header_wrapper( $email_heading, $email ) {
+			if ( is_a( $email, 'WC_Email' ) && isset( $email->object ) && is_a( $email->object, 'WC_Order' ) ) {
+				$order = $email->object;
+				$sent_to_admin = method_exists( $email, 'is_customer_email' ) ? ! $email->is_customer_email() : false;
+				$shown_messages = array();
+				smart_product_emails_output_message( $order, $sent_to_admin, $email, $shown_messages );
+			}
+		}
+
+		// Wrapper function for email footer hook (different parameters)
+		function smart_product_emails_footer_wrapper( $email ) {
+			if ( is_a( $email, 'WC_Email' ) && isset( $email->object ) && is_a( $email->object, 'WC_Order' ) ) {
+				$order = $email->object;
+				$sent_to_admin = method_exists( $email, 'is_customer_email' ) ? ! $email->is_customer_email() : false;
+				$shown_messages = array();
+				smart_product_emails_output_message( $order, $sent_to_admin, $email, $shown_messages );
+			}
+		}
+
 		// Add an action for each email template location to insert our smart product email.
+		add_action( 'woocommerce_email_header', 'smart_product_emails_header_wrapper', 30, 2 ); // Email Template Location: Email Header (priority 30 = after header is rendered)
 		add_action( 'woocommerce_email_before_order_table', 'smart_product_emails_output_message', 10, 4 ); // Email Template Location: Before Order Table
 		add_action( 'woocommerce_email_after_order_table', 'smart_product_emails_output_message', 10, 4 ); // Email Template Location: After Order Table
 		add_action( 'woocommerce_email_order_meta', 'smart_product_emails_output_message', 10, 4 ); // Email Template Location: After Order Meta
 		add_action( 'woocommerce_email_customer_details', 'smart_product_emails_output_message', 10, 4 ); // Email Template Location: After Customer Details
+		add_action( 'woocommerce_email_footer', 'smart_product_emails_footer_wrapper', 5, 1 ); // Email Template Location: Email Footer (priority 5 = before footer is rendered)
 
 	}
 

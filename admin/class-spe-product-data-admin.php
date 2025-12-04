@@ -340,10 +340,12 @@ class SPE_Product_Data_Admin {
 					function showLocationSelect( $status_name = '' ) {
 
 						$location_select_arr = array(
+							'woocommerce_email_header' => __( 'Email Header', 'smart_product_emails_domain' ),
 							'woocommerce_email_before_order_table' => __( 'Before Order Table', 'smart_product_emails_domain' ),
 							'woocommerce_email_after_order_table' => __( 'After Order Table', 'smart_product_emails_domain' ),
 							'woocommerce_email_order_meta' => __( 'After Order Meta', 'smart_product_emails_domain' ),
 							'woocommerce_email_customer_details' => __( 'After Customer Details', 'smart_product_emails_domain' ),
+							'woocommerce_email_footer' => __( 'Email Footer', 'smart_product_emails_domain' ),
 						);
 
 						if ( 'onhold' === $status_name ) {
