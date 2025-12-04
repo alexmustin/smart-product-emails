@@ -1,0 +1,961 @@
+<?php
+/**
+ * Renders the WooCommerce Product Data admin settings.
+ *
+ * @package SmartProductEmails
+ */
+
+/**
+ * SPE_Product_Data_Admin is a class for adding the Smart Product Email Admin settings for each Product.
+ */
+class SPE_Product_Data_Admin {
+
+	public function __construct() {
+		// Free version: Pro features (preview/test) removed
+		// Pro version can hook in via 'spe_product_admin_init' action
+		do_action('spe_product_admin_init', $this);
+
+		// Add admin body classes based on Pro status
+		add_filter('admin_body_class', array($this, 'add_pro_body_classes'));
+    }
+
+	/**
+	 * Check if PRO version is active
+	 *
+	 * @return bool True if PRO is active
+	 */
+	private function is_pro_active() {
+		// Check if Pro version constant is defined
+		if (defined('SPE_PRO_VERSION')) {
+			return true;
+		}
+
+		// Alternative check using filter hook
+		return apply_filters('spe_is_pro_active', false);
+	}
+
+	/**
+	 * Add CSS classes to admin body when Pro is active
+	 *
+	 * @param string $classes Existing body classes
+	 * @return string Modified body classes
+	 */
+	public function add_pro_body_classes($classes) {
+		// Only add on product edit screens
+		global $pagenow, $post;
+		if (('post.php' === $pagenow || 'post-new.php' === $pagenow) &&
+			$post && get_post_type($post) === 'product') {
+
+			// Check if Pro is installed
+			if (function_exists('spe_pro_is_installed') && spe_pro_is_installed()) {
+				$classes .= ' spe-pro-installed';
+			}
+
+			// Check if Pro license is active
+			if (function_exists('spe_pro_is_license_active') && spe_pro_is_license_active()) {
+				$classes .= ' spe-pro-active';
+			}
+		}
+
+		return $classes;
+	}
+
+	public $options;
+
+	/**
+	 * Track the plugin version.
+	 *
+	 * @var string $version The version number.
+	 */
+	protected $version;
+
+	/**
+	 * Creates a new Tab in the SPE Product settings section.
+	 *
+	 * @param object $original_prodata_tabs  An object containing the Settings Tabs.
+	 */
+	public function add_smart_product_emails_tab( $original_prodata_tabs ) {
+
+		$this->options = get_option( 'SmartProductEmails_settings_name' );
+
+		$display_classes_default = 'show_if_simple, show_if_variable, show_if_external, show_if_downloadable, show_if_grouped';
+		$display_classes_setting = '';
+
+		if ( isset( $this->options['display_classes'] ) ) {
+			// Data is set.
+			$display_classes_setting = $display_classes_default . ', ' . $this->options['display_classes'];
+		} else {
+			// No Data set.
+			$display_classes_setting = $display_classes_default;
+		}
+
+		// Remove whitespace.
+		$display_classes_setting = str_replace( ' ', '', $display_classes_setting );
+
+		// Turn the string into an array.
+		$display_classes_arr = explode( ',', $display_classes_setting );
+
+		$new_custom_tab['smart-product-emails'] = array(
+			'label'  => __( 'Smart Emails', 'smart_product_emails_domain' ),
+			'target' => 'smart_product_emails_product_data',
+			'class'  => $display_classes_arr,
+		);
+
+		$insert_at_position = 2; // Set the position in the tab list.
+
+		// Split the tabs into an array, then keep the first part up until our position number.
+		$tabs = array_slice( $original_prodata_tabs, 0, $insert_at_position, true );
+
+		// Add our new tab into the array.
+		$tabs = array_merge( $tabs, $new_custom_tab );
+
+		// Append the last part of tabs array.
+		$tabs = array_merge( $tabs, array_slice( $original_prodata_tabs, $insert_at_position, null, true ) );
+
+		return $tabs;
+
+	}
+
+	/**
+	 * Adds the custom Admin stylesheet.
+	 */
+	public function spe_custom_admin_style() {
+		include_once dirname( __FILE__ ) . '/css/smart-product-emails-admin-styles.css';
+	}
+
+	/**
+	 * Enqueues the custom Admin stylesheet.
+	 */
+	public function spe_enqueue_custom_admin_style() {
+
+		global $pagenow;
+
+		// If we are not on the Edit page, exit the function.
+		if ( 'edit.php' !== $pagenow ) {
+			return;
+		}
+
+		wp_register_style( 'spe_custom_admin_css', plugins_url( 'smart-product-emails-admin-styles.css', __FILE__ ), null, '1.0' );
+		wp_enqueue_style( 'spe_custom_admin_css' );
+
+		include_once dirname( __FILE__ ) . '/css/smart-product-emails-admin-styles.css';
+
+	}
+
+
+	/**
+	 * Adds fields to the 'Smart Product Emails' Product Data tab.
+	 */
+	public function add_smart_product_emails_tab_fields() {
+
+		global $post;
+
+		// Get SPE Settings.
+		$this->options = get_option( 'SmartProductEmails_settings_name' );
+
+		// Get Meta from this Post.
+		$this_product_id = get_the_ID();
+		$customcontent_meta = get_post_meta( $this_product_id, 'custom_content', true );
+
+		// Note the 'id' attribute MUST match the 'target' parameter set above.
+		?>
+		<div id='smart_product_emails_product_data' class='panel woocommerce_options_panel'>
+
+			<div class='options_group'>
+
+				<div class="spe-product-options-table">
+
+					<div class="table-header">
+						<div class="status">
+							<?php echo esc_html__( 'Order Status', 'smart_product_emails_domain' ); ?>
+							<span class="woocommerce-help-tip" data-tip="<?php echo esc_html__( 'The Order Status Email which is automatically generated by WooCommerce.', 'smart_product_emails_domain' ); ?>"></span>
+						</div>
+						<div class="message">
+							<?php echo esc_html__( 'Smart Product Email', 'smart_product_emails_domain' ); ?>
+							<span class="woocommerce-help-tip" data-tip="<?php echo esc_html__( 'Select a Smart Product Email to be displayed in the Order Status email.', 'smart_product_emails_domain' ); ?>"></span>
+						</div>
+						<div class="location">
+							<?php echo esc_html__( 'Content Location', 'smart_product_emails_domain' ); ?>
+							<span class="woocommerce-help-tip" data-tip="<?php echo esc_html__( 'Select where your custom content will display in the Order Status email.', 'smart_product_emails_domain' ); ?>"></span>
+						</div>
+					</div>
+
+					<?php
+					$customcontent_orderstatus = get_post_meta( $this_product_id, 'order_status', true );
+					$customcontent_location = get_post_meta( $this_product_id, 'location', true );
+
+					/**
+					 * Returns the title of a Smart Product Email.
+					 *
+					 * @param  integer $msg_id  The id of the message.
+					 * @param  string  $status_name  The name of the Status Message.
+					 * @return string  $return_str  [description]
+					 */
+					function get_message_title( $msg_id = 0, $status_name = '' ) {
+
+						$spemail_title = get_the_title( $msg_id );
+						$edit_url = admin_url( 'post.php?post=' . $msg_id . '&action=edit' );
+						$edit_btn = '<a href="' . $edit_url . '" target="_blank" class="button edit-spemail" alt="' . __( 'Edit', 'smart_product_emails_domain' ) . '" title="' . __( 'Edit', 'smart_product_emails_domain' ) . '"><span class="dashicons dashicons-edit"></span></a>';
+
+						// Check if this message is Published.
+						if ( get_post_status( $msg_id ) !== 'publish' ) {
+							// Saved SPE Mail is not published, show Invalid message.
+							$spemail_saved_text = '(' . __( 'Invalid SPE Message Selected', 'smart_product_emails_domain' ) . ')';
+						} else {
+							// Saved SPE Mail is published.
+							$spemail_saved_text = $spemail_title . '';
+						}
+
+						$default_search_msg = __( 'Search Smart Product Emails...', 'smart_product_emails_domain' );
+
+						$return_str = '<input class="spemail_search_field_input" type="text" value="' . $spemail_saved_text . '" name="spemail_search_' . $status_name . '" id="spemail_search_' . $status_name . '" placeholder="' . $default_search_msg . '" autocomplete="off"></input>';
+
+						$return_str .= wp_nonce_field( 'ajax_nonce_action', 'ajax_nonce' );
+
+						return $return_str;
+
+					}
+
+					/**
+					 * Displays a Smart Product Email.
+					 *
+					 * @param  string $status_name  The name of the Status message.
+					 * @return void
+					 */
+					function show_saved_message( $status_name = '' ) {
+
+						// Set the Status "slug".
+						if ( 'onhold' === $status_name ) {
+							$status_slug = 'on-hold';
+						} else {
+							$status_slug = $status_name;
+						}
+
+						$post_id = get_the_ID();
+						$product = wc_get_product($post_id);
+						
+						if (!$product) {
+							return;
+						}
+						
+						// Use WooCommerce CRUD methods instead of get_post_meta
+						$spemail_id_currentstatus = $product->get_meta('spemail_id_' . $status_name);
+						
+						// Legacy support - still use get_post_meta for old data structure
+						$spemail_id = get_post_meta($post_id, 'spemail_id', true);
+						// $customcontent_orderstatus = get_post_meta($post_id, 'order_status', true);
+
+						$spemail_controls = '';
+						$customcontent_orderstatus = '';
+
+						$extra_btn_container_open             = '<div class="button-container">';
+						$extra_btn_container_open_remove_edit = '<div class="button-container preview remove edit">';
+						$extra_btn_container_close            = '</div>';
+
+						$kses_allowed_html = array(
+							'a'     => array(
+								'alt' => array(),
+								'class' => array(),
+								'href' => array(),
+								'target' => array(),
+								'title' => array(),
+							),
+							'div' => array(
+								'class' => array(),
+							),
+							'input' => array(
+								'autocomplete' => array(),
+								'class'        => array(),
+								'id'           => array(),
+								'name'         => array(),
+								'placeholder'  => array(),
+								'type'         => array(),
+								'value'        => array(),
+							),
+							'span' => array(
+								'class' => array(),
+							),
+						);
+
+						?>
+						<div class="form-field spemail_search_field">
+							<?php
+							// If an SPE email is saved for this Order Status...
+							if ( ! empty( $spemail_id_currentstatus ) ) {
+
+								echo wp_kses( get_message_title( $spemail_id_currentstatus, $status_name ), $kses_allowed_html );
+
+								$hidden_buttons = '<!-- Hidden fields to store data -->
+            					<input type="hidden" class="spe-preview-status" value="' . esc_attr($status_name) . '" />
+            					<input type="hidden" class="spe-preview-message-id" value="' . esc_attr($spemail_id_currentstatus) . '" />';
+
+								// FREE VERSION: Preview and Test buttons removed
+								// Pro version adds these via 'spe_product_admin_action_buttons' filter
+								$pro_buttons = apply_filters('spe_product_admin_action_buttons', '', $status_name, $spemail_id_currentstatus, $post_id);
+
+								$edit_url   = admin_url( 'post.php?post=' . $spemail_id_currentstatus . '&action=edit' );
+								$edit_btn   = '<a href="' . $edit_url . '" target="_blank" class="button edit-spemail" alt="' . __( 'Edit', 'smart_product_emails_domain' ) . '" title="' . __( 'Edit', 'smart_product_emails_domain' ) . '"><span class="dashicons dashicons-edit"></span></a>';
+
+								$remove_btn = '<a href="#" class="button remove-spemail" alt="' . __( 'Remove', 'smart_product_emails_domain' ) . '" title="' . __( 'Remove', 'smart_product_emails_domain' ) . '"><span class="dashicons dashicons-no"></span></a>';
+
+								$spemail_controls = $extra_btn_container_open_remove_edit . $hidden_buttons . $pro_buttons . $edit_btn . $remove_btn . $extra_btn_container_close;
+
+							} else {
+								// No previous SPE email is saved.
+								$spemail_controls = $extra_btn_container_open . $extra_btn_container_close;
+								?>
+								<input class="spemail_search_field_input" type="text" name="spemail_search_<?php echo esc_attr( $status_name ); ?>" id="spemail_search_<?php echo esc_attr( $status_name ); ?>" placeholder="<?php echo esc_html__( 'Search Smart Product Emails...', 'smart_product_emails_domain' ); ?>" autocomplete="off"></input>
+								<?php
+							}
+							?>
+							<div class="spemail_search_results hide" id="spemail_<?php echo esc_attr( $status_name ); ?>_search_results">
+								<div class="spemail_search_results_wrap">
+									<p class="placeholder"><?php echo esc_html__( 'Search results will appear here', 'smart_product_emails_domain' ); ?></p>
+								</div>
+							</div>
+						</div>
+						<?php
+						echo wp_kses( $spemail_controls, $kses_allowed_html );
+
+						$hidden_field_val = '';
+
+						// If data is saved for this Order Status...
+						if ( ! empty( $spemail_id_currentstatus ) ) {
+							$hidden_field_val = $spemail_id_currentstatus;
+						}
+						if ( ( 'woocommerce_order_status_' . $status_slug ) === $customcontent_orderstatus ) {
+							$hidden_field_val = $spemail_id;
+						}
+						?>
+						<input class="spemail_search_field_hidden" type="hidden" name="spemail_id_<?php echo esc_attr( $status_name ); ?>" id="spemail_id_<?php echo esc_attr( $status_name ); ?>" value="<?php echo esc_attr( $hidden_field_val ); ?>" />
+						<?php
+					}
+
+					/**
+					 * Returns a drop down menu of template locations.
+					 *
+					 * @param string $status_name The name of the status message.
+					 * @return void
+					 */
+					function showLocationSelect( $status_name = '' ) {
+
+						$location_select_arr = array(
+							'woocommerce_email_before_order_table' => __( 'Before Order Table', 'smart_product_emails_domain' ),
+							'woocommerce_email_after_order_table' => __( 'After Order Table', 'smart_product_emails_domain' ),
+							'woocommerce_email_order_meta' => __( 'After Order Meta', 'smart_product_emails_domain' ),
+							'woocommerce_email_customer_details' => __( 'After Customer Details', 'smart_product_emails_domain' ),
+						);
+
+						if ( 'onhold' === $status_name ) {
+							$status_slug = 'on-hold';
+						} else {
+							$status_slug = $status_name;
+						}
+
+						$product = wc_get_product(get_the_ID());
+    
+						if (!$product) {
+							return;
+						}
+
+						// $current_status_location = get_post_meta( get_the_ID(), 'location_' . $status_name, true );
+						// $old_order_status        = get_post_meta( get_the_ID(), 'order_status', true );
+						// $old_order_location      = get_post_meta( get_the_ID(), 'location', true );
+
+						// Use WooCommerce CRUD methods
+						$current_status_location = $product->get_meta('location_' . $status_name);
+						
+						// Legacy support
+						$old_order_status = get_post_meta(get_the_ID(), 'order_status', true);
+						$old_order_location = get_post_meta(get_the_ID(), 'location', true);
+
+						// If NEW data is saved for this Order Status...
+						if ( ! empty( $current_status_location ) ) {
+
+							// Show a Select menu with the new saved value.
+							woocommerce_wp_select(
+								array(
+									'id'       => $status_name . '-location',
+									'label'    => '',
+									'options'  => $location_select_arr,
+									'desc_tip' => false,
+									'value'    => $current_status_location, // Use the new saved value.
+								)
+							);
+
+						} else {
+
+							// If the previous data has been saved for the current Order Status...
+							if ( ( 'woocommerce_order_status_' . $status_name ) === $old_order_status ) {
+
+								// Show a Select menu with the old saved value.
+								woocommerce_wp_select(
+									array(
+										'id'       => $status_name . '-location',
+										'label'    => '',
+										'options'  => $location_select_arr,
+										'desc_tip' => false,
+										// 'value'    => $old_order_location, // Use the old saved value.
+										'value' => $old_order_location ?: '',
+									)
+								);
+								
+							} else {
+								// No data has been saved for the current Order Status.
+
+								// Show a Select menu with no default value.
+								woocommerce_wp_select(
+									array(
+										'id'       => $status_name . '-location',
+										'label'    => '',
+										'options'  => $location_select_arr,
+										'desc_tip' => false,
+									)
+								);
+							}
+						}
+
+					}
+					?>
+
+					<?php
+					/**
+					 * Hook: spe_before_processing_status_row
+					 *
+					 * Allows PRO version to add order status rows before Processing
+					 * (e.g., On-Hold status)
+					 */
+					do_action('spe_before_processing_status_row', $this_product_id);
+					?>
+
+					<!-- // PROCESSING ***************************************************** // -->
+					<div class="table-row">
+						<div class="status order_status">
+							<mark class="order-status status-processing">
+								<span><?php echo esc_html__( 'Processing', 'smart_product_emails_domain' ); ?></span>
+							</mark>
+						</div>
+						<label class="label-mobile"><?php echo esc_html__( 'Smart Product Email:', 'smart_product_emails_domain' ); ?></label>
+						<div class="message">
+							<?php show_saved_message( 'processing' ); ?>
+						</div>
+						<label class="label-mobile"><?php echo esc_html__( 'Content Location:', 'smart_product_emails_domain' ); ?></label>
+						<div class="location">
+							<?php showLocationSelect( 'processing' ); ?>
+						</div>
+						<?php
+						// Create a nonce.
+						wp_nonce_field( 'status_processing_action', 'spemail_processing_nonce' );
+						?>
+					</div>
+
+					<?php
+					/**
+					 * Hook: spe_after_processing_status_row
+					 *
+					 * Allows PRO version to add order status rows after Processing
+					 * (e.g., Completed status)
+					 */
+					do_action('spe_after_processing_status_row', $this_product_id);
+					?>
+
+				</div>
+
+			</div>
+
+		</div>
+		<?php
+	}
+
+	/**
+	 * Outputs the AJAX Fetch JS functions.
+	 *
+	 * @return void
+	 */
+	public function ajax_spe_fetch_script() {
+		?>
+		<script type="text/javascript">
+		<?php
+		/**
+		 * Hook: spe_ajax_fetch_functions_before
+		 *
+		 * Allows PRO version to add AJAX fetch functions for additional order statuses
+		 * (e.g., fetch_spe_posts_onhold)
+		 */
+		do_action('spe_ajax_fetch_functions_before');
+		?>
+
+		function fetch_spe_posts_processing(){
+			jQuery.ajax({
+				url: '<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>',
+				type: 'post',
+				data: {
+					action: 'spe_data_fetch',
+					keyword: jQuery('#spemail_search_processing').val(),
+					ajax_nonce: jQuery('#ajax_nonce').val(),
+				},
+				success: function(data) {
+					jQuery('#spemail_processing_search_results .spemail_search_results_wrap').html( data );
+				}
+			});
+		}
+
+		<?php
+		/**
+		 * Hook: spe_ajax_fetch_functions_after
+		 *
+		 * Allows PRO version to add AJAX fetch functions for additional order statuses
+		 * (e.g., fetch_spe_posts_completed)
+		 */
+		do_action('spe_ajax_fetch_functions_after');
+		?>
+
+		jQuery(document).ready( function($) {
+
+			<?php
+			/**
+			 * Hook: spe_ajax_keyup_handlers_before
+			 *
+			 * Allows PRO version to add keyup handlers for additional order statuses
+			 */
+			do_action('spe_ajax_keyup_handlers_before');
+			?>
+
+			// Apply onkeyup behavior
+			$('#spemail_search_processing').keyup(function () {
+				fetch_spe_posts_processing();
+			});
+
+			<?php
+			/**
+			 * Hook: spe_ajax_keyup_handlers_after
+			 *
+			 * Allows PRO version to add keyup handlers for additional order statuses
+			 */
+			do_action('spe_ajax_keyup_handlers_after');
+			?>
+
+			var allHidden = false;
+
+			function hideAllSearchResultsBoxes() {
+
+				if ( allHidden !== true ) {
+
+					// Hide all SR boxes
+					$('.spemail_search_results').addClass('hide');
+
+					// Assign 'allHidden' var to true
+					allHidden = true;
+
+				}
+
+			}
+
+			function hideSearchResultsBox(thisElem) {
+				// Add 'hide' class to closest SR box
+				thisElem.closest('.message').find('.spemail_search_results').addClass('hide');
+			}
+
+			function showSearchResultsBox(thisElem) {
+				// Remove 'hide' class from closest SR box
+				thisElem.closest('.message').find('.spemail_search_results').removeClass('hide');
+				allHidden = false;
+			}
+
+			// Click functions
+			$(document).on('click', function(e) {
+
+				var target = e.target;
+				var targetClass = target.className;
+
+				if ( targetClass == 'spemail_search_field_input' ) {
+
+					/* SEARCH FIELD CLICKED - SHOW SEARCH RESULTS MODAL
+					--------------------------------------------------------- */
+
+					// Don't jump to top of page
+					e.preventDefault();
+
+					// Hide all search results elements
+					$('.spemail_search_results').addClass('hide');
+
+					// Remove 'hide' class from closest search results box
+					showSearchResultsBox( $(e.target) );
+
+					// Focus on the search results box that was clicked
+					$(e.target).closest('.message').focus();
+
+				} else if ( targetClass == 'spe-search-result' ) {
+
+					/* SEARCH RESULT CLICKED - ASSIGN CUSTOM EMAIL MESSAGE
+					--------------------------------------------------------- */
+
+					// Don't jump to top of page
+					e.preventDefault();
+
+					// Define vars
+					var theid = $(e.target).attr('data-id');
+					var thetitle = $(e.target).attr('data-title');
+
+					// Update field values
+					$(e.target).closest('.table-row').find('.spemail_search_field_hidden').val(theid);	// hidden field
+					$(e.target).closest('.table-row').find('.spemail_search_field_input').val(thetitle);	// search field
+
+					// Add new buttons if not already present
+					var $btnContainer = $(e.target).closest('.table-row').find('.button-container');
+					if (!$btnContainer.hasClass('remove')) {
+						// FREE VERSION: Preview and Test buttons removed
+						// Pro version can inject buttons via JavaScript hook
+						var proButtons = $(document).triggerHandler('spe_add_pro_buttons', [theid, status]) || '';
+
+						var editBtn = '<a href="<?php echo admin_url('post.php?post='); ?>' + theid + '&action=edit" target="_blank" class="button edit-spemail" title="Edit"><span class="dashicons dashicons-edit"></span></a>';
+						var removeBtn = '<a href="#" class="button remove-spemail" title="Remove"><span class="dashicons dashicons-no"></span></a>';
+
+						$btnContainer.addClass('remove edit').html(proButtons + editBtn + removeBtn);
+					}
+
+					// Add 'hide' class to closest search results box
+					hideSearchResultsBox( $(e.target) );
+
+				} else {
+
+					/* NORMAL PAGE ELEMENT CLICKED - HIDE ALL SEARCH RESULTS BOXES
+					--------------------------------------------------------- */
+
+					hideAllSearchResultsBoxes();
+
+				}
+
+			});
+
+			// Remove button
+			$(document).on('click', '.remove-spemail', function(e) {
+
+				// Don't jump to top of page
+				e.preventDefault();
+
+				// Hide Edit buttons
+				$(this).closest('.table-row').find('.button-container').find('.button').addClass('hide');
+
+				// Remove field values
+				$(this).closest('.table-row').find('.spemail_search_field_input').val('');
+				$(this).closest('.table-row').find('.spemail_search_field_hidden').val('');
+
+				// Remove CSS classes
+				$(this).closest('.button-container').removeClass('remove');
+				$(this).closest('.button-container').removeClass('edit');
+
+			});
+
+		});
+		</script>
+		<?php
+	}
+
+	/**
+	 * Runs the AJAX Fetch function.
+	 *
+	 * @return void
+	 */
+	public function spe_data_fetch() {
+
+		if ( isset( $_POST['keyword'], $_POST['ajax_nonce'] ) && wp_verify_nonce( sanitize_key( $_POST['ajax_nonce'] ), 'ajax_nonce_action' ) ) {
+			$search_term = sanitize_text_field( wp_unslash( $_POST['keyword'] ) );
+		} else {
+			$search_term = '';
+		}
+
+		$args = array(
+			'post_type'      => 'smartproductemails',
+			'post_status'    => 'publish',
+			'posts_per_page' => -1,
+			's'              => $search_term,
+		);
+
+		$the_query = new WP_Query( $args );
+
+		if ( $the_query->have_posts() ) {
+			while ( $the_query->have_posts() ) :
+
+				$the_query->the_post();
+
+				$the_permalink = esc_url( get_permalink() );
+				$the_id        = get_the_ID();
+				$the_title     = get_the_title();
+				?>
+				<p><a href="#" class="spe-search-result" data-id="<?php echo esc_attr( $the_id ); ?>" data-title="<?php echo esc_attr( $the_title ); ?>"><?php echo esc_attr( $the_id ); ?> - <?php echo esc_html( $the_title ); ?></a></p>
+				<?php
+			endwhile;
+			wp_reset_postdata();
+		} else {
+			$add_messages_url  = admin_url( 'edit.php?post_type=smartproductemails' );
+			$add_messages_text = '<a href="' . $add_messages_url . '" target="_blank" class="edit-spemail">' . __( 'Smart Product Emails', 'smart_product_emails_domain' ) . '</a>';
+			?>
+			<p class="placeholder error">
+				<?php
+				echo esc_html__( 'Sorry! No posts match your search. Please add some ', 'smart_product_emails_domain' );
+				echo wp_kses( $add_messages_text, $kses_allowed_html );
+				echo esc_html__( ' and try again.', 'smart_product_emails_domain' );
+				?>
+			</p>
+			<?php
+		}
+
+		die();
+	}
+
+
+	/**
+	 * Callback function to save custom fields information.
+	 *
+	 * @param  [type] $post_id The Post ID.
+	 * @return void
+	 */
+	public function save_smart_product_emails_tab_fields( $post_id ) {
+
+		// Get the product object using HPOS-compatible method
+		$product = wc_get_product($post_id);
+		if (!$product) {
+			return;
+		}
+
+		/**
+		 * Hook: spe_save_status_fields_before_processing
+		 *
+		 * Allows PRO version to save additional order status fields before Processing
+		 * (e.g., On-Hold status)
+		 *
+		 * @param WC_Product $product The product object
+		 * @param int $post_id The product ID
+		 */
+		do_action('spe_save_status_fields_before_processing', $product, $post_id);
+
+		// PROCESSING.
+		if (isset($_POST['spemail_id_processing'], $_POST['spemail_processing_nonce']) &&
+			wp_verify_nonce(sanitize_key($_POST['spemail_processing_nonce']), 'status_processing_action')) {
+			$msg_processing_id = sanitize_text_field(wp_unslash($_POST['spemail_id_processing']));
+			$product->update_meta_data('spemail_id_processing', $msg_processing_id);
+		}
+
+		if (isset($_POST['processing-location'], $_POST['spemail_processing_nonce']) &&
+			wp_verify_nonce(sanitize_key($_POST['spemail_processing_nonce']), 'status_processing_action')) {
+			$msg_processing_location = sanitize_text_field(wp_unslash($_POST['processing-location']));
+			$product->update_meta_data('location_processing', $msg_processing_location);
+		}
+
+		/**
+		 * Hook: spe_save_status_fields_after_processing
+		 *
+		 * Allows PRO version to save additional order status fields after Processing
+		 * (e.g., Completed status)
+		 *
+		 * @param WC_Product $product The product object
+		 * @param int $post_id The product ID
+		 */
+		do_action('spe_save_status_fields_after_processing', $product, $post_id);
+
+		// Save the product - this handles both HPOS and legacy storage
+    	$product->save();
+
+	}
+
+	/**
+	 * Get separator HTML based on settings
+	 * 
+	 * @return string HTML for separator
+	 */
+	public function get_separator_html() {
+		$settings = get_option( 'SmartProductEmails_settings_name', array() );
+
+		$separator_type = isset($settings['content_separator']) ? $settings['content_separator'] : 'none';
+		$color = isset($settings['separator_color']) ? $settings['separator_color'] : '#dddddd';
+		$thickness = isset($settings['separator_thickness']) ? $settings['separator_thickness'] : '1';
+		$spacing = isset($settings['separator_spacing']) ? $settings['separator_spacing'] : '20';
+		$custom_html = isset($settings['separator_customhtml']) ? $settings['separator_customhtml'] : '';
+		
+		switch ($separator_type) {
+			case 'line':
+				return '<hr style="border: none; border-top: ' . esc_attr($thickness) . 'px solid ' . esc_attr($color) . '; margin: ' . esc_attr($spacing) . 'px 0;" />';
+				
+			case 'dots':
+				return '<hr style="border: none; border-top: ' . esc_attr($thickness) . 'px dotted ' . esc_attr($color) . '; margin: ' . esc_attr($spacing) . 'px 0;" />';
+				
+			case 'dashes':
+				return '<hr style="border: none; border-top: ' . esc_attr($thickness) . 'px dashed ' . esc_attr($color) . '; margin: ' . esc_attr($spacing) . 'px 0;" />';
+				
+			case 'double':
+				return '<hr style="border: none; border-top: ' . esc_attr($thickness) . 'px double ' . esc_attr($color) . '; margin: ' . esc_attr($spacing) . 'px 0;" />';
+				
+			case 'space':
+				return '<div style="height: ' . esc_attr($spacing) . 'px;"></div>';
+				
+			case 'custom':
+				return nl2br($custom_html);
+				
+			case 'none':
+			default:
+				return '';
+		}
+	}
+	
+	/**
+	 * Get WooCommerce email color settings
+	 */
+	private function get_woocommerce_email_colors() {
+		// Get WooCommerce email settings
+		$base_color = get_option('woocommerce_email_base_color', '#96588a');
+		$background_color = get_option('woocommerce_email_background_color', '#f7f7f7');
+		$body_background_color = get_option('woocommerce_email_body_background_color', '#ffffff');
+		$body_text_color = get_option('woocommerce_email_text_color', '#3c3c3c');
+
+		return array(
+			'base' => $base_color,
+			'background' => $background_color,
+			'body_bg' => $body_background_color,
+			'body_text' => $body_text_color
+		);
+	}
+
+	/**
+	 * Get WooCommerce email template settings for specific status
+	 */
+	private function get_woocommerce_email_settings($status) {
+		// Map status to WooCommerce email option names
+		$email_option_map = array(
+			'onhold' => 'customer_on_hold_order',
+			'processing' => 'customer_processing_order',
+			'completed' => 'customer_completed_order'
+		);
+
+		$email_type = isset($email_option_map[$status]) ? $email_option_map[$status] : 'customer_processing_order';
+
+		// Get email-specific settings
+		$heading = get_option('woocommerce_' . $email_type . '_settings');
+		$subject = isset($heading['subject']) ? $heading['subject'] : '';
+		$heading_text = isset($heading['heading']) ? $heading['heading'] : '';
+		$additional_content = isset($heading['additional_content']) ? $heading['additional_content'] : '';
+
+		// Fallback to direct option names if settings array doesn't exist
+		if (empty($heading_text)) {
+			$heading_text = get_option('woocommerce_' . $email_type . '_heading', '');
+		}
+		if (empty($additional_content)) {
+			$additional_content = get_option('woocommerce_' . $email_type . '_additional_content', '');
+		}
+
+		// Default headings if none set
+		$default_headings = array(
+			'onhold' => __('Thank you for your order', 'woocommerce'),
+			'processing' => __('Thank you for your order', 'woocommerce'),
+			'completed' => __('Your order is complete', 'woocommerce')
+		);
+
+		if (empty($heading_text)) {
+			$heading_text = isset($default_headings[$status]) ? $default_headings[$status] : __('Thank you for your order', 'woocommerce');
+		}
+
+		return array(
+			'subject' => $subject,
+			'heading' => $heading_text,
+			'additional_content' => $additional_content
+		);
+	}
+
+	/**
+	 * Get contrast color (white or black) for a given background color
+	 */
+	private function get_contrast_color($hex_color) {
+		// Remove # if present
+		$hex_color = ltrim($hex_color, '#');
+
+		// Convert to RGB
+		$r = hexdec(substr($hex_color, 0, 2));
+		$g = hexdec(substr($hex_color, 2, 2));
+		$b = hexdec(substr($hex_color, 4, 2));
+
+		// Calculate relative luminance
+		$luminance = (0.299 * $r + 0.587 * $g + 0.114 * $b) / 255;
+
+		// Return white for dark backgrounds, black for light backgrounds
+		return $luminance > 0.5 ? '#000000' : '#ffffff';
+	}
+
+	/**
+	 * Get blog name for placeholders.
+	 *
+	 * @return string
+	 */
+	private function get_blogname() {
+		return wp_specialchars_decode( get_option( 'blogname' ), ENT_QUOTES );
+	}
+
+	/**
+	 * Get the store physical address for placeholders.
+	 */
+	public function get_store_address(){
+
+		$shop_address = '';
+
+		// The main address pieces:
+		$store_address     = get_option( 'woocommerce_store_address' );
+		$store_address_2   = get_option( 'woocommerce_store_address_2' );
+		$store_city        = get_option( 'woocommerce_store_city' );
+		$store_postcode    = get_option( 'woocommerce_store_postcode' );
+
+		// The country/state
+		$store_raw_country = get_option( 'woocommerce_default_country' );
+
+		// Split the country/state
+		$split_country = explode( ":", $store_raw_country );
+
+		// Country and state separated:
+		$store_country = $split_country[0];
+		$store_state   = $split_country[1];
+
+		$shop_address .= $store_address . "<br />";
+		$shop_address .= ( $store_address_2 ) ? $store_address_2 . "<br />" : '';
+		$shop_address .= $store_city . ', ' . $store_state . ' ' . $store_postcode . "<br />";
+		$shop_address .= $store_country;
+
+		return $shop_address;
+	}
+
+	/**
+	 * Get from email address for placeholders.
+	 *
+	 * @return string
+	 */
+	public function get_from_address() {
+		return sanitize_email( get_option( 'woocommerce_email_from_address' ) );
+	}
+
+	/**
+	 * Replace placeholders text in email preview.
+	 *
+	 */
+	public function replace_placeholders( $text ) {
+		$domain = wp_parse_url( home_url(), PHP_URL_HOST );
+
+		return str_replace(
+			array(
+				'{site_title}',
+				'{site_address}',
+				'{site_url}',
+				'{store_email}',
+				'{order_date}',
+				'{order_number}'
+				// {store_address} -> $this->get_store_address()
+			),
+			array(
+				$this->get_blogname(),
+				$domain,
+				$domain,
+				$this->get_from_address(),
+				current_time( get_option( 'date_format' ) ),
+				'12345'
+			),
+			$text
+		);
+	}
+
+}
