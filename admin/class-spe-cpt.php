@@ -57,20 +57,20 @@ class Smart_Product_Emails_CPT {
 		$opts['capabilities']['read_post']              = "read_{$cap_type}";
 		$opts['capabilities']['read_private_posts']     = "read_private_{$cap_type}s";
 
-		$opts['labels']['add_new']            = 'Add New Smart Product Emails Message';
-		$opts['labels']['add_new_item']       = 'Add New Smart Product Emails Message';
-		$opts['labels']['all_items']          = 'Smart Product Emails Messages';
-		$opts['labels']['edit_item']          = 'Edit Smart Product Emails Message';
-		$opts['labels']['menu_name']          = 'Smart Product Emails Messages';
-		$opts['labels']['name']               = 'Smart Product Emails Messages';
-		$opts['labels']['name_admin_bar']     = 'Smart Product Emails Message';
-		$opts['labels']['new_item']           = 'New Smart Product Emails Message';
-		$opts['labels']['not_found']          = 'No Smart Product Emails Messages Found';
-		$opts['labels']['not_found_in_trash'] = 'No Smart Product Emails Messages Found in Trash';
-		$opts['labels']['parent_item_colon']  = 'Parent Smart Product Emails Messages:';
-		$opts['labels']['search_items']       = 'Search Smart Product Emails Messages';
-		$opts['labels']['singular_name']      = 'Smart Product Emails Message';
-		$opts['labels']['view_item']          = 'View Smart Product Emails Message';
+		$opts['labels']['add_new']            = 'Add New SPE Message';
+		$opts['labels']['add_new_item']       = 'Add New SPE Message';
+		$opts['labels']['all_items']          = 'SPE Messages';
+		$opts['labels']['edit_item']          = 'Edit SPE Message';
+		$opts['labels']['menu_name']          = 'SPE Messages';
+		$opts['labels']['name']               = 'SPE Messages';
+		$opts['labels']['name_admin_bar']     = 'SPE Message';
+		$opts['labels']['new_item']           = 'New SPE Message';
+		$opts['labels']['not_found']          = 'No SPE Messages Found';
+		$opts['labels']['not_found_in_trash'] = 'No SPE Messages Found in Trash';
+		$opts['labels']['parent_item_colon']  = 'Parent SPE Messages:';
+		$opts['labels']['search_items']       = 'Search SPE Messages';
+		$opts['labels']['singular_name']      = 'SPE Message';
+		$opts['labels']['view_item']          = 'View SPE Message';
 
 		$opts = apply_filters( 'smartproductemails-cpt-options', $opts );
 

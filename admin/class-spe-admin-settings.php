@@ -265,50 +265,6 @@ class Smart_Product_Emails_For_WooCommerce_Admin_Settings {
 		esc_html_e('Customize how your custom email content is visually separated from the rest of the order email.', 'smart_product_emails_domain');
 	}
 
-	// /**
-	//  * Adds a checkbox field for the setting: Show messages in Admin emails.
-	//  */
-	// public function show_in_admin_email_callback() {
-	// 	printf(
-	// 		'<input type="checkbox" name="SmartProductEmails_settings_name[show_in_admin_email]" id="show_in_admin_email" value="show_in_admin_email" %s> <label for="show_in_admin_email">' . __( 'Show the Smart Product Email content inside Admin order notification emails.', 'smart_product_emails_domain' ) . '</label>',
-	// 		( isset( $this->spe_settings_options['show_in_admin_email'] ) && 'show_in_admin_email' === $this->spe_settings_options['show_in_admin_email'] ) ? 'checked' : ''
-	// 	);
-	// }
-
-	// /**
-	//  * Adds a textarea field for the setting: Display classes.
-	//  */
-	// public function display_classes_callback() {
-	// 	printf(
-	// 		'<textarea class="large-text" rows="5" name="SmartProductEmails_settings_name[display_classes]" id="display_classes">%s</textarea>',
-	// 		isset( $this->spe_settings_options['display_classes'] ) ? esc_attr( $this->spe_settings_options['display_classes'] ) : ''
-	// 	);
-	// 	// Description.
-	// 	echo '<div class="description" style="margin-top: 20px;">' . esc_html__( 'By default, WooCommerce only shows the "Smart Product Emails" tab for the standard "', 'smart_product_emails_domain' ) . '<b>product</b>' . esc_html__( '" post type.', 'smart_product_emails_domain' );
-	// 	echo '<br>' . esc_html__( 'Use this option to force other post types to show the Smart Product Emails tab. This should be a comma-separated list.', 'smart_product_emails_domain' );
-	// 	echo '</div>';
-
-	// 	// Code example.
-	// 	echo '<div class="description" style="margin-top: 20px; margin-left: 30px;"><b>Example:</b><pre>show_if_booking, show_if_grouped</pre></div>';
-
-	// 	echo '<hr />';
-
-	// 	// Instructions to find CSS Class.
-	// 	echo '<div class="description" style="margin-top: 20px;"><h3>' . esc_html__( 'How to Find the CSS Class for a Custom Product', 'smart_product_emails_domain' ) . '</h3>' . esc_html__( 'To find the class for your product type, do the following:', 'smart_product_emails_domain' );
-	// 	echo '<ol>';
-	// 	echo '<li>' . esc_html__( 'Go to ', 'smart_product_emails_domain' ) . '<b>' . esc_html__( 'Products', 'smart_product_emails_domain' ) . '</b>' . esc_html__( ', and Edit a custom product', 'smart_product_emails_domain' ) . '</li>';
-	// 	echo '<li>' . esc_html__( 'Scroll down to the ', 'smart_product_emails_domain' ) . '<b>' . esc_html__( 'Product Data', 'smart_product_emails_domain' ) . '</b>' . esc_html__( ' table', 'smart_product_emails_domain' ) . '</li>';
-	// 	echo '<li><b>' . esc_html__( 'Inspect the code', 'smart_product_emails_domain' ) . '</b>' . esc_html__( ' for a tab item, like ', 'smart_product_emails_domain' ) . '<b>' . esc_html__( 'Inventory', 'smart_product_emails_domain' ) . '</b>' . esc_html__( ' (or any menu item which appears only for your product type)', 'smart_product_emails_domain' ) . '</li>';
-	// 	echo '<li>' . esc_html__( 'Find the custom CSS class for your product type which is assigned to that tab menu item. These classes usually start with ', 'smart_product_emails_domain' ) . '<b>' . esc_html__( 'show_if_', 'smart_product_emails_domain' ) . '</b>' . esc_html__( ' -- ex: "show_if_booking"', 'smart_product_emails_domain' ) . '</li>';
-	// 	echo '<li>' . esc_html__( 'Copy and paste that CSS class into the field above', 'smart_product_emails_domain' ) . '</li>';
-	// 	echo '<li>' . esc_html__( 'Save your settings', 'smart_product_emails_domain' ) . '</li>';
-	// 	echo '</ol>';
-	// 	echo '</div>';
-
-	// 	// Note text.
-	// 	echo '<div style="margin-top: 20px; padding: 20px; border: 1px solid rgba(0,0,0,0.15); border-radius: 4px; background: rgba(0,0,0,0.025);"><b style="color: #ff0000;">' . esc_html( 'Important: This feature is still experimental and may not work in all cases.' ) . '</b><br>' . esc_html( 'Some WooCommerce extensions send emails in their own way, separate from the standard WooCommerce email system that this plugin uses.' ) . '</div>';
-	// }
-
 	/**
 	 * Adds setting field: Separator Style
 	 */
@@ -426,7 +382,7 @@ class Smart_Product_Emails_For_WooCommerce_Admin_Settings {
 			class="large-text code"
 			placeholder='<div style="border-top: 2px solid #ff9800; margin: 20px 0;"></div>'><?php echo nl2br( esc_html($custom_separator_html)); ?></textarea>
 		<p class="description">
-			<?php esc_html_e('Enter custom HTML for your separator. Must use inline CSS styles for email compatibility.', 'smart_product_emails_domain'); ?>
+			<?php esc_html_e('Enter custom HTML for your separator. Must use inline CSS styles for email compatibility. Shortcodes are not supported.', 'smart_product_emails_domain'); ?>
 		</p>
 		<details style="margin-top: 10px;">
 			<summary style="cursor: pointer; color: #2271b1;"><?php esc_html_e('Show Examples', 'smart_product_emails_domain'); ?></summary>
