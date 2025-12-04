@@ -12,7 +12,7 @@ Instead of sending generic order confirmations, automatically deliver the right 
 
 **Dynamic Product-Based Content** — Create custom content blocks that automatically appear based on what customers purchase. From setup instructions to warranty information, your messages adapt to each order without manual intervention.
 
-**Intelligent Placement Control** — Position your content exactly where it makes the most impact — before order details, after customer information, or anywhere in between. Your emails, your rules.
+**Intelligent Placement Control** — Position your content exactly where it makes the most impact — before order details, after customer information, or in between. Your emails, your rules.
 
 **Customer Segmentation** *(PRO)* — Target messages based on purchase history, order value, customer location, and more. Speak directly to first-time buyers differently than loyal customers.
 
@@ -25,10 +25,9 @@ Instead of sending generic order confirmations, automatically deliver the right 
 ### How It Works
 
 1. **Create Smart Messages** – Build reusable content blocks with the visual editor or custom HTML
-2. **Set Targeting Rules** – Choose which products, customer segments, or order types trigger each message
+2. **Set Targeting Rules** – Choose which products trigger each message
 3. **Choose Placement** – Position content strategically within the email template
-4. **Test & Optimize** – Preview emails, run A/B tests, and monitor performance analytics
-5. **Automate Everything** – Once configured, your email system runs automatically with zero ongoing effort
+4. **Automate Everything** – Once configured, your email system runs automatically with zero ongoing effort
 
 ### Real-World Use Cases
 
@@ -75,6 +74,7 @@ Instead of sending generic order confirmations, automatically deliver the right 
 - HPOS compatibility
 
 **PRO Version Adds:**
+- On-Hold and Completed Order Statuses
 - Customer segmentation and targeting
 - A/B testing framework
 - Email analytics and reporting
@@ -133,9 +133,9 @@ Have you found something wrong with the plugin? Thought of a helpful feature to 
 [https://github.com/alexmustin/smart-product-emails/issues/](https://github.com/alexmustin/smart-product-emails/issues/)
 
 ### Something Else?
-If you are having any issues, please post in the Support Forum.
+If you are having any issues, please post in the WordPress Plugin Support Forum.
 
 ## Changelog
 
-### 1.0.0 - (Nov 20, 2025)
+### 0.3.0 - (Dec 4, 2025)
 * First release!
