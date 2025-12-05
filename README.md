@@ -20,7 +20,7 @@ Instead of sending generic order confirmations, automatically deliver the right 
 
 **Performance Analytics** *(PRO)* — Track email opens, click-through rates, and conversion metrics. Know exactly which messages drive results and which need refinement.
 
-**Email Preview & Testing** — See exactly how your emails will look before they go out. Send test emails to verify formatting, links, and content placement.
+**Email Preview & Testing** *(PRO)* — See exactly how your emails will look before they go out. Send test emails to verify formatting, links, and content placement.
 
 ### How It Works
 
@@ -69,12 +69,12 @@ Instead of sending generic order confirmations, automatically deliver the right 
 - Unlimited custom email content blocks
 - Product-based targeting
 - Flexible content placement
-- Email preview and testing
 - Duplicate prevention
 - HPOS compatibility
 
 **PRO Version Adds:**
 - On-Hold and Completed Order Statuses
+- Email preview and testing
 - Customer segmentation and targeting
 - A/B testing framework
 - Email analytics and reporting
@@ -131,6 +131,9 @@ https://smartproductemails.com
 ### How do I request a feature or report a bug?
 Have you found something wrong with the plugin? Thought of a helpful feature to add? Please see the Issues section on GitHub:
 [https://github.com/alexmustin/smart-product-emails/issues/](https://github.com/alexmustin/smart-product-emails/issues/)
+
+### Haven’t I seen this plugin before?
+Yes! This plugin was previously released under the name *“Woo Custom Emails Per Product.”* The original version was removed due to copyright concerns around its name. The new version, now called **Smart Product Emails**, has been rebuilt with improved functionality, better performance, and enhanced features, making it more powerful than ever!
 
 ### Something Else?
 If you are having any issues, please post in the WordPress Plugin Support Forum.

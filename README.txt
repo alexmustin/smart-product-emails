@@ -152,6 +152,9 @@ https://smartproductemails.com
 Have you found something wrong with the plugin? Thought of a helpful feature to add? Please see the Issues section on GitHub:
 https://github.com/alexmustin/smart-product-emails/issues/
 
+= Haven’t I seen this plugin before? =
+Yes! This plugin was previously released under the name `Woo Custom Emails Per Product.` The original version was removed due to copyright concerns around its name. The new version, now called *Smart Product Emails*, has been rebuilt with improved functionality, better performance, and enhanced features, making it more powerful than ever!
+
 = Something Else? =
 If you are having any issues, please post in the WordPress Plugin Support Forum.
 
