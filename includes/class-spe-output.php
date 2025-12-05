@@ -212,8 +212,18 @@ class Smart_Product_Emails_Output {
 					// --------------------------------
 
 					// Use WooCommerce CRUD methods for meta data
+					// For Variable products: Check variation first, then fall back to parent product
 					$spemail_id_processing = (int) $product->get_meta('spemail_id_processing');
 					$spemail_location_processing = $product->get_meta('location_processing');
+
+					// If this is a variation and no meta found, check parent product
+					if (empty($spemail_id_processing) && $variation_id) {
+						$parent_product = wc_get_product($product_id);
+						if ($parent_product) {
+							$spemail_id_processing = (int) $parent_product->get_meta('spemail_id_processing');
+							$spemail_location_processing = $parent_product->get_meta('location_processing');
+						}
+					}
 
 					// Begin logic for adding message content
 					if ( 'woocommerce_order_status_processing' === $this_order_status_action && !empty( $spemail_id_processing ) ) {
