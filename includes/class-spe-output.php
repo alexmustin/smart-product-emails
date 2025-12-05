@@ -245,8 +245,14 @@ class Smart_Product_Emails_Output {
 							// Output custom separator.
 							$output .= $separator;
 
-							// Output the_content of the saved SPE Message ID.
-							$output .= wp_kses_post( nl2br( get_post_field( 'post_content', $spemail_id_processing ) ) );
+							// Get the message content
+							$message_content = get_post_field( 'post_content', $spemail_id_processing );
+
+							// Replace placeholders with real order data
+							$message_content = Smart_Product_Emails_Output::replace_placeholders_with_order($message_content, $order);
+
+							// Output the processed content
+							$output .= wp_kses_post( nl2br( $message_content ) );
 
 							// Output custom separator.
 							$output .= $separator;
@@ -307,6 +313,131 @@ class Smart_Product_Emails_Output {
 		add_action( 'woocommerce_email_customer_details', 'smart_product_emails_output_message', 10, 4 ); // Email Template Location: After Customer Details
 		add_action( 'woocommerce_email_footer', 'smart_product_emails_footer_wrapper', 5, 1 ); // Email Template Location: Email Footer (priority 5 = before footer is rendered)
 
+	}
+
+	/**
+	 * Replace placeholders with real order data for emails.
+	 *
+	 * @param string $text Text containing placeholders
+	 * @param WC_Order $order The WooCommerce order object
+	 * @return string Text with placeholders replaced with real order data
+	 */
+	public static function replace_placeholders_with_order($text, $order) {
+		// Bail if no order provided
+		if (!$order || !is_a($order, 'WC_Order')) {
+			return $text;
+		}
+
+		$domain = wp_parse_url( home_url(), PHP_URL_HOST );
+
+		// Get order data
+		$order_id = $order->get_id();
+		$order_date = $order->get_date_created() ? $order->get_date_created()->date_i18n( get_option( 'date_format' ) ) : '';
+		$order_time = $order->get_date_created() ? $order->get_date_created()->date_i18n( get_option( 'time_format' ) ) : '';
+
+		// Get customer data
+		$customer_first_name = $order->get_billing_first_name();
+		$customer_last_name = $order->get_billing_last_name();
+		$customer_full_name = trim($customer_first_name . ' ' . $customer_last_name);
+		$customer_email = $order->get_billing_email();
+		$customer_phone = $order->get_billing_phone();
+
+		// Get billing address
+		$billing_address = $order->get_formatted_billing_address();
+		$billing_city = $order->get_billing_city();
+		$billing_state = $order->get_billing_state();
+		$billing_postcode = $order->get_billing_postcode();
+		$billing_country = WC()->countries->countries[ $order->get_billing_country() ] ?? $order->get_billing_country();
+
+		// Get shipping address
+		$shipping_address = $order->get_formatted_shipping_address();
+		$shipping_city = $order->get_shipping_city();
+		$shipping_state = $order->get_shipping_state();
+		$shipping_postcode = $order->get_shipping_postcode();
+		$shipping_country = WC()->countries->countries[ $order->get_shipping_country() ] ?? $order->get_shipping_country();
+
+		// Get order totals
+		$order_subtotal = $order->get_subtotal();
+		$order_total = $order->get_total();
+		$order_tax = $order->get_total_tax();
+		$order_shipping = $order->get_shipping_total();
+		$order_discount = $order->get_discount_total();
+
+		// Format currency values (strip HTML tags for plain text email compatibility)
+		$order_subtotal_formatted = wp_strip_all_tags(wc_price($order_subtotal, array('currency' => $order->get_currency())));
+		$order_total_formatted = wp_strip_all_tags(wc_price($order_total, array('currency' => $order->get_currency())));
+		$order_tax_formatted = wp_strip_all_tags(wc_price($order_tax, array('currency' => $order->get_currency())));
+		$order_shipping_formatted = wp_strip_all_tags(wc_price($order_shipping, array('currency' => $order->get_currency())));
+		$order_discount_formatted = wp_strip_all_tags(wc_price($order_discount, array('currency' => $order->get_currency())));
+
+		// Get payment method
+		$payment_method = $order->get_payment_method_title();
+
+		// Get site/store info
+		$site_title = wp_specialchars_decode( get_option( 'blogname' ), ENT_QUOTES );
+		$store_email = sanitize_email( get_option( 'woocommerce_email_from_address' ) );
+
+		// Define all placeholders and their replacements
+		$placeholders = array(
+			// Site/Store info
+			'{site_title}' => $site_title,
+			'{site_address}' => $domain,
+			'{site_url}' => home_url(),
+			'{store_email}' => $store_email,
+
+			// Order info
+			'{order_number}' => $order_id,
+			'{order_id}' => $order_id,
+			'{order_date}' => $order_date,
+			'{order_time}' => $order_time,
+			'{order_status}' => wc_get_order_status_name($order->get_status()),
+			'{payment_method}' => $payment_method,
+
+			// Customer info
+			'{customer_first_name}' => $customer_first_name,
+			'{customer_last_name}' => $customer_last_name,
+			'{customer_name}' => $customer_full_name,
+			'{customer_email}' => $customer_email,
+			'{customer_phone}' => $customer_phone,
+
+			// Billing address
+			'{billing_address}' => $billing_address,
+			'{billing_city}' => $billing_city,
+			'{billing_state}' => $billing_state,
+			'{billing_postcode}' => $billing_postcode,
+			'{billing_country}' => $billing_country,
+
+			// Shipping address
+			'{shipping_address}' => $shipping_address,
+			'{shipping_city}' => $shipping_city,
+			'{shipping_state}' => $shipping_state,
+			'{shipping_postcode}' => $shipping_postcode,
+			'{shipping_country}' => $shipping_country,
+
+			// Order totals (formatted with currency)
+			'{order_subtotal}' => $order_subtotal_formatted,
+			'{order_total}' => $order_total_formatted,
+			'{order_tax}' => $order_tax_formatted,
+			'{order_shipping}' => $order_shipping_formatted,
+			'{order_discount}' => $order_discount_formatted,
+		);
+
+		/**
+		 * Filter: Allow modification of available placeholders
+		 *
+		 * @param array $placeholders Array of placeholder => value pairs
+		 * @param WC_Order $order The order object
+		 */
+		$placeholders = apply_filters('spe_email_placeholders', $placeholders, $order);
+
+		// Replace all placeholders
+		$replaced_text = str_replace(
+			array_keys($placeholders),
+			array_values($placeholders),
+			$text
+		);
+
+		return $replaced_text;
 	}
 
 }
