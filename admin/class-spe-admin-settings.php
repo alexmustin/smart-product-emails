@@ -24,6 +24,7 @@ class Smart_Product_Emails_For_WooCommerce_Admin_Settings {
 		add_action( 'admin_menu', array( &$this, 'spe_settings_add_plugin_page' ) );
 		add_action( 'admin_init', array( &$this, 'spe_settings_page_init' ) );
 		add_action( 'admin_enqueue_scripts', array( &$this, 'spe_enqueue_separator_admin_scripts' ) );
+		add_action( 'admin_notices', array( &$this, 'spe_woocommerce_missing_notice' ) );
 	}
 
 	/**
@@ -34,10 +35,58 @@ class Smart_Product_Emails_For_WooCommerce_Admin_Settings {
 		if (strpos($hook, 'smartproductemails') === false) {
 			return;
 		}
-		
+
 		// Enqueue WordPress color picker
 		wp_enqueue_style('wp-color-picker');
 		wp_enqueue_script('wp-color-picker');
+	}
+
+	/**
+	 * Display admin notice if WooCommerce is not active.
+	 */
+	public function spe_woocommerce_missing_notice() {
+		// Only show on SPE settings page
+		$screen = get_current_screen();
+		if ( ! $screen || strpos( $screen->id, 'smartproductemails_page_spe-settings' ) === false ) {
+			return;
+		}
+
+		// Check if WooCommerce is active
+		if ( ! $this->is_woocommerce_active() ) {
+			$woo_plugin_url = esc_url( 'https://wordpress.org/plugins/woocommerce/' );
+			?>
+			<div class="notice notice-error">
+				<p>
+					<strong><?php esc_html_e( 'WooCommerce Required', 'smart_product_emails_domain' ); ?></strong>
+				</p>
+				<p>
+					<?php
+					printf(
+						/* translators: %1$s: opening link tag, %2$s: closing link tag */
+						esc_html__( 'Smart Product Emails requires %1$sWooCommerce%2$s to be installed and activated. Please install and activate WooCommerce to use this plugin.', 'smart_product_emails_domain' ),
+						'<a href="' . esc_url( $woo_plugin_url ) . '" target="_blank">',
+						'</a>'
+					);
+					?>
+				</p>
+			</div>
+			<?php
+		}
+	}
+
+	/**
+	 * Check if WooCommerce is active.
+	 *
+	 * @return bool True if WooCommerce is active, false otherwise.
+	 */
+	private function is_woocommerce_active() {
+		// Check if WooCommerce class exists (most reliable method)
+		if ( class_exists( 'WooCommerce' ) ) {
+			return true;
+		}
+
+		// Fallback: Check if WooCommerce plugin is in active plugins list
+		return in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ), true );
 	}
 
 	/**
@@ -71,13 +120,7 @@ class Smart_Product_Emails_For_WooCommerce_Admin_Settings {
 			<?php settings_errors(); ?>
 
 			<?php
-			// if ( isset( $_GET['tab'] ) && wp_verify_nonce( sanitize_key( $_GET['tab'] ) ) ) {
-			// 	$active_tab = sanitize_text_field( wp_unslash( $_GET['tab'] ) );
-			// } else {
-			// 	$active_tab = 'display_settings';
-			// }
-
-			// Nonce check.
+			// Nonce check for tab parameter (only if tab is set in URL)
 			$nonce_verified = false;
 			if (isset($_GET['_wpnonce']) && wp_verify_nonce(sanitize_key($_GET['_wpnonce']), 'spe_admin_nonce')) {
 				$nonce_verified = true;
@@ -88,10 +131,9 @@ class Smart_Product_Emails_For_WooCommerce_Admin_Settings {
 			} else {
 				$active_tab = 'display_settings';
 			}
-			?>
 
-			<?php
-			if ( isset( $_GET['page'] ) && wp_verify_nonce( sanitize_key( $_GET['page'], 'spe_admin_nonce' ) ) ) {
+			// Page parameter is set by WordPress admin menu, so just sanitize it
+			if ( isset( $_GET['page'] ) ) {
 				$page = sanitize_text_field( wp_unslash( $_GET['page'] ) );
 			} else {
 				$page = 'spe-settings';

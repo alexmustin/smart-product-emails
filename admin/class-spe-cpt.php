@@ -11,12 +11,67 @@
 class Smart_Product_Emails_CPT {
 
 	/**
+	 * Constructor - Set up hooks
+	 */
+	public function __construct() {
+		add_action( 'admin_notices', array( $this, 'spe_woocommerce_missing_notice' ) );
+	}
+
+	/**
+	 * Display admin notice if WooCommerce is not active.
+	 */
+	public function spe_woocommerce_missing_notice() {
+		// Only show on SPE Message CPT screens (list, create, edit) - not settings page
+		$screen = get_current_screen();
+		if ( ! $screen || $screen->post_type !== 'smartproductemails' || ! in_array( $screen->base, array( 'post', 'edit' ), true ) ) {
+			return;
+		}
+
+		// Check if WooCommerce is active
+		if ( ! $this->is_woocommerce_active() ) {
+			$woo_plugin_url = esc_url( 'https://wordpress.org/plugins/woocommerce/' );
+			?>
+			<div class="notice notice-error">
+				<p>
+					<strong><?php esc_html_e( 'WooCommerce Required', 'smart_product_emails_domain' ); ?></strong>
+				</p>
+				<p>
+					<?php
+					printf(
+						/* translators: %1$s: opening link tag, %2$s: closing link tag */
+						esc_html__( 'Smart Product Emails requires %1$sWooCommerce%2$s to be installed and activated. Please install and activate WooCommerce to use this plugin.', 'smart_product_emails_domain' ),
+						'<a href="' . esc_url( $woo_plugin_url ) . '" target="_blank">',
+						'</a>'
+					);
+					?>
+				</p>
+			</div>
+			<?php
+		}
+	}
+
+	/**
+	 * Check if WooCommerce is active.
+	 *
+	 * @return bool True if WooCommerce is active, false otherwise.
+	 */
+	private function is_woocommerce_active() {
+		// Check if WooCommerce class exists (most reliable method)
+		if ( class_exists( 'WooCommerce' ) ) {
+			return true;
+		}
+
+		// Fallback: Check if WooCommerce plugin is in active plugins list
+		return in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ), true );
+	}
+
+	/**
 	 * Creates a new custom post type.
 	 *
 	 * @access public
 	 * @uses register_post_type()
 	 */
-	public static function new_cpt_speemails() {
+	public function new_cpt_speemails() {
 
 		$cap_type = 'post';
 		$plural   = 'Smart Product Emails';

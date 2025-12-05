@@ -140,5 +140,5 @@ If you are having any issues, please post in the WordPress Plugin Support Forum.
 
 ## Changelog
 
-### 0.3.0 - (Dec 4, 2025)
+### X.X.X - (XXX X, 202X)
 * First release!

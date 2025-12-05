@@ -1,12 +1,12 @@
 <?php
 /**
- * Adds custom columns to the Manage Posts page for SPE.
+ * Adds custom columns to the SPE Messages page.
  *
  * @package SmartProductEmails
  */
 
 /**
- * Smart_Product_Emails_Column_Display is a class for displaying extra table columns on the Manage Posts page for SPE.
+ * Smart_Product_Emails_Column_Display is a class for displaying extra table columns on the SPE Messages page.
  */
 class Smart_Product_Emails_Column_Display {
 

@@ -177,7 +177,6 @@ class SPE_Email_Helper {
 	 */
 	public static function replace_placeholders($text) {
 		$domain = wp_parse_url( home_url(), PHP_URL_HOST );
-        // $domain = "DOMAIN";
 
         $replaced_text = str_replace(
 			array(

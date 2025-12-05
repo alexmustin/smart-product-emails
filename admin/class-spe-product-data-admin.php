@@ -661,7 +661,18 @@ class SPE_Product_Data_Admin {
 	 */
 	public function spe_data_fetch() {
 
-		if ( isset( $_POST['keyword'], $_POST['ajax_nonce'] ) && wp_verify_nonce( sanitize_key( $_POST['ajax_nonce'] ), 'ajax_nonce_action' ) ) {
+		// Security: Check user capabilities - must be able to edit products
+		if ( ! current_user_can( 'edit_products' ) ) {
+			wp_die( esc_html__( 'You do not have permission to perform this action.', 'smart_product_emails_domain' ), 403 );
+		}
+
+		// Security: Verify nonce
+		if ( ! isset( $_POST['ajax_nonce'] ) || ! wp_verify_nonce( sanitize_key( $_POST['ajax_nonce'] ), 'ajax_nonce_action' ) ) {
+			wp_die( esc_html__( 'Security check failed.', 'smart_product_emails_domain' ), 403 );
+		}
+
+		// Sanitize and get search term
+		if ( isset( $_POST['keyword'] ) ) {
 			$search_term = sanitize_text_field( wp_unslash( $_POST['keyword'] ) );
 		} else {
 			$search_term = '';
@@ -703,7 +714,7 @@ class SPE_Product_Data_Admin {
 			<?php
 		}
 
-		die();
+		wp_die();
 	}
 
 
@@ -715,9 +726,24 @@ class SPE_Product_Data_Admin {
 	 */
 	public function save_smart_product_emails_tab_fields( $post_id ) {
 
+		// Security: Don't save during autosave
+		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+			return;
+		}
+
+		// Security: Check user capabilities
+		if ( ! current_user_can( 'edit_product', $post_id ) ) {
+			return;
+		}
+
 		// Get the product object using HPOS-compatible method
 		$product = wc_get_product($post_id);
 		if (!$product) {
+			return;
+		}
+
+		// Security: Verify this is a product post type
+		if ( get_post_type( $post_id ) !== 'product' ) {
 			return;
 		}
 

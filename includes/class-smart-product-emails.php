@@ -76,9 +76,8 @@ class Smart_Product_Emails {
 		// Add AJAX Fetch JS to footer.
 		$this->loader->add_action( 'admin_footer', $spe_product_data_admin, 'ajax_spe_fetch_script' );
 
-		// Add AJAX Fetch Function.
+		// Add AJAX Fetch Function (admin only - removed nopriv for security).
 		$this->loader->add_action( 'wp_ajax_spe_data_fetch', $spe_product_data_admin, 'spe_data_fetch' );
-		$this->loader->add_action( 'wp_ajax_nopriv_spe_data_fetch', $spe_product_data_admin, 'spe_data_fetch' );
 
 	}
 

@@ -4,10 +4,10 @@ Author: alexmustin
 Author URI: https://alexmustin.com/
 Tags: woocommerce emails, custom emails, product emails, per product, product specific emails, targeted emails
 Requires at least: 6.8
-Tested up to: 6.8.2
+Tested up to: 6.9
 Requires PHP: 8.2
-Stable tag: 0.3.0
-Version: 0.3.0
+Stable tag: 0.4.4
+Version: 0.4.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -171,5 +171,5 @@ If you are having any issues, please post in the WordPress Plugin Support Forum.
 
 == Changelog ==
 
-= 0.3.0 - (Dec 4, 2025) =
+= x.x.x - (XXX X, 202X) =
 * First release!
