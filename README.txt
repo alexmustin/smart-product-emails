@@ -89,12 +89,13 @@ Works perfectly with WooCommerce's native emails — no theme conflicts, no comp
 - Unlimited custom email content blocks
 - Product-based targeting
 - Flexible content placement
-- Email preview and testing
+- Dynamic placeholders
 - Duplicate prevention
 - HPOS compatibility
 
 **PRO Version Adds:**
 - On-Hold and Completed Order Statuses
+- Email preview and testing
 - Customer segmentation and targeting
 - A/B testing framework
 - Email analytics and reporting

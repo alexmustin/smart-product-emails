@@ -69,6 +69,7 @@ Instead of sending generic order confirmations, automatically deliver the right 
 - Unlimited custom email content blocks
 - Product-based targeting
 - Flexible content placement
+- Dynamic placeholders
 - Duplicate prevention
 - HPOS compatibility
 
