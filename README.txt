@@ -130,7 +130,7 @@ Ready to turn your order emails into a revenue-generating communication platform
 == Frequently Asked Questions ==
 
 = Why does my content appear in the wrong location in the email? =
-When there are multiple products in an Order which have the same Smart Product Email assigned, the first occurrence of a product with that Custom Email will get priority on which Content Location setting to use.
+When there are multiple products in an Order which have the same SPE Message assigned, the first occurrence of a product with that SPE Message will get priority on which Content Location setting to use.
 
 = What HTML tags are allowed? =
 You can use any HTML allowed in the Classic Editor. These are:
