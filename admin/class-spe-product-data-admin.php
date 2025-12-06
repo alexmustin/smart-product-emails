@@ -429,6 +429,11 @@ class SPE_Product_Data_Admin {
 	public function ajax_spe_fetch_script() {
 		?>
 		<script type="text/javascript">
+		// Localized strings for JavaScript
+		const speI18n = {
+			edit: <?php echo wp_json_encode( __( 'Edit', 'smart_product_emails_domain' ) ); ?>,
+			remove: <?php echo wp_json_encode( __( 'Remove', 'smart_product_emails_domain' ) ); ?>
+		};
 		<?php
 		/**
 		 * Hook: spe_ajax_fetch_functions_before
@@ -562,8 +567,8 @@ class SPE_Product_Data_Admin {
 						// Pro version can inject buttons via JavaScript hook
 						var proButtons = $(document).triggerHandler('spe_add_pro_buttons', [theid, status]) || '';
 
-						var editBtn = '<a href="<?php echo admin_url('post.php?post='); ?>' + theid + '&action=edit" target="_blank" class="button edit-spemail" title="Edit"><span class="dashicons dashicons-edit"></span></a>';
-						var removeBtn = '<a href="#" class="button remove-spemail" title="Remove"><span class="dashicons dashicons-no"></span></a>';
+						var editBtn = '<a href="<?php echo admin_url('post.php?post='); ?>' + theid + '&action=edit" target="_blank" class="button edit-spemail" title="' + speI18n.edit + '"><span class="dashicons dashicons-edit"></span></a>';
+						var removeBtn = '<a href="#" class="button remove-spemail" title="' + speI18n.remove + '"><span class="dashicons dashicons-no"></span></a>';
 
 						$btnContainer.addClass('remove edit').html(proButtons + editBtn + removeBtn);
 					}

@@ -111,7 +111,7 @@ class Smart_Product_Emails_For_WooCommerce_Admin_Settings {
 		?>
 
 		<div class="wrap">
-			<h2>Smart Product Emails Settings</h2>
+			<h2><?php esc_html_e( 'Smart Product Emails Settings', 'smart_product_emails_domain' ); ?></h2>
 
 			<hr>
 
@@ -143,7 +143,7 @@ class Smart_Product_Emails_For_WooCommerce_Admin_Settings {
 			$nonce_url = wp_create_nonce('spe_admin_nonce');
 			?>
 			<h2 class="nav-tab-wrapper">
-				<a href="?post_type=smartproductemails&page=<?php echo esc_attr( $page ); ?>&tab=display_settings&_wpnonce=<?php echo esc_attr($nonce_url); ?>" class="nav-tab <?php echo 'display_settings' === $active_tab ? 'nav-tab-active' : ''; ?>">Display Settings</a>
+				<a href="?post_type=smartproductemails&page=<?php echo esc_attr( $page ); ?>&tab=display_settings&_wpnonce=<?php echo esc_attr($nonce_url); ?>" class="nav-tab <?php echo 'display_settings' === $active_tab ? 'nav-tab-active' : ''; ?>"><?php esc_html_e( 'Display Settings', 'smart_product_emails_domain' ); ?></a>
 			</h2>
 
 			<form method="post" action="options.php">

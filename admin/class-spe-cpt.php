@@ -112,20 +112,20 @@ class Smart_Product_Emails_CPT {
 		$opts['capabilities']['read_post']              = "read_{$cap_type}";
 		$opts['capabilities']['read_private_posts']     = "read_private_{$cap_type}s";
 
-		$opts['labels']['add_new']            = 'Add New SPE Message';
-		$opts['labels']['add_new_item']       = 'Add New SPE Message';
-		$opts['labels']['all_items']          = 'SPE Messages';
-		$opts['labels']['edit_item']          = 'Edit SPE Message';
-		$opts['labels']['menu_name']          = 'SPE Messages';
-		$opts['labels']['name']               = 'SPE Messages';
-		$opts['labels']['name_admin_bar']     = 'SPE Message';
-		$opts['labels']['new_item']           = 'New SPE Message';
-		$opts['labels']['not_found']          = 'No SPE Messages Found';
-		$opts['labels']['not_found_in_trash'] = 'No SPE Messages Found in Trash';
-		$opts['labels']['parent_item_colon']  = 'Parent SPE Messages:';
-		$opts['labels']['search_items']       = 'Search SPE Messages';
-		$opts['labels']['singular_name']      = 'SPE Message';
-		$opts['labels']['view_item']          = 'View SPE Message';
+		$opts['labels']['add_new']            = __( 'Add New SPE Message', 'smart_product_emails_domain' );
+		$opts['labels']['add_new_item']       = __( 'Add New SPE Message', 'smart_product_emails_domain' );
+		$opts['labels']['all_items']          = __( 'SPE Messages', 'smart_product_emails_domain' );
+		$opts['labels']['edit_item']          = __( 'Edit SPE Message', 'smart_product_emails_domain' );
+		$opts['labels']['menu_name']          = __( 'SPE Messages', 'smart_product_emails_domain' );
+		$opts['labels']['name']               = __( 'SPE Messages', 'smart_product_emails_domain' );
+		$opts['labels']['name_admin_bar']     = __( 'SPE Message', 'smart_product_emails_domain' );
+		$opts['labels']['new_item']           = __( 'New SPE Message', 'smart_product_emails_domain' );
+		$opts['labels']['not_found']          = __( 'No SPE Messages Found', 'smart_product_emails_domain' );
+		$opts['labels']['not_found_in_trash'] = __( 'No SPE Messages Found in Trash', 'smart_product_emails_domain' );
+		$opts['labels']['parent_item_colon']  = __( 'Parent SPE Messages:', 'smart_product_emails_domain' );
+		$opts['labels']['search_items']       = __( 'Search SPE Messages', 'smart_product_emails_domain' );
+		$opts['labels']['singular_name']      = __( 'SPE Message', 'smart_product_emails_domain' );
+		$opts['labels']['view_item']          = __( 'View SPE Message', 'smart_product_emails_domain' );
 
 		$opts = apply_filters( 'smartproductemails-cpt-options', $opts );
 

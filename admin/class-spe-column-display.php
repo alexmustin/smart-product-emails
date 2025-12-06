@@ -30,11 +30,11 @@ class Smart_Product_Emails_Column_Display {
 		unset( $columns['date'] );
 
 		// Add new "ID" column.
-		$columns['messageid'] = __( 'ID', 'Smart_Product_Emails_domain' );
+		$columns['messageid'] = __( 'ID', 'smart_product_emails_domain' );
 
 		// Add the Title and Date columns back in.
-		$columns['title'] = __( 'Title', 'Smart_Product_Emails_domain' );
-		$columns['date']  = __( 'Date', 'Smart_Product_Emails_domain' );
+		$columns['title'] = __( 'Title', 'smart_product_emails_domain' );
+		$columns['date']  = __( 'Date', 'smart_product_emails_domain' );
 
 		return $columns;
 	}
