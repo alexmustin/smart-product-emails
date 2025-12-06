@@ -96,7 +96,7 @@ class SPE_Product_Data_Admin {
 		$display_classes_arr = explode( ',', $display_classes_setting );
 
 		$new_custom_tab['smart-product-emails'] = array(
-			'label'  => __( 'Smart Emails', 'smart_product_emails_domain' ),
+			'label'  => __( 'Smart Product Emails', 'smart_product_emails_domain' ),
 			'target' => 'smart_product_emails_product_data',
 			'class'  => $display_classes_arr,
 		);
