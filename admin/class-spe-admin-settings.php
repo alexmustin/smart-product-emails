@@ -171,13 +171,6 @@ class Smart_Product_Emails_For_WooCommerce_Admin_Settings {
 			array( $this, 'spe_settings_sanitize' ) // sanitize_callback.
 		);
 
-		// add_settings_section(
-		// 	'spe_settings_display_settings_section', // id.
-		// 	__('Display Settings', 'smart_product_emails_domain'), // title.
-		// 	array( $this, 'spe_settings_section_info' ), // callback.
-		// 	'spe-settings-admin' // page.
-		// );
-
 		add_settings_section(
 			'spe_settings_content_separator_section', // id.
 			__('Content Separator', 'smart_product_emails_domain'), // title.
@@ -263,14 +256,6 @@ class Smart_Product_Emails_For_WooCommerce_Admin_Settings {
 	 */
 	public function spe_settings_sanitize( $input ) {
 		$sanitary_values = array();
-		
-		// if ( isset( $input['show_in_admin_email'] ) ) {
-		// 	$sanitary_values['show_in_admin_email'] = $input['show_in_admin_email'];
-		// }
-
-		// if ( isset( $input['display_classes'] ) ) {
-		// 	$sanitary_values['display_classes'] = sanitize_text_field( $input['display_classes'] );
-		// }
 
 		// Separator style.
 		if ( isset( $input['content_separator'] ) ) {
@@ -357,11 +342,11 @@ class Smart_Product_Emails_For_WooCommerce_Admin_Settings {
 
 		?>
 		<!-- Separator Color (for line styles) -->
-		<input type="text" 
-			name="SmartProductEmails_settings_name[separator_color]" 
-			id="spe_separator_color" 
-			value="<?php echo esc_attr($separator_color); ?>" 
-			class="spe-color-picker" 
+		<input type="text"
+			name="SmartProductEmails_settings_name[separator_color]"
+			id="spe_separator_color"
+			value="<?php echo esc_attr($separator_color); ?>"
+			class="spe-color-picker"
 			data-default-color="#dddddd" />
 
 			<p class="description">
@@ -376,13 +361,13 @@ class Smart_Product_Emails_For_WooCommerce_Admin_Settings {
 	public function spe_settings_content_separator_thickness() {
 		$separator_thickness = isset( $this->spe_settings_options['separator_thickness'] ) ? $this->spe_settings_options['separator_thickness'] : '1';
 		?>
-		<input type="range" 
-			name="SmartProductEmails_settings_name[separator_thickness]" 
-			id="spe_separator_thickness" 
-			min="1" 
-			max="5" 
-			step="1" 
-			value="<?php echo esc_attr($separator_thickness); ?>" 
+		<input type="range"
+			name="SmartProductEmails_settings_name[separator_thickness]"
+			id="spe_separator_thickness"
+			min="1"
+			max="5"
+			step="1"
+			value="<?php echo esc_attr($separator_thickness); ?>"
 			style="width: 200px;" />
 		<span id="spe_thickness_value"><?php echo esc_html($separator_thickness); ?>px</span>
 		<p class="description">
@@ -397,13 +382,13 @@ class Smart_Product_Emails_For_WooCommerce_Admin_Settings {
 	public function spe_settings_content_separator_spacing() {
 		$separator_spacing = isset( $this->spe_settings_options['separator_spacing'] ) ? $this->spe_settings_options['separator_spacing'] : '20';
 		?>
-		<input type="range" 
-			name="SmartProductEmails_settings_name[separator_spacing]" 
-			id="spe_separator_spacing" 
-			min="10" 
-			max="50" 
-			step="5" 
-			value="<?php echo esc_attr($separator_spacing); ?>" 
+		<input type="range"
+			name="SmartProductEmails_settings_name[separator_spacing]"
+			id="spe_separator_spacing"
+			min="10"
+			max="50"
+			step="5"
+			value="<?php echo esc_attr($separator_spacing); ?>"
 			style="width: 200px;" />
 		<span id="spe_spacing_value"><?php echo esc_html($separator_spacing); ?>px</span>
 		<p class="description">
@@ -418,9 +403,9 @@ class Smart_Product_Emails_For_WooCommerce_Admin_Settings {
 	public function spe_settings_content_separator_customhtml() {
 		$custom_separator_html = isset( $this->spe_settings_options['separator_customhtml'] ) ? $this->spe_settings_options['separator_customhtml'] : '';
 		?>
-		<textarea name="SmartProductEmails_settings_name[separator_customhtml]" 
+		<textarea name="SmartProductEmails_settings_name[separator_customhtml]"
 			id="spe_separator_customhtml"
-			rows="5" 
+			rows="5"
 			class="large-text code"
 			placeholder='<div style="border-top: 2px solid #ff9800; margin: 20px 0;"></div>'><?php echo nl2br( esc_html($custom_separator_html)); ?></textarea>
 		<p class="description">
@@ -431,10 +416,10 @@ class Smart_Product_Emails_For_WooCommerce_Admin_Settings {
 			<div style="margin-top: 10px; padding: 10px; background: #f9f9f9; border-left: 3px solid #2271b1;">
 				<p><strong><?php esc_html_e('Brand-colored line:', 'smart_product_emails_domain'); ?></strong></p>
 				<code>&lt;hr style="border: none; border-top: 3px solid #ff6900; margin: 20px 0;" /&gt;</code>
-				
+
 				<p style="margin-top: 15px;"><strong><?php esc_html_e('Decorative stars:', 'smart_product_emails_domain'); ?></strong></p>
 				<code>&lt;div style="text-align: center; color: #999; margin: 20px 0;"&gt;★ ★ ★&lt;/div&gt;</code>
-				
+
 				<p style="margin-top: 15px;"><strong><?php esc_html_e('Gradient line:', 'smart_product_emails_domain'); ?></strong></p>
 				<code>&lt;div style="height: 2px; background: linear-gradient(to right, transparent, #2271b1, transparent); margin: 20px 0;"&gt;&lt;/div&gt;</code>
 			</div>
@@ -448,9 +433,9 @@ class Smart_Product_Emails_For_WooCommerce_Admin_Settings {
 			<p style="margin: 0 0 10px 0; color: #666; font-size: 13px;">
 				<?php esc_html_e('Order content appears here...', 'smart_product_emails_domain'); ?>
 			</p>
-			
+
 			<div id="spe_separator_preview_top"></div>
-			
+
 			<div style="background: #fffbcc; border-left: 4px solid #ff9800; padding: 15px; margin: 10px 0;">
 				<strong style="display: block; margin-bottom: 5px; color: #e65100;">
 					<?php esc_html_e('Your Custom Email Content', 'smart_product_emails_domain'); ?>
@@ -459,9 +444,9 @@ class Smart_Product_Emails_For_WooCommerce_Admin_Settings {
 					<?php esc_html_e('This is where your custom product-specific content will appear in the customer\'s order email.', 'smart_product_emails_domain'); ?>
 				</p>
 			</div>
-			
+
 			<div id="spe_separator_preview_bottom"></div>
-			
+
 			<p style="margin: 10px 0 0 0; color: #666; font-size: 13px;">
 				<?php esc_html_e('More order content continues below...', 'smart_product_emails_domain'); ?>
 			</p>
@@ -480,7 +465,7 @@ class Smart_Product_Emails_For_WooCommerce_Admin_Settings {
 		?>
 		<script>
         jQuery(document).ready(function($) {
-            
+
             // Initialize WordPress color picker
             if ($.fn.wpColorPicker) {
                 $('.spe-color-picker').wpColorPicker({
@@ -492,23 +477,23 @@ class Smart_Product_Emails_For_WooCommerce_Admin_Settings {
                     }
                 });
             }
-            
+
             // Update thickness value display
             $('#spe_separator_thickness').on('input', function() {
                 $('#spe_thickness_value').text($(this).val() + 'px');
                 updateSeparatorPreview();
             });
-            
+
             // Update spacing value display
             $('#spe_separator_spacing').on('input', function() {
                 $('#spe_spacing_value').text($(this).val() + 'px');
                 updateSeparatorPreview();
             });
-            
+
             // Update preview when separator type changes
             $('#spe_content_separator').on('change', function() {
                 var separatorType = $(this).val();
-                
+
                 // Show/hide relevant options
                 if (separatorType === 'line' || separatorType === 'dots' || separatorType === 'dashes' || separatorType === 'double') {
                     $('.spe_separator_color_row').show();
@@ -521,28 +506,28 @@ class Smart_Product_Emails_For_WooCommerce_Admin_Settings {
 				if (separatorType === 'line' || separatorType === 'dots' || separatorType === 'dashes' || separatorType === 'double' || separatorType === 'space') {
 					$('.spe_separator_spacing_row').show();
 				}
-                
+
                 if (separatorType === 'custom') {
 					$('.spe_separator_customhtml_row').show();
 					$('.spe_separator_spacing_row').hide();
                 } else {
 					$('.spe_separator_customhtml_row').hide();
                 }
-                
+
                 if (separatorType === 'none') {
                     $('.spe_separator_spacing_row').hide();
                 }
-                
+
                 updateSeparatorPreview();
             });
-            
+
             // Update preview when custom HTML changes
             $('#spe_separator_customhtml').on('input', function() {
                 if ($('#spe_content_separator').val() === 'custom') {
                     updateSeparatorPreview();
                 }
             });
-            
+
             /**
              * Update the live preview based on current settings
              */
@@ -552,34 +537,34 @@ class Smart_Product_Emails_For_WooCommerce_Admin_Settings {
                 var thickness = $('#spe_separator_thickness').val() || '1';
                 var spacing = $('#spe_separator_spacing').val() || '20';
                 var customHTML = $('#spe_separator_customhtml').val();
-                
+
                 var html = '';
-                
+
                 switch(separatorType) {
                     case 'none':
                         html = '';
                         break;
-                        
+
                     case 'line':
                         html = '<hr style="border: none; border-top: ' + thickness + 'px solid ' + color + '; margin: ' + spacing + 'px 0;" />';
                         break;
-                        
+
                     case 'dots':
                         html = '<hr style="border: none; border-top: ' + thickness + 'px dotted ' + color + '; margin: ' + spacing + 'px 0;" />';
                         break;
-                        
+
                     case 'dashes':
                         html = '<hr style="border: none; border-top: ' + thickness + 'px dashed ' + color + '; margin: ' + spacing + 'px 0;" />';
                         break;
-                        
+
                     case 'double':
                         html = '<hr style="border: none; border-top: ' + thickness + 'px double ' + color + '; margin: ' + spacing + 'px 0;" />';
                         break;
-                        
+
                     case 'space':
                         html = '<div style="height: ' + spacing + 'px;"></div>';
                         break;
-                        
+
                     case 'custom':
                         html = customHTML || '<div style="border-top: 2px solid #ff9800; margin: 20px 0;"></div>';
                         break;
@@ -593,44 +578,44 @@ class Smart_Product_Emails_For_WooCommerce_Admin_Settings {
                     $('.spe_separator_color_row').hide();
                     $('.spe_separator_thickness_row').hide();
                 }
-                
+
                 if (separatorType === 'custom') {
 					$('.spe_separator_spacing_row').hide();
                     $('.spe_separator_customhtml_row').show();
                 } else {
                     $('.spe_separator_customhtml_row').hide();
                 }
-                
+
                 if (separatorType === 'none') {
                     $('.spe_separator_spacing_row').hide();
                 }
-                
+
                 $('#spe_separator_preview_top').html(html);
                 $('#spe_separator_preview_bottom').html(html);
             }
-            
+
             // Initial preview update
             updateSeparatorPreview();
         });
         </script>
-        
+
         <style>
         #spe_separator_preview {
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
-        
+
         #spe_separator_preview hr {
             height: 0;
         }
-        
+
         .spe-color-picker {
             max-width: 100px;
         }
-        
+
         input[type="range"] {
             vertical-align: middle;
         }
-        
+
         #spe_thickness_value,
         #spe_spacing_value {
             display: inline-block;
@@ -638,11 +623,11 @@ class Smart_Product_Emails_For_WooCommerce_Admin_Settings {
             font-weight: bold;
             color: #2271b1;
         }
-        
+
         details summary {
             font-size: 13px;
         }
-        
+
         details code {
             display: block;
             padding: 8px;
@@ -662,11 +647,3 @@ class Smart_Product_Emails_For_WooCommerce_Admin_Settings {
 if ( is_admin() ) {
 	$spe_settings = new Smart_Product_Emails_For_WooCommerce_Admin_Settings();
 }
-
-/*
- * Retrieve values with the following functions:
- *
- * $spe_settings_options = get_option( 'SmartProductEmails_settings_name' ); // Array of All Options
- * $show_in_admin_email = $spe_settings_options['show_in_admin_email']; // Include in Admin Emails
- * $display_classes = $spe_settings_options['display_classes']; // Display for Other Product Types
- */

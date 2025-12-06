@@ -70,53 +70,6 @@ class SPE_Product_Data_Admin {
 	protected $version;
 
 	/**
-	 * Creates a new Tab in the SPE Product settings section.
-	 *
-	 * @param object $original_prodata_tabs  An object containing the Settings Tabs.
-	 */
-	public function add_smart_product_emails_tab( $original_prodata_tabs ) {
-
-		$this->options = get_option( 'SmartProductEmails_settings_name' );
-
-		$display_classes_default = 'show_if_simple, show_if_variable, show_if_external, show_if_downloadable, show_if_grouped';
-		$display_classes_setting = '';
-
-		if ( isset( $this->options['display_classes'] ) ) {
-			// Data is set.
-			$display_classes_setting = $display_classes_default . ', ' . $this->options['display_classes'];
-		} else {
-			// No Data set.
-			$display_classes_setting = $display_classes_default;
-		}
-
-		// Remove whitespace.
-		$display_classes_setting = str_replace( ' ', '', $display_classes_setting );
-
-		// Turn the string into an array.
-		$display_classes_arr = explode( ',', $display_classes_setting );
-
-		$new_custom_tab['smart-product-emails'] = array(
-			'label'  => __( 'Smart Emails', 'smart_product_emails_domain' ),
-			'target' => 'smart_product_emails_product_data',
-			'class'  => $display_classes_arr,
-		);
-
-		$insert_at_position = 2; // Set the position in the tab list.
-
-		// Split the tabs into an array, then keep the first part up until our position number.
-		$tabs = array_slice( $original_prodata_tabs, 0, $insert_at_position, true );
-
-		// Add our new tab into the array.
-		$tabs = array_merge( $tabs, $new_custom_tab );
-
-		// Append the last part of tabs array.
-		$tabs = array_merge( $tabs, array_slice( $original_prodata_tabs, $insert_at_position, null, true ) );
-
-		return $tabs;
-
-	}
-
-	/**
 	 * Adds the custom Admin stylesheet.
 	 */
 	public function spe_custom_admin_style() {
@@ -141,7 +94,6 @@ class SPE_Product_Data_Admin {
 		include_once dirname( __FILE__ ) . '/css/smart-product-emails-admin-styles.css';
 
 	}
-
 
 	/**
 	 * Adds fields to the 'Smart Product Emails' Product Data tab.
@@ -233,14 +185,14 @@ class SPE_Product_Data_Admin {
 
 						$post_id = get_the_ID();
 						$product = wc_get_product($post_id);
-						
+
 						if (!$product) {
 							return;
 						}
-						
+
 						// Use WooCommerce CRUD methods instead of get_post_meta
 						$spemail_id_currentstatus = $product->get_meta('spemail_id_' . $status_name);
-						
+
 						// Legacy support - still use get_post_meta for old data structure
 						$spemail_id = get_post_meta($post_id, 'spemail_id', true);
 						// $customcontent_orderstatus = get_post_meta($post_id, 'order_status', true);
@@ -355,7 +307,7 @@ class SPE_Product_Data_Admin {
 						}
 
 						$product = wc_get_product(get_the_ID());
-    
+
 						if (!$product) {
 							return;
 						}
@@ -366,7 +318,7 @@ class SPE_Product_Data_Admin {
 
 						// Use WooCommerce CRUD methods
 						$current_status_location = $product->get_meta('location_' . $status_name);
-						
+
 						// Legacy support
 						$old_order_status = get_post_meta(get_the_ID(), 'order_status', true);
 						$old_order_location = get_post_meta(get_the_ID(), 'location', true);
@@ -401,7 +353,7 @@ class SPE_Product_Data_Admin {
 										'value' => $old_order_location ?: '',
 									)
 								);
-								
+
 							} else {
 								// No data has been saved for the current Order Status.
 
@@ -702,12 +654,18 @@ class SPE_Product_Data_Admin {
 			wp_reset_postdata();
 		} else {
 			$add_messages_url  = admin_url( 'edit.php?post_type=smartproductemails' );
-			$add_messages_text = '<a href="' . $add_messages_url . '" target="_blank" class="edit-spemail">' . __( 'Smart Product Emails', 'smart_product_emails_domain' ) . '</a>';
+			$add_messages_text = '<a href="' . $add_messages_url . '" target="_blank" class="edit-spemail">SPE Messages</a>';
+			$allowed_tags = array(
+				'a' => array(
+				'href' => true,
+				'title' => true,
+				'class' => true
+			));
 			?>
 			<p class="placeholder error">
 				<?php
 				echo esc_html__( 'Sorry! No posts match your search. Please add some ', 'smart_product_emails_domain' );
-				echo wp_kses( $add_messages_text, $kses_allowed_html );
+				echo wp_kses( $add_messages_text, $allowed_tags );
 				echo esc_html__( ' and try again.', 'smart_product_emails_domain' );
 				?>
 			</p>
@@ -789,7 +747,7 @@ class SPE_Product_Data_Admin {
 
 	/**
 	 * Get separator HTML based on settings
-	 * 
+	 *
 	 * @return string HTML for separator
 	 */
 	public function get_separator_html() {
@@ -800,32 +758,32 @@ class SPE_Product_Data_Admin {
 		$thickness = isset($settings['separator_thickness']) ? $settings['separator_thickness'] : '1';
 		$spacing = isset($settings['separator_spacing']) ? $settings['separator_spacing'] : '20';
 		$custom_html = isset($settings['separator_customhtml']) ? $settings['separator_customhtml'] : '';
-		
+
 		switch ($separator_type) {
 			case 'line':
 				return '<hr style="border: none; border-top: ' . esc_attr($thickness) . 'px solid ' . esc_attr($color) . '; margin: ' . esc_attr($spacing) . 'px 0;" />';
-				
+
 			case 'dots':
 				return '<hr style="border: none; border-top: ' . esc_attr($thickness) . 'px dotted ' . esc_attr($color) . '; margin: ' . esc_attr($spacing) . 'px 0;" />';
-				
+
 			case 'dashes':
 				return '<hr style="border: none; border-top: ' . esc_attr($thickness) . 'px dashed ' . esc_attr($color) . '; margin: ' . esc_attr($spacing) . 'px 0;" />';
-				
+
 			case 'double':
 				return '<hr style="border: none; border-top: ' . esc_attr($thickness) . 'px double ' . esc_attr($color) . '; margin: ' . esc_attr($spacing) . 'px 0;" />';
-				
+
 			case 'space':
 				return '<div style="height: ' . esc_attr($spacing) . 'px;"></div>';
-				
+
 			case 'custom':
 				return nl2br($custom_html);
-				
+
 			case 'none':
 			default:
 				return '';
 		}
 	}
-	
+
 	/**
 	 * Get WooCommerce email color settings
 	 */

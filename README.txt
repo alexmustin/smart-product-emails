@@ -6,8 +6,8 @@ Tags: woocommerce emails, custom emails, product emails, per product, product sp
 Requires at least: 6.8
 Tested up to: 6.9
 Requires PHP: 8.2
-Stable tag: 0.4.5
-Version: 0.4.5
+Stable tag: 0.4.6
+Version: 0.4.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
