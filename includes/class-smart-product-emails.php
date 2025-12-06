@@ -69,8 +69,6 @@ class Smart_Product_Emails {
 		$this->loader->add_action( 'admin_head-post.php', $spe_product_data_admin, 'spe_custom_admin_style' );
 		$this->loader->add_action( 'admin_head-post-new.php', $spe_product_data_admin, 'spe_custom_admin_style' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $spe_product_data_admin, 'spe_enqueue_custom_admin_style' );
-		// $this->loader->add_action( 'woocommerce_product_data_tabs', $spe_product_data_admin, 'add_smart_product_emails_tab' );
-		// $this->loader->add_action( 'woocommerce_product_data_panels', $spe_product_data_admin, 'add_smart_product_emails_tab_fields' );
 		$this->loader->add_action( 'woocommerce_process_product_meta', $spe_product_data_admin, 'save_smart_product_emails_tab_fields' );
 
 		// Add AJAX Fetch JS to footer.
