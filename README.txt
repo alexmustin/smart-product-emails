@@ -6,8 +6,8 @@ Tags: woocommerce emails, custom emails, product emails, per product, product sp
 Requires at least: 6.8
 Tested up to: 6.9
 Requires PHP: 8.2
-Stable tag: 0.4.7
-Version: 0.4.7
+Stable tag: 0.4.8
+Version: 0.4.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -114,7 +114,7 @@ Ready to turn your order emails into a revenue-generating communication platform
    - *Or* install directly from the WordPress Plugins screen.  
 3. *Activate the plugin* in *Plugins → Installed Plugins*. A new menu item appears: *Smart Product Emails*.  
 4. *Create a custom message*:  
-   - Go to *Smart Product Emails → Add New Email*  
+   - Go to *Smart Product Emails → Add New SPE Message*  
    - Add a title + content, then *Publish* 
    - *(Note: Shortcodes and auto-generated content will not appear in emails)*  
 5. *Assign to a product*:  

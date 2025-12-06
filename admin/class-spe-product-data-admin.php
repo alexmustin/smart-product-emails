@@ -70,6 +70,53 @@ class SPE_Product_Data_Admin {
 	protected $version;
 
 	/**
+	 * Creates a new Tab in the SPE Product settings section.
+	 *
+	 * @param object $original_prodata_tabs  An object containing the Settings Tabs.
+	 */
+	public function add_smart_product_emails_tab( $original_prodata_tabs ) {
+
+		$this->options = get_option( 'SmartProductEmails_settings_name' );
+
+		$display_classes_default = 'show_if_simple, show_if_variable, show_if_external, show_if_downloadable, show_if_grouped';
+		$display_classes_setting = '';
+
+		if ( isset( $this->options['display_classes'] ) ) {
+			// Data is set.
+			$display_classes_setting = $display_classes_default . ', ' . $this->options['display_classes'];
+		} else {
+			// No Data set.
+			$display_classes_setting = $display_classes_default;
+		}
+
+		// Remove whitespace.
+		$display_classes_setting = str_replace( ' ', '', $display_classes_setting );
+
+		// Turn the string into an array.
+		$display_classes_arr = explode( ',', $display_classes_setting );
+
+		$new_custom_tab['smart-product-emails'] = array(
+			'label'  => __( 'Smart Emails', 'smart_product_emails_domain' ),
+			'target' => 'smart_product_emails_product_data',
+			'class'  => $display_classes_arr,
+		);
+
+		$insert_at_position = 2; // Set the position in the tab list.
+
+		// Split the tabs into an array, then keep the first part up until our position number.
+		$tabs = array_slice( $original_prodata_tabs, 0, $insert_at_position, true );
+
+		// Add our new tab into the array.
+		$tabs = array_merge( $tabs, $new_custom_tab );
+
+		// Append the last part of tabs array.
+		$tabs = array_merge( $tabs, array_slice( $original_prodata_tabs, $insert_at_position, null, true ) );
+
+		return $tabs;
+
+	}
+
+	/**
 	 * Adds the custom Admin stylesheet.
 	 */
 	public function spe_custom_admin_style() {
