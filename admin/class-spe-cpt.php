@@ -74,8 +74,8 @@ class Smart_Product_Emails_CPT {
 	public function new_cpt_speemails() {
 
 		$cap_type = 'post';
-		$plural   = 'Smart Product Emails';
-		$single   = 'Smart Product Email';
+		$plural   = __( 'Smart Product Emails', 'smart_product_emails_domain' );
+		$single   = __( 'Smart Product Email', 'smart_product_emails_domain' );
 		$cpt_name = 'smartproductemails';
 
 		$opts['can_export']           = true;
@@ -116,7 +116,7 @@ class Smart_Product_Emails_CPT {
 		$opts['labels']['add_new_item']       = __( 'Add New SPE Message', 'smart_product_emails_domain' );
 		$opts['labels']['all_items']          = __( 'SPE Messages', 'smart_product_emails_domain' );
 		$opts['labels']['edit_item']          = __( 'Edit SPE Message', 'smart_product_emails_domain' );
-		$opts['labels']['menu_name']          = __( 'SPE Messages', 'smart_product_emails_domain' );
+		$opts['labels']['menu_name']          = $plural;
 		$opts['labels']['name']               = __( 'SPE Messages', 'smart_product_emails_domain' );
 		$opts['labels']['name_admin_bar']     = __( 'SPE Message', 'smart_product_emails_domain' );
 		$opts['labels']['new_item']           = __( 'New SPE Message', 'smart_product_emails_domain' );
