@@ -137,7 +137,7 @@ class Smart_Product_Emails_CPT {
 
 // Initialize the Class.
 add_action(
-	'plugins_loaded',
+	'init',
 	function() {
 		$spe_cpt = new Smart_Product_Emails_CPT();
 		$spe_cpt->new_cpt_speemails();
