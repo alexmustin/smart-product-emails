@@ -72,7 +72,7 @@ class SPE_Product_Data_Admin {
 	/**
 	 * Creates a new Tab in the SPE Product settings section.
 	 *
-	 * @param object $original_prodata_tabs  An object containing the Settings Tabs.
+	 * @param array $original_prodata_tabs  An array containing the Settings Tabs.
 	 */
 	public function add_smart_product_emails_tab( $original_prodata_tabs ) {
 
