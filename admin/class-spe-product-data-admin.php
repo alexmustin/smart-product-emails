@@ -161,6 +161,7 @@ class SPE_Product_Data_Admin {
 		<div id='smart_product_emails_product_data' class='panel woocommerce_options_panel'>
 
 			<div class='options_group'>
+				<?php wp_nonce_field( 'ajax_nonce_action', 'ajax_nonce' ); ?>
 
 				<div class="spe-product-options-table">
 
@@ -208,8 +209,6 @@ class SPE_Product_Data_Admin {
 						$default_search_msg = __( 'Search SPE Messages...', 'smart_product_emails_domain' );
 
 						$return_str = '<input class="spemail_search_field_input" type="text" value="' . $spemail_saved_text . '" name="spemail_search_' . $status_name . '" id="spemail_search_' . $status_name . '" placeholder="' . $default_search_msg . '" autocomplete="off"></input>';
-
-						$return_str .= wp_nonce_field( 'ajax_nonce_action', 'ajax_nonce' );
 
 						return $return_str;
 
