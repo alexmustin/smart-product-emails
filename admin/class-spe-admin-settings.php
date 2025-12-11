@@ -464,138 +464,183 @@ class Smart_Product_Emails_For_WooCommerce_Admin_Settings {
 
 		?>
 		<script>
-        jQuery(document).ready(function($) {
+        jQuery(document).ready(function ($) {
+        	// Initialize WordPress color picker
+        	if ($.fn.wpColorPicker) {
+        		$('.spe-color-picker').wpColorPicker({
+        			change() {
+        				updateSeparatorPreview();
+        			},
+        			clear() {
+        				updateSeparatorPreview();
+        			},
+        		});
+        	}
 
-            // Initialize WordPress color picker
-            if ($.fn.wpColorPicker) {
-                $('.spe-color-picker').wpColorPicker({
-                    change: function() {
-                        updateSeparatorPreview();
-                    },
-                    clear: function() {
-                        updateSeparatorPreview();
-                    }
-                });
-            }
+        	// Update thickness value display
+        	$('#spe_separator_thickness').on('input', function () {
+        		$('#spe_thickness_value').text($(this).val() + 'px');
+        		updateSeparatorPreview();
+        	});
 
-            // Update thickness value display
-            $('#spe_separator_thickness').on('input', function() {
-                $('#spe_thickness_value').text($(this).val() + 'px');
-                updateSeparatorPreview();
-            });
+        	// Update spacing value display
+        	$('#spe_separator_spacing').on('input', function () {
+        		$('#spe_spacing_value').text($(this).val() + 'px');
+        		updateSeparatorPreview();
+        	});
 
-            // Update spacing value display
-            $('#spe_separator_spacing').on('input', function() {
-                $('#spe_spacing_value').text($(this).val() + 'px');
-                updateSeparatorPreview();
-            });
+        	// Update preview when separator type changes
+        	$('#spe_content_separator').on('change', function () {
+        		const separatorType = $(this).val();
 
-            // Update preview when separator type changes
-            $('#spe_content_separator').on('change', function() {
-                var separatorType = $(this).val();
+        		// Show/hide relevant options
+        		if (
+        			separatorType === 'line' ||
+        			separatorType === 'dots' ||
+        			separatorType === 'dashes' ||
+        			separatorType === 'double'
+        		) {
+        			$('.spe_separator_color_row').show();
+        			$('.spe_separator_thickness_row').show();
+        		} else {
+        			$('.spe_separator_color_row').hide();
+        			$('.spe_separator_thickness_row').hide();
+        		}
 
-                // Show/hide relevant options
-                if (separatorType === 'line' || separatorType === 'dots' || separatorType === 'dashes' || separatorType === 'double') {
-                    $('.spe_separator_color_row').show();
-                    $('.spe_separator_thickness_row').show();
-                } else {
-                    $('.spe_separator_color_row').hide();
-                    $('.spe_separator_thickness_row').hide();
-                }
+        		if (
+        			separatorType === 'line' ||
+        			separatorType === 'dots' ||
+        			separatorType === 'dashes' ||
+        			separatorType === 'double' ||
+        			separatorType === 'space'
+        		) {
+        			$('.spe_separator_spacing_row').show();
+        		}
 
-				if (separatorType === 'line' || separatorType === 'dots' || separatorType === 'dashes' || separatorType === 'double' || separatorType === 'space') {
-					$('.spe_separator_spacing_row').show();
-				}
+        		if (separatorType === 'custom') {
+        			$('.spe_separator_customhtml_row').show();
+        			$('.spe_separator_spacing_row').hide();
+        		} else {
+        			$('.spe_separator_customhtml_row').hide();
+        		}
 
-                if (separatorType === 'custom') {
-					$('.spe_separator_customhtml_row').show();
-					$('.spe_separator_spacing_row').hide();
-                } else {
-					$('.spe_separator_customhtml_row').hide();
-                }
+        		if (separatorType === 'none') {
+        			$('.spe_separator_spacing_row').hide();
+        		}
 
-                if (separatorType === 'none') {
-                    $('.spe_separator_spacing_row').hide();
-                }
+        		updateSeparatorPreview();
+        	});
 
-                updateSeparatorPreview();
-            });
+        	// Update preview when custom HTML changes
+        	$('#spe_separator_customhtml').on('input', function () {
+        		if ($('#spe_content_separator').val() === 'custom') {
+        			updateSeparatorPreview();
+        		}
+        	});
 
-            // Update preview when custom HTML changes
-            $('#spe_separator_customhtml').on('input', function() {
-                if ($('#spe_content_separator').val() === 'custom') {
-                    updateSeparatorPreview();
-                }
-            });
+        	/**
+        	 * Update the live preview based on current settings
+        	 */
+        	function updateSeparatorPreview() {
+        		const separatorType = $('#spe_content_separator').val();
+        		const color = $('#spe_separator_color').val() || '#dddddd';
+        		const thickness = $('#spe_separator_thickness').val() || '1';
+        		const spacing = $('#spe_separator_spacing').val() || '20';
+        		const customHTML = $('#spe_separator_customhtml').val();
 
-            /**
-             * Update the live preview based on current settings
-             */
-            function updateSeparatorPreview() {
-                var separatorType = $('#spe_content_separator').val();
-                var color = $('#spe_separator_color').val() || '#dddddd';
-                var thickness = $('#spe_separator_thickness').val() || '1';
-                var spacing = $('#spe_separator_spacing').val() || '20';
-                var customHTML = $('#spe_separator_customhtml').val();
+        		let html = '';
 
-                var html = '';
+        		switch (separatorType) {
+        			case 'none':
+        				html = '';
+        				break;
 
-                switch(separatorType) {
-                    case 'none':
-                        html = '';
-                        break;
+        			case 'line':
+        				html =
+        					'<hr style="border: none; border-top: ' +
+        					thickness +
+        					'px solid ' +
+        					color +
+        					'; margin: ' +
+        					spacing +
+        					'px 0;" />';
+        				break;
 
-                    case 'line':
-                        html = '<hr style="border: none; border-top: ' + thickness + 'px solid ' + color + '; margin: ' + spacing + 'px 0;" />';
-                        break;
+        			case 'dots':
+        				html =
+        					'<hr style="border: none; border-top: ' +
+        					thickness +
+        					'px dotted ' +
+        					color +
+        					'; margin: ' +
+        					spacing +
+        					'px 0;" />';
+        				break;
 
-                    case 'dots':
-                        html = '<hr style="border: none; border-top: ' + thickness + 'px dotted ' + color + '; margin: ' + spacing + 'px 0;" />';
-                        break;
+        			case 'dashes':
+        				html =
+        					'<hr style="border: none; border-top: ' +
+        					thickness +
+        					'px dashed ' +
+        					color +
+        					'; margin: ' +
+        					spacing +
+        					'px 0;" />';
+        				break;
 
-                    case 'dashes':
-                        html = '<hr style="border: none; border-top: ' + thickness + 'px dashed ' + color + '; margin: ' + spacing + 'px 0;" />';
-                        break;
+        			case 'double':
+        				html =
+        					'<hr style="border: none; border-top: ' +
+        					thickness +
+        					'px double ' +
+        					color +
+        					'; margin: ' +
+        					spacing +
+        					'px 0;" />';
+        				break;
 
-                    case 'double':
-                        html = '<hr style="border: none; border-top: ' + thickness + 'px double ' + color + '; margin: ' + spacing + 'px 0;" />';
-                        break;
+        			case 'space':
+        				html = '<div style="height: ' + spacing + 'px;"></div>';
+        				break;
 
-                    case 'space':
-                        html = '<div style="height: ' + spacing + 'px;"></div>';
-                        break;
+        			case 'custom':
+        				html =
+        					customHTML ||
+        					'<div style="border-top: 2px solid #ff9800; margin: 20px 0;"></div>';
+        				break;
+        		}
 
-                    case 'custom':
-                        html = customHTML || '<div style="border-top: 2px solid #ff9800; margin: 20px 0;"></div>';
-                        break;
-                }
+        		// Show/hide relevant options
+        		if (
+        			separatorType === 'line' ||
+        			separatorType === 'dots' ||
+        			separatorType === 'dashes' ||
+        			separatorType === 'double'
+        		) {
+        			$('.spe_separator_color_row').show();
+        			$('.spe_separator_thickness_row').show();
+        		} else {
+        			$('.spe_separator_color_row').hide();
+        			$('.spe_separator_thickness_row').hide();
+        		}
 
-				// Show/hide relevant options
-                if (separatorType === 'line' || separatorType === 'dots' || separatorType === 'dashes' || separatorType === 'double') {
-                    $('.spe_separator_color_row').show();
-                    $('.spe_separator_thickness_row').show();
-                } else {
-                    $('.spe_separator_color_row').hide();
-                    $('.spe_separator_thickness_row').hide();
-                }
+        		if (separatorType === 'custom') {
+        			$('.spe_separator_spacing_row').hide();
+        			$('.spe_separator_customhtml_row').show();
+        		} else {
+        			$('.spe_separator_customhtml_row').hide();
+        		}
 
-                if (separatorType === 'custom') {
-					$('.spe_separator_spacing_row').hide();
-                    $('.spe_separator_customhtml_row').show();
-                } else {
-                    $('.spe_separator_customhtml_row').hide();
-                }
+        		if (separatorType === 'none') {
+        			$('.spe_separator_spacing_row').hide();
+        		}
 
-                if (separatorType === 'none') {
-                    $('.spe_separator_spacing_row').hide();
-                }
+        		$('#spe_separator_preview_top').html(html);
+        		$('#spe_separator_preview_bottom').html(html);
+        	}
 
-                $('#spe_separator_preview_top').html(html);
-                $('#spe_separator_preview_bottom').html(html);
-            }
-
-            // Initial preview update
-            updateSeparatorPreview();
+        	// Initial preview update
+        	updateSeparatorPreview();
         });
         </script>
 

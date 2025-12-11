@@ -6,8 +6,8 @@ Tags: woocommerce emails, custom emails, product emails, per product, product sp
 Requires at least: 6.8
 Tested up to: 6.9
 Requires PHP: 8.2
-Stable tag: 0.4.8.1
-Version: 0.4.8.1
+Stable tag: 0.4.8.2
+Version: 0.4.8.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -22,10 +22,13 @@ Instead of sending generic order confirmations, automatically deliver the right 
 == Core Features ==
 
 **Dynamic Product-Based Content**
-Create custom content blocks that automatically appear based on what customers purchase. From setup instructions to warranty information, your messages adapt to each order without manual intervention.
+Create custom content messages that automatically appear based on what customers purchase. From setup instructions to warranty information, your messages adapt to each order without manual intervention.
 
 **Intelligent Placement Control**
-Position your content exactly where it makes the most impact — before order details, after customer information, or in between. Your emails, your rules.
+Position your content exactly where it makes the most impact — the top of the email, before/after order details, after customer information, or at the end of the email. Your emails, your rules.
+
+**Email Preview & Testing** *(PRO)*
+See exactly how your emails will look before they go out. Send test emails to verify formatting, links, and content placement.
 
 **Customer Segmentation** *(PRO)*
 Target messages based on purchase history, order value, customer location, and more. Speak directly to first-time buyers differently than loyal customers.
@@ -36,11 +39,8 @@ Test different messages, calls-to-action, and content strategies. Data-driven in
 **Performance Analytics** *(PRO)*
 Track email opens, click-through rates, and conversion metrics. Know exactly which messages drive results and which need refinement.
 
-**Email Preview & Testing**
-See exactly how your emails will look before they go out. Send test emails to verify formatting, links, and content placement.
-
 == How It Works ==
-1. **Create Smart Messages** – Build reusable content blocks with the visual editor or custom HTML
+1. **Create Smart Messages** – Build reusable content messages with the visual editor or custom HTML
 2. **Set Targeting Rules** – Choose which products trigger each message
 3. **Choose Placement** – Position content strategically within the email template
 4. **Automate Everything** – Once configured, your email system runs automatically with zero ongoing effort
@@ -86,7 +86,7 @@ Works perfectly with WooCommerce's native emails — no theme conflicts, no comp
 == Free vs PRO ==
 
 **Free Version Includes:**
-- Unlimited custom email content blocks
+- Unlimited custom email messages
 - Product-based targeting
 - Flexible content placement
 - Dynamic placeholders
@@ -94,7 +94,8 @@ Works perfectly with WooCommerce's native emails — no theme conflicts, no comp
 - HPOS compatibility
 
 **PRO Version Adds:**
-- On-Hold and Completed Order Statuses
+- On-Hold, Completed, and Refunded Order Statuses
+- Multiple custom email messages per product with hierarchy control
 - Email preview and testing
 - Customer segmentation and targeting
 - A/B testing framework
@@ -109,21 +110,20 @@ Ready to turn your order emails into a revenue-generating communication platform
 
 == Installation & Setup ==
 
-1. *Backup your site* before installing any new plugin.  
-2. *Install the plugin*:  
-   - Upload to `/wp-content/plugins/smart-product-emails/`  
-   - *Or* install directly from the WordPress Plugins screen.  
-3. *Activate the plugin* in *Plugins → Installed Plugins*. A new menu item appears: *Smart Product Emails*.  
-4. *Create a custom message*:  
-   - Go to *Smart Product Emails → Add New SPE Message*  
-   - Add a title + content, then *Publish* 
-   - *(Note: Shortcodes and auto-generated content will not appear in emails)*  
-5. *Assign to a product*:  
-   - Edit a WooCommerce product  
-   - Open the *Smart Product Emails* tab in Product Data  
-   - Choose the *Order Status* where the message should appear  
-   - Click *Select Message*, search by name, and select it (green text = active)  
-   - Choose the *Content Location* (before/after Order Details, Order Meta, or Customer Details)  
+1. *Backup your site* before installing any new plugin.
+2. *Install the plugin*:
+   - Upload to `/wp-content/plugins/smart-product-emails/`
+   - *Or* install directly from the WordPress Plugins screen.
+3. *Activate the plugin* in *Plugins → Installed Plugins*. A new menu item appears: *Smart Product Emails*.
+4. *Create a custom message*:
+   - Go to *Smart Product Emails → Add New SPE Message*
+   - Add a title + content, then *Publish*
+   - *(Note: Shortcodes, blocks, and auto-generated content will not appear in emails)*
+5. *Assign to a product*:
+   - Edit a WooCommerce product
+   - Open the *Smart Product Emails* tab in Product Data
+   - Click *Select Message*, search by name, and select it
+   - Choose the *Content Location* (Email Header, before/after Order Details, Order Meta, Customer Details, or Email Footer)
    - *Update the product* 
 6. *Test it*: Place a test order with that product. The custom content will appear in the WooCommerce email at your chosen location.
 
@@ -172,13 +172,11 @@ If you are having any issues, please post in the WordPress Plugin Support Forum.
 == Screenshots ==
 
 1. Plugin menu: "Smart Product Emails"
-2. 'Smart Product Email' example - using the Classic Editor
-3. New Tab in the WooCommerce Product Data section: "Smart Product Emails"
-4. Use the search fields to find your SPE Message, then assign it to an Order Status email. Click the Title of your Message to assign it, then Update/Publish the Product to save your settings.
-5. Smart Email Message in the Customer email
-6. Smart Email Message in the Admin email
-7. Assigned Messages page
-8. 'Smart Product Emails' Settings page
+2. 'Smart Product Emails' Settings page
+3. 'Smart Product Email' example - using the Classic Editor
+4. New Tab in the WooCommerce Product Data section: "Smart Product Emails"
+5. Use the search fields to find your SPE Message, then assign it to the Order Status email. Click the Title of your Message to assign it, then Update/Publish the Product to save your settings.
+6. Smart Email Message in the Customer email 
 
 == Changelog ==
 
