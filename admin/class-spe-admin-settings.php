@@ -421,7 +421,7 @@ class Smart_Product_Emails_For_WooCommerce_Admin_Settings {
 				<code>&lt;div style="text-align: center; color: #999; margin: 20px 0;"&gt;★ ★ ★&lt;/div&gt;</code>
 
 				<p style="margin-top: 15px;"><strong><?php esc_html_e('Gradient line:', 'smart_product_emails_domain'); ?></strong></p>
-				<code>&lt;div style="height: 2px; background: linear-gradient(to right, transparent, #2271b1, transparent); margin: 20px 0;"&gt;&lt;/div&gt;</code>
+				<code>&lt;div style="height: 2px; background: linear-gradient(to right, #0c88d9, #9459dc); margin: 20px 0;"&gt;&lt;/div&gt;</code>
 			</div>
 		</details>
 		<?php
