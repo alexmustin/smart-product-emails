@@ -113,7 +113,7 @@ class Smart_Product_Emails_Output {
 
 		/**
 		 * Get separator HTML based on settings
-		 * 
+		 *
 		 * @return string HTML for separator
 		 */
 		function get_separator_html() {
@@ -124,26 +124,26 @@ class Smart_Product_Emails_Output {
 			$thickness = isset($settings['separator_thickness']) ? $settings['separator_thickness'] : '1';
 			$spacing = isset($settings['separator_spacing']) ? $settings['separator_spacing'] : '20';
 			$custom_html = isset($settings['separator_customhtml']) ? $settings['separator_customhtml'] : '';
-			
+
 			switch ($separator_type) {
 				case 'line':
 					return '<hr style="border: none; border-top: ' . esc_attr($thickness) . 'px solid ' . esc_attr($color) . '; margin: ' . esc_attr($spacing) . 'px 0;" />';
-					
+
 				case 'dots':
 					return '<hr style="border: none; border-top: ' . esc_attr($thickness) . 'px dotted ' . esc_attr($color) . '; margin: ' . esc_attr($spacing) . 'px 0;" />';
-					
+
 				case 'dashes':
 					return '<hr style="border: none; border-top: ' . esc_attr($thickness) . 'px dashed ' . esc_attr($color) . '; margin: ' . esc_attr($spacing) . 'px 0;" />';
-					
+
 				case 'double':
 					return '<hr style="border: none; border-top: ' . esc_attr($thickness) . 'px double ' . esc_attr($color) . '; margin: ' . esc_attr($spacing) . 'px 0;" />';
-					
+
 				case 'space':
 					return '<div style="height: ' . esc_attr($spacing) . 'px;"></div>';
-					
+
 				case 'custom':
 					return nl2br($custom_html);
-					
+
 				case 'none':
 				default:
 					return '';
@@ -248,8 +248,8 @@ class Smart_Product_Emails_Output {
 							// Get the message content
 							$message_content = get_post_field( 'post_content', $spemail_id_processing );
 
-							// Replace placeholders with real order data
-							$message_content = Smart_Product_Emails_Output::replace_placeholders_with_order($message_content, $order);
+							// Replace placeholders with real order data and product data
+							$message_content = Smart_Product_Emails_Output::replace_placeholders_with_order($message_content, $order, $product);
 
 							// Output the processed content
 							$output .= wp_kses_post( nl2br( $message_content ) );
@@ -277,7 +277,7 @@ class Smart_Product_Emails_Output {
 					 * @param string $this_email_template_location Current email template location
 					 */
 					do_action('spe_output_message_after_processing', $product, $order, $sent_to_admin, $shown_messages, $this_email_template_location);
-					
+
 				}
 
 			}
@@ -320,9 +320,10 @@ class Smart_Product_Emails_Output {
 	 *
 	 * @param string $text Text containing placeholders
 	 * @param WC_Order $order The WooCommerce order object
+	 * @param WC_Product|null $product Optional. The WooCommerce product object
 	 * @return string Text with placeholders replaced with real order data
 	 */
-	public static function replace_placeholders_with_order($text, $order) {
+	public static function replace_placeholders_with_order($text, $order, $product = null) {
 		// Bail if no order provided
 		if (!$order || !is_a($order, 'WC_Order')) {
 			return $text;
@@ -422,13 +423,68 @@ class Smart_Product_Emails_Output {
 			'{order_discount}' => $order_discount_formatted,
 		);
 
+		// Add product-specific placeholders if product is provided
+		if ($product && is_a($product, 'WC_Product')) {
+			// Get product data
+			$product_id = $product->get_id();
+			$product_name = $product->get_name();
+			$product_sku = $product->get_sku();
+			$product_price = $product->get_price();
+			$product_regular_price = $product->get_regular_price();
+			$product_sale_price = $product->get_sale_price();
+
+			// Format prices with currency
+			$product_price_formatted = $product_price ? wp_strip_all_tags(wc_price($product_price, array('currency' => $order->get_currency()))) : '';
+			$product_regular_price_formatted = $product_regular_price ? wp_strip_all_tags(wc_price($product_regular_price, array('currency' => $order->get_currency()))) : '';
+			$product_sale_price_formatted = $product_sale_price ? wp_strip_all_tags(wc_price($product_sale_price, array('currency' => $order->get_currency()))) : '';
+
+			// Get product URL and short description
+			$product_url = get_permalink($product_id);
+			$product_short_description = $product->get_short_description();
+			$product_description = $product->get_description();
+
+			// Get product categories and tags
+			$product_categories = wc_get_product_category_list($product_id, ', ');
+			$product_tags = wc_get_product_tag_list($product_id, ', ');
+
+			// Strip HTML tags from categories and tags for plain text compatibility
+			$product_categories_plain = wp_strip_all_tags($product_categories);
+			$product_tags_plain = wp_strip_all_tags($product_tags);
+
+			// Add product placeholders to the array
+			$product_placeholders = array(
+				// Product info
+				'{product_id}' => $product_id,
+				'{product_name}' => $product_name,
+				'{product_sku}' => $product_sku,
+				'{product_url}' => $product_url,
+
+				// Product prices (formatted with currency)
+				'{product_price}' => $product_price_formatted,
+				'{product_regular_price}' => $product_regular_price_formatted,
+				'{product_sale_price}' => $product_sale_price_formatted,
+
+				// Product descriptions
+				'{product_short_description}' => $product_short_description,
+				'{product_description}' => $product_description,
+
+				// Product taxonomy
+				'{product_categories}' => $product_categories_plain,
+				'{product_tags}' => $product_tags_plain,
+			);
+
+			// Merge product placeholders with existing placeholders
+			$placeholders = array_merge($placeholders, $product_placeholders);
+		}
+
 		/**
 		 * Filter: Allow modification of available placeholders
 		 *
 		 * @param array $placeholders Array of placeholder => value pairs
 		 * @param WC_Order $order The order object
+		 * @param WC_Product|null $product The product object (if provided)
 		 */
-		$placeholders = apply_filters('spe_email_placeholders', $placeholders, $order);
+		$placeholders = apply_filters('spe_email_placeholders', $placeholders, $order, $product);
 
 		// Replace all placeholders
 		$replaced_text = str_replace(

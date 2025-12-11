@@ -131,9 +131,10 @@ You can use any HTML allowed in the Classic Editor. These are:
 -   **Tables:** `<table>`, `<thead>`, `<tbody>`, `<tr>`, `<th>`, `<td>`
 
 ### What Placeholders can I use in the SPE Messages content?
-Smart Product Emails supports 30+ dynamic placeholders. These are automatically replaced with real order data when emails are sent.
+Smart Product Emails supports 40+ dynamic placeholders. These are automatically replaced with real order data when emails are sent.
 
 - **Site/Store:** `{site_title}`, `{site_address}`, `{site_url}`, `{store_email}`
+- **Product Info:** `{product_id}`, `{product_name}`, `{product_sku}`, `{product_url}`, `{product_price}`, `{product_regular_price}`, `{product_sale_price}`, `{product_short_description}`, `{product_description}`, `{product_categories}`, `{product_tags}`
 - **Order Info:** `{order_number}`, `{order_id}`, `{order_date}`, `{order_time}`, `{order_status}`, `{payment_method}`
 - **Customer Info:** `{customer_first_name}`, `{customer_last_name}`, `{customer_name}`, `{customer_email}`, `{customer_phone}`
 - **Billing Address:** `{billing_address}`, `{billing_city}`, `{billing_state}`, `{billing_postcode}`, `{billing_country}`
