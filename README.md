@@ -73,14 +73,15 @@ Track email opens, click-through rates, and conversion metrics. Know exactly whi
 - Unlimited custom email messages
 - Product-based targeting
 - Flexible content placement
-- Dynamic placeholders
+- 40+ Dynamic placeholders
 - Duplicate prevention
 - HPOS compatibility
 
 **PRO Version Adds:**
 - On-Hold, Completed, and Refunded Order Statuses
-- Multiple custom email messages per product with hierarchy control
 - Email preview and testing
+- Quick Templates Library
+- Multiple SPE Messages per product with hierarchy control
 - Customer segmentation and targeting
 - A/B testing framework
 - Email analytics and reporting
@@ -139,7 +140,7 @@ Smart Product Emails supports 40+ dynamic placeholders. These are automatically 
 - **Customer Info:** `{customer_first_name}`, `{customer_last_name}`, `{customer_name}`, `{customer_email}`, `{customer_phone}`
 - **Billing Address:** `{billing_address}`, `{billing_city}`, `{billing_state}`, `{billing_postcode}`, `{billing_country}`
 - **Shipping Address:** `{shipping_address}`, `{shipping_city}`, `{shipping_state}`, `{shipping_postcode}`, `{shipping_country}`
-- **Order Totals - Auto-formatted with currency:** `{order_subtotal}`, `{order_total}`, `{order_tax}`, `{order_shipping}`, `{order_discount}`
+- **Order Totals:** `{order_subtotal}`, `{order_total}`, `{order_tax}`, `{order_shipping}`, `{order_discount}`
 
 ### Official Website
 Please see the official website for further reference:
