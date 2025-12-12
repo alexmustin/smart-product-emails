@@ -86,7 +86,7 @@ Works perfectly with WooCommerce's native emails — no theme conflicts, no comp
 == Free vs PRO ==
 
 **Free Version Includes:**
-- **Unlimited SPE Messages** -- Create and manage as many Smart Product Email (SPE) messages as needed, giving you full flexibility without artificial limits.
+- **Unlimited SPE Messages** -- Create and manage as many Smart Product Email (SPE) messages as needed, giving you full flexibility without limits.
 - **Product-Based Targeting** -- Display custom email content based on the exact product purchased, ensuring customers receive relevant and personalized messaging.
 - **Flexible Content Placement** -- Choose where your custom message appears within the WooCommerce email layout, allowing it to fit naturally into existing email designs.
 - **40+ Dynamic Placeholders** -- Insert dynamic order, product, and customer data—such as names, order numbers, and product details—without writing any code.

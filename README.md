@@ -69,31 +69,31 @@ Track email opens, click-through rates, and conversion metrics. Know exactly whi
 
 ### Free vs PRO
 
-**Free Version Includes:**
-- **Unlimited SPE Messages** -- Create and manage as many Smart Product Email (SPE) messages as needed, giving you full flexibility without artificial limits.
-- **Product-Based Targeting** -- Display custom email content based on the exact product purchased, ensuring customers receive relevant and personalized messaging.
-- **Flexible Content Placement** -- Choose where your custom message appears within the WooCommerce email layout, allowing it to fit naturally into existing email designs.
-- **40+ Dynamic Placeholders** -- Insert dynamic order, product, and customer data—such as names, order numbers, and product details—without writing any code.
-- **Duplicate Prevention** -- Automatically prevents the same message from appearing multiple times in a single email, ensuring clean and professional communication.
-- **HPOS Compatibility** -- Fully compatible with WooCommerce High-Performance Order Storage (HPOS) for reliable performance and future-proof data handling.
+**✅ Free Version Includes:**
+- **🧾 Unlimited SPE Messages** -- Create and manage as many Smart Product Email (SPE) messages as needed, giving you full flexibility without limits.
+- **🎯 Product-Based Targeting** -- Display custom email content based on the exact product purchased, ensuring customers receive relevant and personalized messaging.
+- **🧩 Flexible Content Placement** -- Choose where your custom message appears within the WooCommerce email layout, allowing it to fit naturally into existing email designs.
+- **🔄 40+ Dynamic Placeholders** -- Insert dynamic order, product, and customer data—such as names, order numbers, and product details—without writing any code.
+- **🛡️ Duplicate Prevention** -- Automatically prevents the same message from appearing multiple times in a single email, ensuring clean and professional communication.
+- **⚡ HPOS Compatibility** -- Fully compatible with WooCommerce High-Performance Order Storage (HPOS) for reliable performance and future-proof data handling.
 
-**PRO Version Adds:**
-- **Additional Order Status Support** -- Customize customer emails for **On-Hold**, **Completed**, and **Refunded** order statuses to improve communication throughout the entire order lifecycle.
-- **Email Preview** -- Preview exactly how your Smart Product Email content will appear before it’s sent to customers, reducing errors and guesswork.
-- **Send Test Emails** -- Send test emails to yourself or your team to verify formatting, links, and dynamic placeholders before going live.
-- **Quick Templates Library** -- Access a growing library of pre-written Smart Product Email templates designed for common scenarios like refunds, promotions, upsells, and shipping instructions.
-- **Priority Support** -- Get faster access to support and assistance directly from the plugin developer when you need help.
-- **Regular Feature Updates** -- Receive ongoing enhancements, improvements, and new features as the plugin continues to evolve.
+**⭐ PRO Version Adds:**
+- **📦 Additional Order Status Support** -- Customize customer emails for **On-Hold**, **Completed**, and **Refunded** order statuses to improve communication throughout the entire order lifecycle.
+- **👁️ Email Preview** -- Preview exactly how your Smart Product Email content will appear before it’s sent to customers, reducing errors and guesswork.
+- **🧪 Send Test Emails** -- Send test emails to yourself or your team to verify formatting, links, and dynamic placeholders before going live.
+- **📚 Quick Templates Library** -- Access a growing library of pre-written Smart Product Email templates designed for common scenarios like refunds, promotions, upsells, and shipping instructions.
+- **🛟 Priority Support** -- Get faster access to support and assistance directly from the plugin developer when you need help.
+- **🔄 Regular Feature Updates** -- Receive ongoing enhancements, improvements, and new features as the plugin continues to evolve.
 
-**More PRO Features Coming Soon:**
-- **Multiple SPE Messages Per Product (with Hierarchy Control)** -- Assign multiple messages to a single product and control which message takes priority when conditions overlap.
-- **Advanced Conditional Logic** -- Display or hide messages based on complex rules such as cart value, customer type, product combinations, and more.
-- **Bulk Message Management** -- Assign messages to multiple products simultaneously
-- **A/B Testing Framework** -- Test different message variations to identify which content performs best with your customers.
-- **Email Analytics and Reporting Dashboard** -- Gain insights into how your Smart Product Emails perform with metrics like engagement and effectiveness.
-- **Customer Segmentation and Targeting** -- Show different email content based on customer behavior, purchase history, order value, or other attributes.
-- **Automated Follow-up Sequences** -- Trigger additional emails based on customer actions
-- **Multi-language Support** -- Automatically deliver emails in the customer's preferred language
+**🚀 More PRO Features Coming Soon:**
+- **🧱 Multiple SPE Messages Per Product (with Hierarchy Control)** -- Assign multiple messages to a single product and control which message takes priority when conditions overlap.
+- **⚙️ Advanced Conditional Logic** -- Display or hide messages based on complex rules such as cart value, customer type, product combinations, and more.
+- **🗂️ Bulk Message Management** -- Assign messages to multiple products simultaneously
+- **🧪 A/B Testing Framework** -- Test different message variations to identify which content performs best with your customers.
+- **📊 Email Analytics and Reporting Dashboard** -- Gain insights into how your Smart Product Emails perform with metrics like engagement and effectiveness.
+- **🎯 Customer Segmentation and Targeting** -- Show different email content based on customer behavior, purchase history, order value, or other attributes.
+- **🔁 Automated Follow-up Sequences** -- Trigger additional emails based on customer actions
+- **🌍 Multi-language Support** -- Automatically deliver emails in the customer's preferred language
 
 ---
 
