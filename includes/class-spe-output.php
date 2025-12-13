@@ -116,37 +116,39 @@ class Smart_Product_Emails_Output {
 		 *
 		 * @return string HTML for separator
 		 */
-		function get_separator_html() {
-			$settings = get_option( 'SmartProductEmails_settings_name', array() );
+		if ( ! function_exists( 'get_separator_html' ) ) {
+			function get_separator_html() {
+				$settings = get_option( 'SmartProductEmails_settings_name', array() );
 
-			$separator_type = isset($settings['content_separator']) ? $settings['content_separator'] : 'none';
-			$color = isset($settings['separator_color']) ? $settings['separator_color'] : '#dddddd';
-			$thickness = isset($settings['separator_thickness']) ? $settings['separator_thickness'] : '1';
-			$spacing = isset($settings['separator_spacing']) ? $settings['separator_spacing'] : '20';
-			$custom_html = isset($settings['separator_customhtml']) ? $settings['separator_customhtml'] : '';
+				$separator_type = isset($settings['content_separator']) ? $settings['content_separator'] : 'none';
+				$color = isset($settings['separator_color']) ? $settings['separator_color'] : '#dddddd';
+				$thickness = isset($settings['separator_thickness']) ? $settings['separator_thickness'] : '1';
+				$spacing = isset($settings['separator_spacing']) ? $settings['separator_spacing'] : '20';
+				$custom_html = isset($settings['separator_customhtml']) ? $settings['separator_customhtml'] : '';
 
-			switch ($separator_type) {
-				case 'line':
-					return '<hr style="border: none; border-top: ' . esc_attr($thickness) . 'px solid ' . esc_attr($color) . '; margin: ' . esc_attr($spacing) . 'px 0;" />';
+				switch ($separator_type) {
+					case 'line':
+						return '<hr style="border: none; border-top: ' . esc_attr($thickness) . 'px solid ' . esc_attr($color) . '; margin: ' . esc_attr($spacing) . 'px 0;" />';
 
-				case 'dots':
-					return '<hr style="border: none; border-top: ' . esc_attr($thickness) . 'px dotted ' . esc_attr($color) . '; margin: ' . esc_attr($spacing) . 'px 0;" />';
+					case 'dots':
+						return '<hr style="border: none; border-top: ' . esc_attr($thickness) . 'px dotted ' . esc_attr($color) . '; margin: ' . esc_attr($spacing) . 'px 0;" />';
 
-				case 'dashes':
-					return '<hr style="border: none; border-top: ' . esc_attr($thickness) . 'px dashed ' . esc_attr($color) . '; margin: ' . esc_attr($spacing) . 'px 0;" />';
+					case 'dashes':
+						return '<hr style="border: none; border-top: ' . esc_attr($thickness) . 'px dashed ' . esc_attr($color) . '; margin: ' . esc_attr($spacing) . 'px 0;" />';
 
-				case 'double':
-					return '<hr style="border: none; border-top: ' . esc_attr($thickness) . 'px double ' . esc_attr($color) . '; margin: ' . esc_attr($spacing) . 'px 0;" />';
+					case 'double':
+						return '<hr style="border: none; border-top: ' . esc_attr($thickness) . 'px double ' . esc_attr($color) . '; margin: ' . esc_attr($spacing) . 'px 0;" />';
 
-				case 'space':
-					return '<div style="height: ' . esc_attr($spacing) . 'px;"></div>';
+					case 'space':
+						return '<div style="height: ' . esc_attr($spacing) . 'px;"></div>';
 
-				case 'custom':
-					return nl2br($custom_html);
+					case 'custom':
+						return nl2br($custom_html);
 
-				case 'none':
-				default:
-					return '';
+					case 'none':
+					default:
+						return '';
+				}
 			}
 		}
 
@@ -208,25 +210,43 @@ class Smart_Product_Emails_Output {
 					 */
 					do_action('spe_output_message_before_processing', $product, $order, $sent_to_admin, $shown_messages, $this_email_template_location);
 
+					/**
+					 * Hook: spe_output_message_processing
+					 *
+					 * Allows PRO version to handle Processing status output with multiple messages.
+					 * If PRO doesn't handle it, the free version's logic below will run.
+					 *
+					 * @param WC_Product $product The product object
+					 * @param WC_Order $order The order object
+					 * @param boolean $sent_to_admin Whether email is sent to admin
+					 * @param array $shown_messages Array of already shown message IDs
+					 * @param string $this_email_template_location Current email template location
+					 */
+					do_action('spe_output_message_processing', $product, $order, $sent_to_admin, $shown_messages, $this_email_template_location);
+
 					// PROCESSING Status.
 					// --------------------------------
+					// Allow PRO to override Processing output (for multiple messages support)
+					$pro_handles_processing = apply_filters('spe_pro_override_processing_output', false, $product, $order);
 
-					// Use WooCommerce CRUD methods for meta data
-					// For Variable products: Check variation first, then fall back to parent product
-					$spemail_id_processing = (int) $product->get_meta('spemail_id_processing');
-					$spemail_location_processing = $product->get_meta('location_processing');
+					// Only run free version logic if PRO is not handling it
+					if (!$pro_handles_processing) {
+						// Use WooCommerce CRUD methods for meta data
+						// For Variable products: Check variation first, then fall back to parent product
+						$spemail_id_processing = (int) $product->get_meta('spemail_id_processing');
+						$spemail_location_processing = $product->get_meta('location_processing');
 
-					// If this is a variation and no meta found, check parent product
-					if (empty($spemail_id_processing) && $variation_id) {
-						$parent_product = wc_get_product($product_id);
-						if ($parent_product) {
-							$spemail_id_processing = (int) $parent_product->get_meta('spemail_id_processing');
-							$spemail_location_processing = $parent_product->get_meta('location_processing');
+						// If this is a variation and no meta found, check parent product
+						if (empty($spemail_id_processing) && $variation_id) {
+							$parent_product = wc_get_product($product_id);
+							if ($parent_product) {
+								$spemail_id_processing = (int) $parent_product->get_meta('spemail_id_processing');
+								$spemail_location_processing = $parent_product->get_meta('location_processing');
+							}
 						}
-					}
 
-					// Begin logic for adding message content
-					if ( 'woocommerce_order_status_processing' === $this_order_status_action && !empty( $spemail_id_processing ) ) {
+						// Begin logic for adding message content
+						if ( 'woocommerce_order_status_processing' === $this_order_status_action && !empty( $spemail_id_processing ) ) {
 
 						// If there is an email assigned for 'Processing' status and this message is not already shown,
 						// AND if the message location set for the 'Processing' message is the current email template location...
@@ -264,6 +284,7 @@ class Smart_Product_Emails_Output {
 							$shown_messages[] = $spemail_id_processing;
 						}
 					}
+					} // End: if (!$pro_handles_processing)
 
 					/**
 					 * Hook: spe_output_message_after_processing
@@ -286,22 +307,26 @@ class Smart_Product_Emails_Output {
 
 
 		// Wrapper function for email header hook (different parameters)
-		function smart_product_emails_header_wrapper( $email_heading, $email ) {
-			if ( is_a( $email, 'WC_Email' ) && isset( $email->object ) && is_a( $email->object, 'WC_Order' ) ) {
-				$order = $email->object;
-				$sent_to_admin = method_exists( $email, 'is_customer_email' ) ? ! $email->is_customer_email() : false;
-				$shown_messages = array();
-				smart_product_emails_output_message( $order, $sent_to_admin, $email, $shown_messages );
+		if ( ! function_exists( 'smart_product_emails_header_wrapper' ) ) {
+			function smart_product_emails_header_wrapper( $email_heading, $email ) {
+				if ( is_a( $email, 'WC_Email' ) && isset( $email->object ) && is_a( $email->object, 'WC_Order' ) ) {
+					$order = $email->object;
+					$sent_to_admin = method_exists( $email, 'is_customer_email' ) ? ! $email->is_customer_email() : false;
+					$shown_messages = array();
+					smart_product_emails_output_message( $order, $sent_to_admin, $email, $shown_messages );
+				}
 			}
 		}
 
 		// Wrapper function for email footer hook (different parameters)
-		function smart_product_emails_footer_wrapper( $email ) {
-			if ( is_a( $email, 'WC_Email' ) && isset( $email->object ) && is_a( $email->object, 'WC_Order' ) ) {
-				$order = $email->object;
-				$sent_to_admin = method_exists( $email, 'is_customer_email' ) ? ! $email->is_customer_email() : false;
-				$shown_messages = array();
-				smart_product_emails_output_message( $order, $sent_to_admin, $email, $shown_messages );
+		if ( ! function_exists( 'smart_product_emails_footer_wrapper' ) ) {
+			function smart_product_emails_footer_wrapper( $email ) {
+				if ( is_a( $email, 'WC_Email' ) && isset( $email->object ) && is_a( $email->object, 'WC_Order' ) ) {
+					$order = $email->object;
+					$sent_to_admin = method_exists( $email, 'is_customer_email' ) ? ! $email->is_customer_email() : false;
+					$shown_messages = array();
+					smart_product_emails_output_message( $order, $sent_to_admin, $email, $shown_messages );
+				}
 			}
 		}
 

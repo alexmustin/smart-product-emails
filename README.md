@@ -82,11 +82,11 @@ Track email opens, click-through rates, and conversion metrics. Know exactly whi
 - **👁️ Email Preview** -- Preview exactly how your Smart Product Email content will appear before it’s sent to customers, reducing errors and guesswork.
 - **🧪 Send Test Emails** -- Send test emails to yourself or your team to verify formatting, links, and dynamic placeholders before going live.
 - **📚 Quick Templates Library** -- Access a growing library of pre-written Smart Product Email templates designed for common scenarios like refunds, promotions, upsells, and shipping instructions.
+- **🧱 Multiple SPE Messages Per Product (with Hierarchy Control)** -- Assign multiple messages to a single product and control which message takes priority when conditions overlap.
 - **🛟 Priority Support** -- Get faster access to support and assistance directly from the plugin developer when you need help.
 - **🔄 Regular Feature Updates** -- Receive ongoing enhancements, improvements, and new features as the plugin continues to evolve.
 
 **🚀 More PRO Features Coming Soon:**
-- **🧱 Multiple SPE Messages Per Product (with Hierarchy Control)** -- Assign multiple messages to a single product and control which message takes priority when conditions overlap.
 - **⚙️ Advanced Conditional Logic** -- Display or hide messages based on complex rules such as cart value, customer type, product combinations, and more.
 - **🗂️ Bulk Message Management** -- Assign messages to multiple products simultaneously
 - **🧪 A/B Testing Framework** -- Test different message variations to identify which content performs best with your customers.

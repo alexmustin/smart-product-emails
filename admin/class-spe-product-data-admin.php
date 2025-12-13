@@ -767,17 +767,32 @@ class SPE_Product_Data_Admin {
 		 */
 		do_action('spe_save_status_fields_before_processing', $product, $post_id);
 
-		// PROCESSING.
-		if (isset($_POST['spemail_id_processing'], $_POST['spemail_processing_nonce']) &&
-			wp_verify_nonce(sanitize_key($_POST['spemail_processing_nonce']), 'status_processing_action')) {
-			$msg_processing_id = sanitize_text_field(wp_unslash($_POST['spemail_id_processing']));
-			$product->update_meta_data('spemail_id_processing', $msg_processing_id);
-		}
+		/**
+		 * Hook: spe_save_status_fields_processing
+		 *
+		 * Allows PRO version to override Processing status save logic
+		 * If PRO handles it, it should return true to prevent free version from saving
+		 *
+		 * @param WC_Product $product The product object
+		 * @param int $post_id The product ID
+		 */
+		$pro_handled_processing = apply_filters( 'spe_pro_override_processing_save', false, $product, $post_id );
+		do_action( 'spe_save_status_fields_processing', $product, $post_id );
 
-		if (isset($_POST['processing-location'], $_POST['spemail_processing_nonce']) &&
-			wp_verify_nonce(sanitize_key($_POST['spemail_processing_nonce']), 'status_processing_action')) {
-			$msg_processing_location = sanitize_text_field(wp_unslash($_POST['processing-location']));
-			$product->update_meta_data('location_processing', $msg_processing_location);
+		// Only save Processing if PRO didn't handle it
+		if ( ! $pro_handled_processing ) {
+			// PROCESSING.
+			if (isset($_POST['spemail_id_processing'], $_POST['spemail_processing_nonce']) &&
+				wp_verify_nonce(sanitize_key($_POST['spemail_processing_nonce']), 'status_processing_action')) {
+				$msg_processing_id = sanitize_text_field(wp_unslash($_POST['spemail_id_processing']));
+				$product->update_meta_data('spemail_id_processing', $msg_processing_id);
+			}
+
+			if (isset($_POST['processing-location'], $_POST['spemail_processing_nonce']) &&
+				wp_verify_nonce(sanitize_key($_POST['spemail_processing_nonce']), 'status_processing_action')) {
+				$msg_processing_location = sanitize_text_field(wp_unslash($_POST['processing-location']));
+				$product->update_meta_data('location_processing', $msg_processing_location);
+			}
 		}
 
 		/**
