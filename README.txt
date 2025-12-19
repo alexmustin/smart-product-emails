@@ -6,8 +6,8 @@ Tags: woocommerce emails, custom emails, product emails, per product, product sp
 Requires at least: 6.8
 Tested up to: 6.9
 Requires PHP: 8.2
-Stable tag: 0.4.10
-Version: 0.4.10
+Stable tag: 0.5.0
+Version: 0.5.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -92,13 +92,13 @@ Works perfectly with WooCommerce's native emails — no theme conflicts, no comp
 - **40+ Dynamic Placeholders** -- Insert dynamic order, product, and customer data—such as names, order numbers, and product details—without writing any code.
 - **Duplicate Prevention** -- Automatically prevents the same message from appearing multiple times in a single email, ensuring clean and professional communication.
 - **HPOS Compatibility** -- Fully compatible with WooCommerce High-Performance Order Storage (HPOS) for reliable performance and future-proof data handling.
+- **Error Log & Debugging** -- Built-in error logging system captures PHP errors, AJAX failures, and email sending issues. View, filter, search, and export logs from the admin panel to quickly diagnose and resolve issues.
 
 **PRO Version Adds:**
 - **Additional Order Status Support** -- Customize customer emails for **On-Hold**, **Completed**, and **Refunded** order statuses to improve communication throughout the entire order lifecycle.
-- **Email Preview** -- Preview exactly how your Smart Product Email content will appear before it’s sent to customers, reducing errors and guesswork.
+- **Visual Email Customizer** -- Design perfect customer emails with an intuitive visual interface. See exactly how your emails will look using real WooCommerce templates, assign multiple messages per product to different template locations (header, before order table, after order table, etc.), and control message hierarchy with simple up/down arrows. Includes live preview showing your messages positioned exactly where they'll appear in customer emails.
 - **Send Test Emails** -- Send test emails to yourself or your team to verify formatting, links, and dynamic placeholders before going live.
 - **Quick Templates Library** -- Access a growing library of pre-written Smart Product Email templates designed for common scenarios like refunds, promotions, upsells, and shipping instructions.
-- **Multiple SPE Messages Per Product (with Hierarchy Control)** -- Assign multiple messages to a single product and control which message takes priority when conditions overlap.
 - **Priority Support** -- Get faster access to support and assistance directly from the plugin developer when you need help.
 - **Regular Feature Updates** -- Receive ongoing enhancements, improvements, and new features as the plugin continues to evolve.
 
@@ -185,8 +185,14 @@ If you are having any issues, please post in the WordPress Plugin Support Forum.
 4. New Tab in the WooCommerce Product Data section: "Smart Product Emails"
 5. Use the search fields to find your SPE Message, then assign it to the Order Status email. Click the Title of your Message to assign it, then Update/Publish the Product to save your settings.
 6. Smart Email Message in the Customer email 
+7. Error Log system to diagnose issues
 
 == Changelog ==
 
-= x.x.x - (XXX X, 202X) =
-* First release!
+### X.X.X - Initial Release
+* Complete product-based email customization system
+* 40+ dynamic placeholders for personalized content
+* Flexible content placement within WooCommerce emails
+* Duplicate message prevention
+* HPOS compatibility and optimization
+* Error Log & Debugging system with filtering, search, and CSV export

@@ -39,12 +39,13 @@ define( 'SPE_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'SPE_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 
 // Add a check for WooCommerce on plugin activation.
-register_activation_hook( __FILE__, 'smart_product_emails_activate_check_for_woo' );
+register_activation_hook( __FILE__, 'smart_product_emails_activate' );
 
 /**
- * Checks for WooCommerce on plugin activation.
+ * Activation hook - checks for WooCommerce and creates error log database table
  */
-function smart_product_emails_activate_check_for_woo() {
+function smart_product_emails_activate() {
+	// Check for WooCommerce
 	if ( ! in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ), true ) ) {
 		$woo_plugin_url = esc_url( 'https://wordpress.org/plugins/woocommerce/' );
 
@@ -54,7 +55,56 @@ function smart_product_emails_activate_check_for_woo() {
 		$text_string .= sprintf( '%1$s%2$s%3$s', '<p>', esc_html__( 'Please install and activate WooCommerce and try again.', 'smart_product_emails_domain' ), '</p>' );
 		wp_die( $text_string ); // phpcs:ignore
 	}
+
+	// Create error log database table
+	global $wpdb;
+	$table_name      = $wpdb->prefix . 'spe_error_logs';
+	$charset_collate = $wpdb->get_charset_collate();
+
+	$sql = "CREATE TABLE {$table_name} (
+		id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+		log_level varchar(20) NOT NULL DEFAULT 'info',
+		message text NOT NULL,
+		context longtext DEFAULT NULL,
+		user_id bigint(20) unsigned DEFAULT NULL,
+		product_id bigint(20) unsigned DEFAULT NULL,
+		order_id bigint(20) unsigned DEFAULT NULL,
+		error_type varchar(100) DEFAULT NULL,
+		file varchar(255) DEFAULT NULL,
+		line int(11) DEFAULT NULL,
+		stack_trace longtext DEFAULT NULL,
+		request_url varchar(255) DEFAULT NULL,
+		user_agent varchar(255) DEFAULT NULL,
+		ip_address varchar(45) DEFAULT NULL,
+		created_at datetime NOT NULL,
+		PRIMARY KEY (id),
+		KEY log_level (log_level),
+		KEY user_id (user_id),
+		KEY product_id (product_id),
+		KEY order_id (order_id),
+		KEY error_type (error_type),
+		KEY created_at (created_at)
+	) {$charset_collate};";
+
+	require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+	dbDelta( $sql );
+
+	// Schedule log cleanup event (daily)
+	if ( ! wp_next_scheduled( 'spe_cleanup_old_logs' ) ) {
+		wp_schedule_event( time(), 'daily', 'spe_cleanup_old_logs' );
+	}
 }
+
+/**
+ * Cleanup old log entries (runs daily via wp-cron)
+ */
+function spe_cleanup_logs_callback() {
+	if ( class_exists( 'SPE_Logger' ) ) {
+		$logger = SPE_Logger::get_instance();
+		$logger->cleanup_old_logs( 30 ); // Keep last 30 days
+	}
+}
+add_action( 'spe_cleanup_old_logs', 'spe_cleanup_logs_callback' );
 
 // Include required files.
 require_once plugin_dir_path( __FILE__ ) . 'includes/class-smart-product-emails.php';
@@ -62,6 +112,17 @@ require_once plugin_dir_path( __FILE__ ) . 'admin/class-spe-cpt.php';
 require_once plugin_dir_path( __FILE__ ) . 'admin/class-spe-column-display.php';
 require_once plugin_dir_path( __FILE__ ) . 'admin/class-spe-admin-settings.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/class-spe-output.php';
+
+// Load Error Log classes
+require_once plugin_dir_path( __FILE__ ) . 'includes/class-spe-logger.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/class-spe-error-handler.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/class-spe-email-logger.php';
+require_once plugin_dir_path( __FILE__ ) . 'admin/class-spe-error-log-admin.php';
+
+// Initialize error handlers
+new SPE_Error_Handler();
+new SPE_Email_Logger();
+new SPE_Error_Log_Admin();
 
 /**
  * Runs main plugin functions.

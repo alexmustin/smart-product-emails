@@ -135,7 +135,7 @@ class SPE_Product_Data_Admin {
 			return;
 		}
 
-		wp_register_style( 'spe_custom_admin_css', plugins_url( 'smart-product-emails-admin-styles.css', __FILE__ ), null, '1.0' );
+		wp_register_style( 'spe_custom_admin_css', plugins_url( 'css/smart-product-emails-admin-styles.css', __FILE__ ), null, '1.0' );
 		wp_enqueue_style( 'spe_custom_admin_css' );
 
 		include_once dirname( __FILE__ ) . '/css/smart-product-emails-admin-styles.css';
@@ -663,67 +663,106 @@ class SPE_Product_Data_Admin {
 	 * @return void
 	 */
 	public function spe_data_fetch() {
+		$logger = SPE_Logger::get_instance();
 
-		// Security: Check user capabilities - must be able to edit products
-		if ( ! current_user_can( 'edit_products' ) ) {
-			wp_die( esc_html__( 'You do not have permission to perform this action.', 'smart_product_emails_domain' ), 403 );
-		}
+		try {
+			// Security: Check user capabilities - must be able to edit products
+			if ( ! current_user_can( 'edit_products' ) ) {
+				$logger->warning( 'Unauthorized message search request', array(
+					'error_type' => 'ajax_error',
+					'action'     => 'spe_data_fetch',
+				) );
+				wp_die( esc_html__( 'You do not have permission to perform this action.', 'smart_product_emails_domain' ), 403 );
+			}
 
-		// Security: Verify nonce
-		if ( ! isset( $_POST['ajax_nonce'] ) || ! wp_verify_nonce( sanitize_key( $_POST['ajax_nonce'] ), 'ajax_nonce_action' ) ) {
-			wp_die( esc_html__( 'Security check failed.', 'smart_product_emails_domain' ), 403 );
-		}
+			// Security: Verify nonce
+			if ( ! isset( $_POST['ajax_nonce'] ) || ! wp_verify_nonce( sanitize_key( $_POST['ajax_nonce'] ), 'ajax_nonce_action' ) ) {
+				$logger->warning( 'Nonce verification failed in message search', array(
+					'error_type' => 'ajax_error',
+					'action'     => 'spe_data_fetch',
+				) );
+				wp_die( esc_html__( 'Security check failed.', 'smart_product_emails_domain' ), 403 );
+			}
 
-		// Sanitize and get search term
-		if ( isset( $_POST['keyword'] ) ) {
-			$search_term = sanitize_text_field( wp_unslash( $_POST['keyword'] ) );
-		} else {
-			$search_term = '';
-		}
+			// Sanitize and get search term
+			if ( isset( $_POST['keyword'] ) ) {
+				$search_term = sanitize_text_field( wp_unslash( $_POST['keyword'] ) );
+			} else {
+				$search_term = '';
+			}
 
-		$args = array(
-			'post_type'      => 'smartproductemails',
-			'post_status'    => 'publish',
-			'posts_per_page' => -1,
-			's'              => $search_term,
-		);
+			$args = array(
+				'post_type'      => 'smartproductemails',
+				'post_status'    => 'publish',
+				'posts_per_page' => -1,
+				's'              => $search_term,
+			);
 
-		$the_query = new WP_Query( $args );
+			$the_query = new WP_Query( $args );
 
-		if ( $the_query->have_posts() ) {
-			while ( $the_query->have_posts() ) :
+			if ( $the_query->have_posts() ) {
+				$result_count = 0;
+				while ( $the_query->have_posts() ) :
 
-				$the_query->the_post();
+					$the_query->the_post();
 
-				$the_permalink = esc_url( get_permalink() );
-				$the_id        = get_the_ID();
-				$the_title     = get_the_title();
+					$the_permalink = esc_url( get_permalink() );
+					$the_id        = get_the_ID();
+					$the_title     = get_the_title();
+					?>
+					<p><a href="#" class="spe-search-result" data-id="<?php echo esc_attr( $the_id ); ?>" data-title="<?php echo esc_attr( $the_title ); ?>"><?php echo esc_attr( $the_id ); ?> - <?php echo esc_html( $the_title ); ?></a></p>
+					<?php
+					$result_count++;
+				endwhile;
+				wp_reset_postdata();
+
+				$logger->info( 'Message search completed successfully', array(
+					'error_type'   => 'user_action',
+					'action'       => 'spe_data_fetch',
+					'search_term'  => $search_term,
+					'result_count' => $result_count,
+				) );
+			} else {
+				$add_messages_url  = admin_url( 'edit.php?post_type=smartproductemails' );
+				$add_messages_text = '<a href="' . $add_messages_url . '" target="_blank" class="edit-spemail">SPE Messages</a>';
+				$allowed_tags = array(
+					'a' => array(
+					'href' => true,
+					'title' => true,
+					'class' => true
+				));
 				?>
-				<p><a href="#" class="spe-search-result" data-id="<?php echo esc_attr( $the_id ); ?>" data-title="<?php echo esc_attr( $the_title ); ?>"><?php echo esc_attr( $the_id ); ?> - <?php echo esc_html( $the_title ); ?></a></p>
+				<p class="placeholder error">
+					<?php
+					echo esc_html__( 'Sorry! No posts match your search. Please add some ', 'smart_product_emails_domain' );
+					echo wp_kses( $add_messages_text, $allowed_tags );
+					echo esc_html__( ' and try again.', 'smart_product_emails_domain' );
+					?>
+				</p>
 				<?php
-			endwhile;
-			wp_reset_postdata();
-		} else {
-			$add_messages_url  = admin_url( 'edit.php?post_type=smartproductemails' );
-			$add_messages_text = '<a href="' . $add_messages_url . '" target="_blank" class="edit-spemail">SPE Messages</a>';
-			$allowed_tags = array(
-				'a' => array(
-				'href' => true,
-				'title' => true,
-				'class' => true
-			));
+				$logger->info( 'Message search returned no results', array(
+					'error_type'  => 'user_action',
+					'action'      => 'spe_data_fetch',
+					'search_term' => $search_term,
+				) );
+			}
+
+			wp_die();
+
+		} catch ( Exception $e ) {
+			$logger->error( 'Exception in message search: ' . $e->getMessage(), array(
+				'error_type'  => 'ajax_error',
+				'action'      => 'spe_data_fetch',
+				'search_term' => isset( $search_term ) ? $search_term : '',
+				'stack_trace' => $e->getTraceAsString(),
+			) );
 			?>
 			<p class="placeholder error">
-				<?php
-				echo esc_html__( 'Sorry! No posts match your search. Please add some ', 'smart_product_emails_domain' );
-				echo wp_kses( $add_messages_text, $allowed_tags );
-				echo esc_html__( ' and try again.', 'smart_product_emails_domain' );
-				?>
+				<?php echo esc_html__( 'An error occurred while searching. Please try again.', 'smart_product_emails_domain' ); ?>
 			</p>
 			<?php
+			wp_die();
 		}
-
-		wp_die();
 	}
 
 

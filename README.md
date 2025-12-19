@@ -75,14 +75,14 @@ Track email opens, click-through rates, and conversion metrics. Know exactly whi
 - **🧩 Flexible Content Placement** -- Choose where your custom message appears within the WooCommerce email layout, allowing it to fit naturally into existing email designs.
 - **🔄 40+ Dynamic Placeholders** -- Insert dynamic order, product, and customer data—such as names, order numbers, and product details—without writing any code.
 - **🛡️ Duplicate Prevention** -- Automatically prevents the same message from appearing multiple times in a single email, ensuring clean and professional communication.
+- **🔍 Error Log & Debugging** -- Built-in error logging system captures PHP errors, AJAX failures, and email sending issues. View, filter, search, and export logs from the admin panel to quickly diagnose and resolve issues.
 - **⚡ HPOS Compatibility** -- Fully compatible with WooCommerce High-Performance Order Storage (HPOS) for reliable performance and future-proof data handling.
 
 **⭐ PRO Version Adds:**
 - **📦 Additional Order Status Support** -- Customize customer emails for **On-Hold**, **Completed**, and **Refunded** order statuses to improve communication throughout the entire order lifecycle.
-- **👁️ Email Preview** -- Preview exactly how your Smart Product Email content will appear before it’s sent to customers, reducing errors and guesswork.
+- **✨ Visual Email Customizer** -- Design perfect customer emails with an intuitive visual interface. See exactly how your emails will look using real WooCommerce templates, assign multiple messages per product to different template locations (header, before order table, after order table, etc.), and control message hierarchy with simple up/down arrows. Includes live preview showing your messages positioned exactly where they'll appear in customer emails.
 - **🧪 Send Test Emails** -- Send test emails to yourself or your team to verify formatting, links, and dynamic placeholders before going live.
 - **📚 Quick Templates Library** -- Access a growing library of pre-written Smart Product Email templates designed for common scenarios like refunds, promotions, upsells, and shipping instructions.
-- **🧱 Multiple SPE Messages Per Product (with Hierarchy Control)** -- Assign multiple messages to a single product and control which message takes priority when conditions overlap.
 - **🛟 Priority Support** -- Get faster access to support and assistance directly from the plugin developer when you need help.
 - **🔄 Regular Feature Updates** -- Receive ongoing enhancements, improvements, and new features as the plugin continues to evolve.
 
@@ -164,5 +164,10 @@ If you are having any issues, please post in the WordPress Plugin Support Forum.
 
 ## Changelog
 
-### X.X.X - (XXX X, 202X)
-* First release!
+### X.X.X - Initial Release
+* Complete product-based email customization system
+* 40+ dynamic placeholders for personalized content
+* Flexible content placement within WooCommerce emails
+* Duplicate message prevention
+* HPOS compatibility and optimization
+* Error Log & Debugging system with filtering, search, and CSV export
