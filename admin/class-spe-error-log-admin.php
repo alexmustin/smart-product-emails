@@ -87,6 +87,11 @@ class SPE_Error_Log_Admin {
 	 * Render admin page
 	 */
 	public function render_admin_page() {
+		// Check user capabilities
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( __( 'You do not have sufficient permissions to access this page.', 'smart_product_emails_pro_domain' ) );
+		}
+
 		// Get filters from request
 		$filters = array(
 			'log_level'  => isset( $_GET['log_level'] ) ? sanitize_text_field( $_GET['log_level'] ) : '',
@@ -260,7 +265,8 @@ class SPE_Error_Log_Admin {
 		global $wpdb;
 		$table_name = $wpdb->prefix . 'spe_error_logs';
 
-		$wpdb->query( "TRUNCATE TABLE {$table_name}" );
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
+		$wpdb->query( "TRUNCATE TABLE `{$table_name}`" );
 
 		wp_send_json_success( array( 'message' => __( 'All logs cleared successfully.', 'smart_product_emails_pro_domain' ) ) );
 	}
@@ -282,10 +288,13 @@ class SPE_Error_Log_Admin {
 		) );
 
 		// Set headers for CSV download
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSV headers, safe hardcoded values
 		header( 'Content-Type: text/csv; charset=utf-8' );
-		header( 'Content-Disposition: attachment; filename=spe-error-log-' . date( 'Y-m-d-His' ) . '.csv' );
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSV filename with sanitized date
+		header( 'Content-Disposition: attachment; filename=spe-error-log-' . gmdate( 'Y-m-d-His' ) . '.csv' );
 
 		// Open output stream
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen -- Streaming CSV output
 		$output = fopen( 'php://output', 'w' );
 
 		// Write CSV header

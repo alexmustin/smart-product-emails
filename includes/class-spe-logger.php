@@ -158,15 +158,20 @@ class SPE_Logger {
 	private function get_client_ip() {
 		$ip = '';
 
+		// Try different sources for IP address and validate
 		if ( isset( $_SERVER['HTTP_CLIENT_IP'] ) ) {
-			$ip = sanitize_text_field( $_SERVER['HTTP_CLIENT_IP'] );
+			$ip = filter_var( wp_unslash( $_SERVER['HTTP_CLIENT_IP'] ), FILTER_VALIDATE_IP );
 		} elseif ( isset( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ) {
-			$ip = sanitize_text_field( $_SERVER['HTTP_X_FORWARDED_FOR'] );
+			// X-Forwarded-For can contain multiple IPs, get the first one
+			$forwarded = wp_unslash( $_SERVER['HTTP_X_FORWARDED_FOR'] );
+			$ip_list = explode( ',', $forwarded );
+			$ip = filter_var( trim( $ip_list[0] ), FILTER_VALIDATE_IP );
 		} elseif ( isset( $_SERVER['REMOTE_ADDR'] ) ) {
-			$ip = sanitize_text_field( $_SERVER['REMOTE_ADDR'] );
+			$ip = filter_var( wp_unslash( $_SERVER['REMOTE_ADDR'] ), FILTER_VALIDATE_IP );
 		}
 
-		return $ip;
+		// Return validated IP or empty string
+		return $ip ? $ip : '';
 	}
 
 	/**

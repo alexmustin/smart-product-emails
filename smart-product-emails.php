@@ -3,7 +3,7 @@
  * Plugin Name: Smart Product Emails
  * Plugin URI: https://smartproductemails.com/
  * Description: Transform WooCommerce emails into a powerful customer communication platform with dynamic content, segmentation, A/B testing, and analytics.
- * Version: 0.5.0
+ * Version: 0.6.0
  * Author: Alex Mustin
  * Author URI: https://alexmustin.com
  * Text Domain: smart_product_emails_domain
@@ -33,13 +33,14 @@ add_action('before_woocommerce_init', function() {
 });
 
 // Define Globals.
-define( 'SPE_PLUGIN_VERSION', '0.5.0' );
+define( 'SPE_PLUGIN_VERSION', '0.6.0' );
 define( 'SPE_PLUGIN_FILE', __FILE__ );
 define( 'SPE_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'SPE_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 
 // Add a check for WooCommerce on plugin activation.
 register_activation_hook( __FILE__, 'smart_product_emails_activate' );
+register_deactivation_hook( __FILE__, 'smart_product_emails_deactivate' );
 
 /**
  * Activation hook - checks for WooCommerce and creates error log database table
@@ -93,6 +94,14 @@ function smart_product_emails_activate() {
 	if ( ! wp_next_scheduled( 'spe_cleanup_old_logs' ) ) {
 		wp_schedule_event( time(), 'daily', 'spe_cleanup_old_logs' );
 	}
+}
+
+/**
+ * Deactivation hook - clears scheduled events
+ */
+function smart_product_emails_deactivate() {
+	// Clear scheduled cron event for log cleanup
+	wp_clear_scheduled_hook( 'spe_cleanup_old_logs' );
 }
 
 /**

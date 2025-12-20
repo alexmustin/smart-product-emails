@@ -32,7 +32,7 @@ class SPE_Email_Logger {
 		add_action( 'wp_mail_failed', array( $this, 'log_email_failure' ), 10, 1 );
 
 		// Hook into WooCommerce email sent action
-		add_action( 'woocommerce_email_sent', array( $this, 'log_email_sent' ), 10, 4 );
+		add_action( 'woocommerce_email_sent', array( $this, 'log_email_sent' ), 10, 3 );
 	}
 
 	/**
@@ -60,9 +60,8 @@ class SPE_Email_Logger {
 	 * @param bool   $return       Whether email was sent successfully
 	 * @param string $email_id     Email ID
 	 * @param object $email_object WooCommerce email object
-	 * @param array  $email        Email data
 	 */
-	public function log_email_sent( $return, $email_id, $email_object, $email ) {
+	public function log_email_sent( $return, $email_id, $email_object ) {
 		// Only log if email was sent successfully
 		if ( ! $return ) {
 			return;
@@ -76,10 +75,12 @@ class SPE_Email_Logger {
 		$to = '';
 		$subject = '';
 
-		// Extract recipient and subject from email data
-		if ( is_array( $email ) ) {
-			$to = isset( $email['to'] ) ? $email['to'] : '';
-			$subject = isset( $email['subject'] ) ? $email['subject'] : '';
+		// Extract recipient and subject from email object
+		if ( isset( $email_object->recipient ) ) {
+			$to = $email_object->recipient;
+		}
+		if ( isset( $email_object->get_subject ) && is_callable( array( $email_object, 'get_subject' ) ) ) {
+			$subject = $email_object->get_subject();
 		}
 
 		$context = array(

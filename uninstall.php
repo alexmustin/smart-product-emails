@@ -81,7 +81,15 @@ function spe_uninstall_cleanup() {
 		}
 	}
 
-	// 4. Clear any cached data
+	// 4. Drop the error log table
+	$error_log_table = $wpdb->prefix . 'spe_error_logs';
+	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
+	$wpdb->query( "DROP TABLE IF EXISTS {$error_log_table}" );
+
+	// 5. Clear scheduled cron event
+	wp_clear_scheduled_hook( 'spe_cleanup_old_logs' );
+
+	// 6. Clear any cached data
 	wp_cache_flush();
 }
 
