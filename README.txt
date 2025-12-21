@@ -2,12 +2,12 @@
 Contributors: alexmustin
 Author: alexmustin
 Author URI: https://alexmustin.com/
-Tags: woocommerce emails, custom emails, product emails, per product, product specific emails, targeted emails
+Tags: woocommerce emails, custom emails, product emails, per product, targeted emails
 Requires at least: 6.8
 Tested up to: 6.9
 Requires PHP: 8.2
-Stable tag: 0.5.0
-Version: 0.5.0
+Stable tag: 0.6.0
+Version: 0.6.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -208,7 +208,7 @@ If you are having any issues, please post in the WordPress Plugin Support Forum.
 
 == Changelog ==
 
-### 0.5.0 - Initial Release
+### 0.6.0 - Initial Release
 * Complete product-based email customization system
 * 40+ dynamic placeholders for personalized content
 * Flexible content placement within WooCommerce emails

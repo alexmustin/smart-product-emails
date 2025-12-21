@@ -29,6 +29,7 @@ class SPE_Error_Handler {
 	 */
 	private function register_handlers() {
 		// Register error handler for plugin files only
+		// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_set_error_handler -- Intentional error handler for logging plugin errors
 		set_error_handler( array( $this, 'handle_error' ) );
 
 		// Register exception handler

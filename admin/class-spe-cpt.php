@@ -33,13 +33,13 @@ class Smart_Product_Emails_CPT {
 			?>
 			<div class="notice notice-error">
 				<p>
-					<strong><?php esc_html_e( 'WooCommerce Required', 'smart_product_emails_domain' ); ?></strong>
+					<strong><?php esc_html_e( 'WooCommerce Required', 'smart-product-emails' ); ?></strong>
 				</p>
 				<p>
 					<?php
 					printf(
 						/* translators: %1$s: opening link tag, %2$s: closing link tag */
-						esc_html__( 'Smart Product Emails requires %1$sWooCommerce%2$s to be installed and activated. Please install and activate WooCommerce to use this plugin.', 'smart_product_emails_domain' ),
+						esc_html__( 'Smart Product Emails requires %1$sWooCommerce%2$s to be installed and activated. Please install and activate WooCommerce to use this plugin.', 'smart-product-emails' ),
 						'<a href="' . esc_url( $woo_plugin_url ) . '" target="_blank">',
 						'</a>'
 					);
@@ -74,8 +74,8 @@ class Smart_Product_Emails_CPT {
 	public function new_cpt_speemails() {
 
 		$cap_type = 'post';
-		$plural   = __( 'Smart Product Emails', 'smart_product_emails_domain' );
-		$single   = __( 'Smart Product Email', 'smart_product_emails_domain' );
+		$plural   = __( 'Smart Product Emails', 'smart-product-emails' );
+		$single   = __( 'Smart Product Email', 'smart-product-emails' );
 		$cpt_name = 'smartproductemails';
 
 		$opts['can_export']           = true;
@@ -112,20 +112,20 @@ class Smart_Product_Emails_CPT {
 		$opts['capabilities']['read_post']              = "read_{$cap_type}";
 		$opts['capabilities']['read_private_posts']     = "read_private_{$cap_type}s";
 
-		$opts['labels']['add_new']            = __( 'Add New SPE Message', 'smart_product_emails_domain' );
-		$opts['labels']['add_new_item']       = __( 'Add New SPE Message', 'smart_product_emails_domain' );
-		$opts['labels']['all_items']          = __( 'SPE Messages', 'smart_product_emails_domain' );
-		$opts['labels']['edit_item']          = __( 'Edit SPE Message', 'smart_product_emails_domain' );
+		$opts['labels']['add_new']            = __( 'Add New SPE Message', 'smart-product-emails' );
+		$opts['labels']['add_new_item']       = __( 'Add New SPE Message', 'smart-product-emails' );
+		$opts['labels']['all_items']          = __( 'SPE Messages', 'smart-product-emails' );
+		$opts['labels']['edit_item']          = __( 'Edit SPE Message', 'smart-product-emails' );
 		$opts['labels']['menu_name']          = $plural;
-		$opts['labels']['name']               = __( 'SPE Messages', 'smart_product_emails_domain' );
-		$opts['labels']['name_admin_bar']     = __( 'SPE Message', 'smart_product_emails_domain' );
-		$opts['labels']['new_item']           = __( 'New SPE Message', 'smart_product_emails_domain' );
-		$opts['labels']['not_found']          = __( 'No SPE Messages Found', 'smart_product_emails_domain' );
-		$opts['labels']['not_found_in_trash'] = __( 'No SPE Messages Found in Trash', 'smart_product_emails_domain' );
-		$opts['labels']['parent_item_colon']  = __( 'Parent SPE Messages:', 'smart_product_emails_domain' );
-		$opts['labels']['search_items']       = __( 'Search SPE Messages', 'smart_product_emails_domain' );
-		$opts['labels']['singular_name']      = __( 'SPE Message', 'smart_product_emails_domain' );
-		$opts['labels']['view_item']          = __( 'View SPE Message', 'smart_product_emails_domain' );
+		$opts['labels']['name']               = __( 'SPE Messages', 'smart-product-emails' );
+		$opts['labels']['name_admin_bar']     = __( 'SPE Message', 'smart-product-emails' );
+		$opts['labels']['new_item']           = __( 'New SPE Message', 'smart-product-emails' );
+		$opts['labels']['not_found']          = __( 'No SPE Messages Found', 'smart-product-emails' );
+		$opts['labels']['not_found_in_trash'] = __( 'No SPE Messages Found in Trash', 'smart-product-emails' );
+		$opts['labels']['parent_item_colon']  = __( 'Parent SPE Messages:', 'smart-product-emails' );
+		$opts['labels']['search_items']       = __( 'Search SPE Messages', 'smart-product-emails' );
+		$opts['labels']['singular_name']      = __( 'SPE Message', 'smart-product-emails' );
+		$opts['labels']['view_item']          = __( 'View SPE Message', 'smart-product-emails' );
 
 		$opts = apply_filters( 'smartproductemails-cpt-options', $opts );
 

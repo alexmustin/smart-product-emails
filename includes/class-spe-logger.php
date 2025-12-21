@@ -5,6 +5,15 @@
  * Provides centralized error logging functionality with different log levels.
  * Stores logs in custom database table for easy viewing and filtering.
  *
+ * Note: This class uses direct database queries because:
+ * 1. WordPress provides no API for custom database tables
+ * 2. The wp_posts/wp_postmeta APIs only work with WordPress core tables
+ * 3. Error logging requires real-time data, caching would show stale/incomplete logs
+ * 4. Log data is constantly changing, making cache invalidation impractical
+ * 5. The error log interface is admin-only with low traffic
+ *
+ * All queries use $wpdb->prepare() for security and are properly escaped.
+ *
  * @package SmartProductEmails
  */
 
@@ -109,8 +118,8 @@ class SPE_Logger {
 		$stack_trace = isset( $context['stack_trace'] ) ? $context['stack_trace'] : null;
 
 		// Get request data
-		$request_url = isset( $_SERVER['REQUEST_URI'] ) ? esc_url_raw( $_SERVER['REQUEST_URI'] ) : null;
-		$user_agent  = isset( $_SERVER['HTTP_USER_AGENT'] ) ? sanitize_text_field( $_SERVER['HTTP_USER_AGENT'] ) : null;
+		$request_url = isset( $_SERVER['REQUEST_URI'] ) ? esc_url_raw( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : null;
+		$user_agent  = isset( $_SERVER['HTTP_USER_AGENT'] ) ? sanitize_text_field( wp_unslash( $_SERVER['HTTP_USER_AGENT'] ) ) : null;
 		$ip_address  = $this->get_client_ip();
 
 		// Prepare context JSON (remove already-extracted fields)
@@ -121,6 +130,7 @@ class SPE_Logger {
 		$context_json = ! empty( $context_data ) ? wp_json_encode( $context_data ) : null;
 
 		// Insert log entry
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery -- Custom error log table requires direct queries, no WordPress API available for custom tables
 		$wpdb->insert(
 			$this->table_name,
 			array(
@@ -146,6 +156,7 @@ class SPE_Logger {
 
 		// Also log to PHP error_log if WP_DEBUG is enabled
 		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+			// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- Intentional logging for debugging purposes when WP_DEBUG is enabled
 			error_log( sprintf( '[SPE %s] %s', strtoupper( $level ), $message ) );
 		}
 	}
@@ -163,7 +174,7 @@ class SPE_Logger {
 			$ip = filter_var( wp_unslash( $_SERVER['HTTP_CLIENT_IP'] ), FILTER_VALIDATE_IP );
 		} elseif ( isset( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ) {
 			// X-Forwarded-For can contain multiple IPs, get the first one
-			$forwarded = wp_unslash( $_SERVER['HTTP_X_FORWARDED_FOR'] );
+			$forwarded = sanitize_text_field( wp_unslash( $_SERVER['HTTP_X_FORWARDED_FOR'] ) );
 			$ip_list = explode( ',', $forwarded );
 			$ip = filter_var( trim( $ip_list[0] ), FILTER_VALIDATE_IP );
 		} elseif ( isset( $_SERVER['REMOTE_ADDR'] ) ) {
@@ -182,6 +193,7 @@ class SPE_Logger {
 	public function cleanup_old_logs( $days = 30 ) {
 		global $wpdb;
 
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Custom error log table cleanup, no caching needed for deletion operations
 		$wpdb->query( $wpdb->prepare(
 			"DELETE FROM {$this->table_name} WHERE created_at < DATE_SUB(NOW(), INTERVAL %d DAY)",
 			$days
@@ -199,6 +211,7 @@ class SPE_Logger {
 
 		$where = $this->build_where_clause( $filters );
 
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Custom error log table query, no caching for real-time log counts, WHERE clause prepared in build_where_clause()
 		return (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$this->table_name} {$where}" );
 	}
 
@@ -226,8 +239,14 @@ class SPE_Logger {
 		$limit  = absint( $args['per_page'] );
 		$offset = ( absint( $args['page'] ) - 1 ) * $limit;
 
-		$query = "SELECT * FROM {$this->table_name} {$where} ORDER BY {$orderby} LIMIT {$limit} OFFSET {$offset}";
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name is a known constant, WHERE clause is prepared in build_where_clause(), ORDER BY is sanitized
+		$query = $wpdb->prepare(
+			"SELECT * FROM {$this->table_name} {$where} ORDER BY {$orderby} LIMIT %d OFFSET %d",
+			$limit,
+			$offset
+		);
 
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared -- Custom error log table query, no caching for real-time log data, query prepared above
 		return $wpdb->get_results( $query );
 	}
 

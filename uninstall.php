@@ -5,6 +5,14 @@
  * This file runs when the plugin is uninstalled (deleted) from WordPress.
  * It removes all plugin data from the database to ensure clean uninstallation.
  *
+ * Note: Direct database queries are required for uninstall because:
+ * 1. Removing custom table data (no WordPress API available)
+ * 2. Cleaning HPOS meta table (WooCommerce custom table, requires direct queries)
+ * 3. Bulk deletion operations (more efficient than iterating through WordPress APIs)
+ * 4. Uninstall runs once and doesn't need caching
+ *
+ * All queries use $wpdb->prepare() for security where user input is involved.
+ *
  * @package SmartProductEmails
  */
 
@@ -71,7 +79,7 @@ function spe_uninstall_cleanup() {
 		);
 
 		if ( $table_exists === $hpos_table ) {
-			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name is constructed from known constant
 			$wpdb->query(
 				$wpdb->prepare(
 					"DELETE FROM {$hpos_table} WHERE meta_key = %s",
@@ -83,7 +91,7 @@ function spe_uninstall_cleanup() {
 
 	// 4. Drop the error log table
 	$error_log_table = $wpdb->prefix . 'spe_error_logs';
-	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
+	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name is constructed from known constant
 	$wpdb->query( "DROP TABLE IF EXISTS {$error_log_table}" );
 
 	// 5. Clear scheduled cron event

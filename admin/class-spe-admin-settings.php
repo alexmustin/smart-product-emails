@@ -57,13 +57,13 @@ class Smart_Product_Emails_For_WooCommerce_Admin_Settings {
 			?>
 			<div class="notice notice-error">
 				<p>
-					<strong><?php esc_html_e( 'WooCommerce Required', 'smart_product_emails_domain' ); ?></strong>
+					<strong><?php esc_html_e( 'WooCommerce Required', 'smart-product-emails' ); ?></strong>
 				</p>
 				<p>
 					<?php
 					printf(
 						/* translators: %1$s: opening link tag, %2$s: closing link tag */
-						esc_html__( 'Smart Product Emails requires %1$sWooCommerce%2$s to be installed and activated. Please install and activate WooCommerce to use this plugin.', 'smart_product_emails_domain' ),
+						esc_html__( 'Smart Product Emails requires %1$sWooCommerce%2$s to be installed and activated. Please install and activate WooCommerce to use this plugin.', 'smart-product-emails' ),
 						'<a href="' . esc_url( $woo_plugin_url ) . '" target="_blank">',
 						'</a>'
 					);
@@ -95,8 +95,8 @@ class Smart_Product_Emails_For_WooCommerce_Admin_Settings {
 	public function spe_settings_add_plugin_page() {
 		add_submenu_page(
 			'edit.php?post_type=smartproductemails', // parent slug.
-			__( 'SPE Settings', 'smart_product_emails_domain' ), // page title.
-			__( 'SPE Settings', 'smart_product_emails_domain' ), // menu title.
+			__( 'SPE Settings', 'smart-product-emails' ), // page title.
+			__( 'SPE Settings', 'smart-product-emails' ), // menu title.
 			'manage_options', // capability.
 			'spe-settings', // menu slug.
 			array( $this, 'spe_settings_create_admin_page' ) // callback function.
@@ -111,11 +111,11 @@ class Smart_Product_Emails_For_WooCommerce_Admin_Settings {
 		?>
 
 		<div class="wrap">
-			<h2><?php esc_html_e( 'Smart Product Emails Settings', 'smart_product_emails_domain' ); ?></h2>
+			<h2><?php esc_html_e( 'Smart Product Emails Settings', 'smart-product-emails' ); ?></h2>
 
 			<hr>
 
-			<p class="howto"><?php echo esc_html( 'Settings for the Smart Product Emails plugin.', 'smart_product_emails_domain' ); ?></p>
+			<p class="howto"><?php echo esc_html( 'Settings for the Smart Product Emails plugin.', 'smart-product-emails' ); ?></p>
 
 			<?php settings_errors(); ?>
 
@@ -143,7 +143,7 @@ class Smart_Product_Emails_For_WooCommerce_Admin_Settings {
 			$nonce_url = wp_create_nonce('spe_admin_nonce');
 			?>
 			<h2 class="nav-tab-wrapper">
-				<a href="?post_type=smartproductemails&page=<?php echo esc_attr( $page ); ?>&tab=display_settings&_wpnonce=<?php echo esc_attr($nonce_url); ?>" class="nav-tab <?php echo 'display_settings' === $active_tab ? 'nav-tab-active' : ''; ?>"><?php esc_html_e( 'Display Settings', 'smart_product_emails_domain' ); ?></a>
+				<a href="?post_type=smartproductemails&page=<?php echo esc_attr( $page ); ?>&tab=display_settings&_wpnonce=<?php echo esc_attr($nonce_url); ?>" class="nav-tab <?php echo 'display_settings' === $active_tab ? 'nav-tab-active' : ''; ?>"><?php esc_html_e( 'Display Settings', 'smart-product-emails' ); ?></a>
 			</h2>
 
 			<form method="post" action="options.php">
@@ -173,7 +173,7 @@ class Smart_Product_Emails_For_WooCommerce_Admin_Settings {
 
 		add_settings_section(
 			'spe_settings_content_separator_section', // id.
-			__('Content Separator', 'smart_product_emails_domain'), // title.
+			__('Content Separator', 'smart-product-emails'), // title.
 			array( $this, 'spe_settings_section_info' ), // callback.
 			'spe-settings-admin' // page.
 		);
@@ -181,7 +181,7 @@ class Smart_Product_Emails_For_WooCommerce_Admin_Settings {
 		// Add settings field: Separator Styles
 		add_settings_field(
 			'spe_content_separator_style_field', // Field ID
-			__('Separator Style', 'smart_product_emails_domain'), // Field title
+			__('Separator Style', 'smart-product-emails'), // Field title
 			array( $this, 'spe_settings_content_separator_style'), // Callback function
 			'spe-settings-admin', // Page slug
 			'spe_settings_content_separator_section' // Section ID
@@ -190,7 +190,7 @@ class Smart_Product_Emails_For_WooCommerce_Admin_Settings {
 		// Add settings field: Separator Color
 		add_settings_field(
 			'spe_content_separator_color_field', // Field ID
-			__('Separator Color', 'smart_product_emails_domain'), // Field title
+			__('Separator Color', 'smart-product-emails'), // Field title
 			array( $this, 'spe_settings_content_separator_color'), // Callback function
 			'spe-settings-admin', // Page slug
 			'spe_settings_content_separator_section', // Section ID
@@ -203,7 +203,7 @@ class Smart_Product_Emails_For_WooCommerce_Admin_Settings {
 		// Add settings field: Separator Thickness
 		add_settings_field(
 			'spe_content_separator_thickness_field', // Field ID
-			__('Line Thickness', 'smart_product_emails_domain'), // Field title
+			__('Line Thickness', 'smart-product-emails'), // Field title
 			array( $this, 'spe_settings_content_separator_thickness'), // Callback function
 			'spe-settings-admin', // Page slug
 			'spe_settings_content_separator_section', // Section ID
@@ -216,7 +216,7 @@ class Smart_Product_Emails_For_WooCommerce_Admin_Settings {
 		// Add settings field: Separator Spacing
 		add_settings_field(
 			'spe_content_separator_spacing_field', // Field ID
-			__('Spacing', 'smart_product_emails_domain'), // Field title
+			__('Spacing', 'smart-product-emails'), // Field title
 			array( $this, 'spe_settings_content_separator_spacing'), // Callback function
 			'spe-settings-admin', // Page slug
 			'spe_settings_content_separator_section', // Section ID
@@ -229,7 +229,7 @@ class Smart_Product_Emails_For_WooCommerce_Admin_Settings {
 		// Add settings field: Custom HTML
 		add_settings_field(
 			'spe_content_separator_customhtml_field', // Field ID
-			__('Custom Separator HTML', 'smart_product_emails_domain'), // Field title
+			__('Custom Separator HTML', 'smart-product-emails'), // Field title
 			array( $this, 'spe_settings_content_separator_customhtml'), // Callback function
 			'spe-settings-admin', // Page slug
 			'spe_settings_content_separator_section', // Section ID
@@ -242,7 +242,7 @@ class Smart_Product_Emails_For_WooCommerce_Admin_Settings {
 		// Add settings field: Live Preview
 		add_settings_field(
 			'spe_content_separator_livepreview', // Field ID
-			__('Live Preview', 'smart_product_emails_domain'), // Field title
+			__('Live Preview', 'smart-product-emails'), // Field title
 			array( $this, 'spe_settings_content_separator_livepreview'), // Callback function
 			'spe-settings-admin', // Page slug
 			'spe_settings_content_separator_section' // Section ID
@@ -289,7 +289,7 @@ class Smart_Product_Emails_For_WooCommerce_Admin_Settings {
 	 * Displays a line of description text.
 	 */
 	public function spe_settings_section_info() {
-		esc_html_e('Customize how your custom email content is visually separated from the rest of the order email.', 'smart_product_emails_domain');
+		esc_html_e('Customize how your custom email content is visually separated from the rest of the order email.', 'smart-product-emails');
 	}
 
 	/**
@@ -304,32 +304,32 @@ class Smart_Product_Emails_For_WooCommerce_Admin_Settings {
 		<select name="SmartProductEmails_settings_name[content_separator]" id="spe_content_separator" class="regular-text">
 
 			<option value="none" <?php selected($content_separator, 'none'); ?>>
-				<?php esc_html_e('None - No separator', 'smart_product_emails_domain'); ?>
+				<?php esc_html_e('None - No separator', 'smart-product-emails'); ?>
 			</option>
 			<option value="line" <?php selected($content_separator, 'line'); ?>>
-				<?php esc_html_e('Solid Line', 'smart_product_emails_domain'); ?>
+				<?php esc_html_e('Solid Line', 'smart-product-emails'); ?>
 			</option>
 			<option value="dots" <?php selected($content_separator, 'dots'); ?>>
-				<?php esc_html_e('Dotted Line', 'smart_product_emails_domain'); ?>
+				<?php esc_html_e('Dotted Line', 'smart-product-emails'); ?>
 			</option>
 			<option value="dashes" <?php selected($content_separator, 'dashes'); ?>>
-				<?php esc_html_e('Dashed Line', 'smart_product_emails_domain'); ?>
+				<?php esc_html_e('Dashed Line', 'smart-product-emails'); ?>
 			</option>
 			<option value="double" <?php selected($content_separator, 'double'); ?>>
-				<?php esc_html_e('Double Line', 'smart_product_emails_domain'); ?>
+				<?php esc_html_e('Double Line', 'smart-product-emails'); ?>
 			</option>
 			<option value="space" <?php selected($content_separator, 'space'); ?>>
-				<?php esc_html_e('Extra Space Only', 'smart_product_emails_domain'); ?>
+				<?php esc_html_e('Extra Space Only', 'smart-product-emails'); ?>
 			</option>
 			<option value="custom" <?php selected($content_separator, 'custom'); ?>>
-				<?php esc_html_e('Custom HTML', 'smart_product_emails_domain'); ?>
+				<?php esc_html_e('Custom HTML', 'smart-product-emails'); ?>
 			</option>
 
 		</select>
 
 		<?php
 		echo '<p>';
-		esc_html_e('Choose a visual style to separate your custom content from order details.', 'smart_product_emails_domain');
+		esc_html_e('Choose a visual style to separate your custom content from order details.', 'smart-product-emails');
 		echo '</p>';
 
 	}
@@ -350,7 +350,7 @@ class Smart_Product_Emails_For_WooCommerce_Admin_Settings {
 			data-default-color="#dddddd" />
 
 			<p class="description">
-				<?php esc_html_e('Choose the color for the separator line.', 'smart_product_emails_domain'); ?>
+				<?php esc_html_e('Choose the color for the separator line.', 'smart-product-emails'); ?>
 			</p>
 		<?php
 	}
@@ -371,7 +371,7 @@ class Smart_Product_Emails_For_WooCommerce_Admin_Settings {
 			style="width: 200px;" />
 		<span id="spe_thickness_value"><?php echo esc_html($separator_thickness); ?>px</span>
 		<p class="description">
-			<?php esc_html_e('Adjust the thickness of the separator line (1-5 pixels).', 'smart_product_emails_domain'); ?>
+			<?php esc_html_e('Adjust the thickness of the separator line (1-5 pixels).', 'smart-product-emails'); ?>
 		</p>
 		<?php
 	}
@@ -392,7 +392,7 @@ class Smart_Product_Emails_For_WooCommerce_Admin_Settings {
 			style="width: 200px;" />
 		<span id="spe_spacing_value"><?php echo esc_html($separator_spacing); ?>px</span>
 		<p class="description">
-			<?php esc_html_e('Space above and below the separator (10-50 pixels).', 'smart_product_emails_domain'); ?>
+			<?php esc_html_e('Space above and below the separator (10-50 pixels).', 'smart-product-emails'); ?>
 		</p>
 		<?php
 	}
@@ -409,18 +409,18 @@ class Smart_Product_Emails_For_WooCommerce_Admin_Settings {
 			class="large-text code"
 			placeholder='<div style="border-top: 2px solid #ff9800; margin: 20px 0;"></div>'><?php echo nl2br( esc_html($custom_separator_html)); ?></textarea>
 		<p class="description">
-			<?php esc_html_e('Enter custom HTML for your separator. Must use inline CSS styles for email compatibility. Shortcodes are not supported.', 'smart_product_emails_domain'); ?>
+			<?php esc_html_e('Enter custom HTML for your separator. Must use inline CSS styles for email compatibility. Shortcodes are not supported.', 'smart-product-emails'); ?>
 		</p>
 		<details style="margin-top: 10px;">
-			<summary style="cursor: pointer; color: #2271b1;"><?php esc_html_e('Show Examples', 'smart_product_emails_domain'); ?></summary>
+			<summary style="cursor: pointer; color: #2271b1;"><?php esc_html_e('Show Examples', 'smart-product-emails'); ?></summary>
 			<div style="margin-top: 10px; padding: 10px; background: #f9f9f9; border-left: 3px solid #2271b1;">
-				<p><strong><?php esc_html_e('Brand-colored line:', 'smart_product_emails_domain'); ?></strong></p>
+				<p><strong><?php esc_html_e('Brand-colored line:', 'smart-product-emails'); ?></strong></p>
 				<code>&lt;hr style="border: none; border-top: 3px solid #ff6900; margin: 20px 0;" /&gt;</code>
 
-				<p style="margin-top: 15px;"><strong><?php esc_html_e('Decorative stars:', 'smart_product_emails_domain'); ?></strong></p>
+				<p style="margin-top: 15px;"><strong><?php esc_html_e('Decorative stars:', 'smart-product-emails'); ?></strong></p>
 				<code>&lt;div style="text-align: center; color: #999; margin: 20px 0;"&gt;★ ★ ★&lt;/div&gt;</code>
 
-				<p style="margin-top: 15px;"><strong><?php esc_html_e('Gradient line:', 'smart_product_emails_domain'); ?></strong></p>
+				<p style="margin-top: 15px;"><strong><?php esc_html_e('Gradient line:', 'smart-product-emails'); ?></strong></p>
 				<code>&lt;div style="height: 2px; background: linear-gradient(to right, #0c88d9, #9459dc); margin: 20px 0;"&gt;&lt;/div&gt;</code>
 			</div>
 		</details>
@@ -431,28 +431,28 @@ class Smart_Product_Emails_For_WooCommerce_Admin_Settings {
 		?>
 		<div id="spe_separator_preview" style="padding: 20px; background: #f9f9f9; border: 1px solid #ddd; border-radius: 4px;">
 			<p style="margin: 0 0 10px 0; color: #666; font-size: 13px;">
-				<?php esc_html_e('Order content appears here...', 'smart_product_emails_domain'); ?>
+				<?php esc_html_e('Order content appears here...', 'smart-product-emails'); ?>
 			</p>
 
 			<div id="spe_separator_preview_top"></div>
 
 			<div style="background: #fffbcc; border-left: 4px solid #ff9800; padding: 15px; margin: 10px 0;">
 				<strong style="display: block; margin-bottom: 5px; color: #e65100;">
-					<?php esc_html_e('Your Custom Email Content', 'smart_product_emails_domain'); ?>
+					<?php esc_html_e('Your Custom Email Content', 'smart-product-emails'); ?>
 				</strong>
 				<p style="margin: 0; color: #666; font-size: 13px;">
-					<?php esc_html_e('This is where your custom product-specific content will appear in the customer\'s order email.', 'smart_product_emails_domain'); ?>
+					<?php esc_html_e('This is where your custom product-specific content will appear in the customer\'s order email.', 'smart-product-emails'); ?>
 				</p>
 			</div>
 
 			<div id="spe_separator_preview_bottom"></div>
 
 			<p style="margin: 10px 0 0 0; color: #666; font-size: 13px;">
-				<?php esc_html_e('More order content continues below...', 'smart_product_emails_domain'); ?>
+				<?php esc_html_e('More order content continues below...', 'smart-product-emails'); ?>
 			</p>
 		</div>
 		<p class="description" style="margin-top: 10px;">
-			<?php esc_html_e('This preview shows how the separator will appear in actual customer emails.', 'smart_product_emails_domain'); ?>
+			<?php esc_html_e('This preview shows how the separator will appear in actual customer emails.', 'smart-product-emails'); ?>
 		</p>
 		<?php
 	}

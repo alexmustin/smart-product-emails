@@ -10,7 +10,7 @@
  * coordinating actions and filters between the core plugin and the
  * administration class.
  *
- * @package smart_product_emails_domain\includes
+ * @package Smart_Product_Emails
  */
 class Smart_Product_Emails_Loader {
 

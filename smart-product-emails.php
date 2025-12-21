@@ -6,13 +6,13 @@
  * Version: 0.6.0
  * Author: Alex Mustin
  * Author URI: https://alexmustin.com
- * Text Domain: smart_product_emails_domain
+ * Text Domain: smart-product-emails
  * License: GPL-2.0+
  * License URI: http://www.gnu.org/licenses/gpl-2.0.txt
  * WC requires at least: 10.2.1
  * WC tested up to: 10.3.6
  *
- * @package smart_product_emails_domain
+ * @package Smart_Product_Emails
  */
 
 // Exit if not WordPress.
@@ -51,9 +51,9 @@ function smart_product_emails_activate() {
 		$woo_plugin_url = esc_url( 'https://wordpress.org/plugins/woocommerce/' );
 
 		$text_string  = '';
-		$text_string .= sprintf( '%1$s%2$s%3$s', '<h2>', esc_html__( 'Oops!', 'smart_product_emails_domain' ), '</h2>' );
-		$text_string .= sprintf( '%1$s%2$sWooCommerce%3$s%4$s%5$s', '<p>', '<a href="' . $woo_plugin_url . '" target="_blank">', '</a>', esc_html__( ' is required for this plugin.', 'smart_product_emails_domain' ), '</p>' );
-		$text_string .= sprintf( '%1$s%2$s%3$s', '<p>', esc_html__( 'Please install and activate WooCommerce and try again.', 'smart_product_emails_domain' ), '</p>' );
+		$text_string .= sprintf( '%1$s%2$s%3$s', '<h2>', esc_html__( 'Oops!', 'smart-product-emails' ), '</h2>' );
+		$text_string .= sprintf( '%1$s%2$sWooCommerce%3$s%4$s%5$s', '<p>', '<a href="' . $woo_plugin_url . '" target="_blank">', '</a>', esc_html__( ' is required for this plugin.', 'smart-product-emails' ), '</p>' );
+		$text_string .= sprintf( '%1$s%2$s%3$s', '<p>', esc_html__( 'Please install and activate WooCommerce and try again.', 'smart-product-emails' ), '</p>' );
 		wp_die( $text_string ); // phpcs:ignore
 	}
 

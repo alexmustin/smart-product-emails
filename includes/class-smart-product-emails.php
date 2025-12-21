@@ -36,7 +36,7 @@ class Smart_Product_Emails {
 	 */
 	public function __construct() {
 
-		$this->plugin_slug = 'smart_product_emails_domain';
+		$this->plugin_slug = 'smart-product-emails';
 		$this->version     = SPE_PLUGIN_VERSION;
 
 		$this->smart_product_emails_load_dependencies();

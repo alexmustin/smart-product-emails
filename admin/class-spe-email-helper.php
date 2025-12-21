@@ -67,13 +67,13 @@ class SPE_Email_Helper {
 
 		// Default headings if none set
 		$default_headings = array(
-			'onhold' => __('Thank you for your order', 'woocommerce'),
-			'processing' => __('Thank you for your order', 'woocommerce'),
-			'completed' => __('Your order is complete', 'woocommerce')
+			'onhold' => __('Thank you for your order', 'smart-product-emails'),
+			'processing' => __('Thank you for your order', 'smart-product-emails'),
+			'completed' => __('Your order is complete', 'smart-product-emails')
 		);
 
 		if (empty($heading_text)) {
-			$heading_text = isset($default_headings[$status]) ? $default_headings[$status] : __('Thank you for your order', 'woocommerce');
+			$heading_text = isset($default_headings[$status]) ? $default_headings[$status] : __('Thank you for your order', 'smart-product-emails');
 		}
 
 		return array(
