@@ -149,6 +149,17 @@ Smart Product Emails supports 40+ dynamic placeholders. These are automatically 
 - **Shipping Address:** `{shipping_address}`, `{shipping_city}`, `{shipping_state}`, `{shipping_postcode}`, `{shipping_country}`
 - **Order Totals:** `{order_subtotal}`, `{order_total}`, `{order_tax}`, `{order_shipping}`, `{order_discount}`
 
+### How do I troubleshoot issues with my custom messages?
+Smart Product Emails includes a built-in **Error Log** feature to help you diagnose and fix issues quickly. To access it:
+
+1. Go to **Smart Product Emails → Settings** in your WordPress admin
+2. Click the **Error Log** tab
+3. View captured errors including PHP errors, AJAX failures, and email sending issues
+4. Use the filter and search tools to find specific problems
+5. Export logs as CSV for detailed analysis
+
+The Error Log shows you exactly what's happening behind the scenes, making it easy to identify and resolve issues without needing developer support. Common issues like missing messages, formatting problems, or placeholder errors are logged automatically so you can fix them yourself.
+
 ### Official Website
 Please see the official website for further reference:
 https://smartproductemails.com
