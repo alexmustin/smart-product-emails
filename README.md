@@ -165,7 +165,7 @@ If you are having any issues, please post in the WordPress Plugin Support Forum.
 
 ## Changelog
 
-### X.X.X - Initial Release
+### 0.5.0 - Initial Release
 * Complete product-based email customization system
 * 40+ dynamic placeholders for personalized content
 * Flexible content placement within WooCommerce emails
