@@ -12,8 +12,8 @@ class SPE_Product_Data_Admin {
 
 	public function __construct() {
 		// Free version: Pro features (preview/test) removed
-		// Pro version can hook in via 'spe_product_admin_init' action
-		do_action('spe_product_admin_init', $this);
+		// Pro version can hook in via 'smartproductemails_product_admin_init' action
+		do_action('smartproductemails_product_admin_init', $this);
 
 		// Add admin body classes based on Pro status
 		add_filter('admin_body_class', array($this, 'add_pro_body_classes'));
@@ -31,7 +31,7 @@ class SPE_Product_Data_Admin {
 		}
 
 		// Alternative check using filter hook
-		return apply_filters('spe_is_pro_active', false);
+		return apply_filters('smartproductemails_is_pro_active', false);
 	}
 
 	/**
@@ -191,7 +191,7 @@ class SPE_Product_Data_Admin {
 					 * @param  string  $status_name  The name of the Status Message.
 					 * @return string  $return_str  [description]
 					 */
-					function get_message_title( $msg_id = 0, $status_name = '' ) {
+					function smartproductemails_get_message_title( $msg_id = 0, $status_name = '' ) {
 
 						$spemail_title = get_the_title( $msg_id );
 						$edit_url = admin_url( 'post.php?post=' . $msg_id . '&action=edit' );
@@ -220,7 +220,7 @@ class SPE_Product_Data_Admin {
 					 * @param  string $status_name  The name of the Status message.
 					 * @return void
 					 */
-					function show_saved_message( $status_name = '' ) {
+					function smartproductemails_show_saved_message( $status_name = '' ) {
 
 						// Set the Status "slug".
 						if ( 'onhold' === $status_name ) {
@@ -281,15 +281,15 @@ class SPE_Product_Data_Admin {
 							// If an SPE email is saved for this Order Status...
 							if ( ! empty( $spemail_id_currentstatus ) ) {
 
-								echo wp_kses( get_message_title( $spemail_id_currentstatus, $status_name ), $kses_allowed_html );
+								echo wp_kses( smartproductemails_get_message_title( $spemail_id_currentstatus, $status_name ), $kses_allowed_html );
 
 								$hidden_buttons = '<!-- Hidden fields to store data -->
             					<input type="hidden" class="spe-preview-status" value="' . esc_attr($status_name) . '" />
             					<input type="hidden" class="spe-preview-message-id" value="' . esc_attr($spemail_id_currentstatus) . '" />';
 
 								// FREE VERSION: Preview and Test buttons removed
-								// Pro version adds these via 'spe_product_admin_action_buttons' filter
-								$pro_buttons = apply_filters('spe_product_admin_action_buttons', '', $status_name, $spemail_id_currentstatus, $post_id);
+								// Pro version adds these via 'smartproductemails_product_admin_action_buttons' filter
+								$pro_buttons = apply_filters('smartproductemails_product_admin_action_buttons', '', $status_name, $spemail_id_currentstatus, $post_id);
 
 								$edit_url   = admin_url( 'post.php?post=' . $spemail_id_currentstatus . '&action=edit' );
 								$edit_btn   = '<a href="' . $edit_url . '" target="_blank" class="button edit-spemail" alt="' . __( 'Edit', 'smart-product-emails' ) . '" title="' . __( 'Edit', 'smart-product-emails' ) . '"><span class="dashicons dashicons-edit"></span></a>';
@@ -335,7 +335,7 @@ class SPE_Product_Data_Admin {
 					 * @param string $status_name The name of the status message.
 					 * @return void
 					 */
-					function showLocationSelect( $status_name = '' ) {
+					function smartproductemails_show_location_select( $status_name = '' ) {
 
 						$location_select_arr = array(
 							'woocommerce_email_header' => __( 'Email Header', 'smart-product-emails' ),
@@ -420,12 +420,12 @@ class SPE_Product_Data_Admin {
 
 					<?php
 					/**
-					 * Hook: spe_before_processing_status_row
+					 * Hook: smartproductemails_before_processing_status_row
 					 *
 					 * Allows PRO version to add order status rows before Processing
 					 * (e.g., On-Hold status)
 					 */
-					do_action('spe_before_processing_status_row', $this_product_id);
+					do_action('smartproductemails_before_processing_status_row', $this_product_id);
 					?>
 
 					<!-- // PROCESSING ***************************************************** // -->
@@ -437,11 +437,11 @@ class SPE_Product_Data_Admin {
 						</div>
 						<label class="label-mobile"><?php echo esc_html__( 'Smart Product Email:', 'smart-product-emails' ); ?></label>
 						<div class="message">
-							<?php show_saved_message( 'processing' ); ?>
+							<?php smartproductemails_show_saved_message( 'processing' ); ?>
 						</div>
 						<label class="label-mobile"><?php echo esc_html__( 'Content Location:', 'smart-product-emails' ); ?></label>
 						<div class="location">
-							<?php showLocationSelect( 'processing' ); ?>
+							<?php smartproductemails_show_location_select( 'processing' ); ?>
 						</div>
 						<?php
 						// Create a nonce.
@@ -451,12 +451,12 @@ class SPE_Product_Data_Admin {
 
 					<?php
 					/**
-					 * Hook: spe_after_processing_status_row
+					 * Hook: smartproductemails_after_processing_status_row
 					 *
 					 * Allows PRO version to add order status rows after Processing
 					 * (e.g., Completed status)
 					 */
-					do_action('spe_after_processing_status_row', $this_product_id);
+					do_action('smartproductemails_after_processing_status_row', $this_product_id);
 					?>
 
 				</div>
@@ -482,12 +482,12 @@ class SPE_Product_Data_Admin {
 		};
 		<?php
 		/**
-		 * Hook: spe_ajax_fetch_functions_before
+		 * Hook: smartproductemails_ajax_fetch_functions_before
 		 *
 		 * Allows PRO version to add AJAX fetch functions for additional order statuses
 		 * (e.g., fetch_spe_posts_onhold)
 		 */
-		do_action('spe_ajax_fetch_functions_before');
+		do_action('smartproductemails_ajax_fetch_functions_before');
 		?>
 
 		function fetch_spe_posts_processing(){
@@ -507,23 +507,23 @@ class SPE_Product_Data_Admin {
 
 		<?php
 		/**
-		 * Hook: spe_ajax_fetch_functions_after
+		 * Hook: smartproductemails_ajax_fetch_functions_after
 		 *
 		 * Allows PRO version to add AJAX fetch functions for additional order statuses
 		 * (e.g., fetch_spe_posts_completed)
 		 */
-		do_action('spe_ajax_fetch_functions_after');
+		do_action('smartproductemails_ajax_fetch_functions_after');
 		?>
 
 		jQuery(document).ready( function($) {
 
 			<?php
 			/**
-			 * Hook: spe_ajax_keyup_handlers_before
+			 * Hook: smartproductemails_ajax_keyup_handlers_before
 			 *
 			 * Allows PRO version to add keyup handlers for additional order statuses
 			 */
-			do_action('spe_ajax_keyup_handlers_before');
+			do_action('smartproductemails_ajax_keyup_handlers_before');
 			?>
 
 			// Apply onkeyup behavior
@@ -533,11 +533,11 @@ class SPE_Product_Data_Admin {
 
 			<?php
 			/**
-			 * Hook: spe_ajax_keyup_handlers_after
+			 * Hook: smartproductemails_ajax_keyup_handlers_after
 			 *
 			 * Allows PRO version to add keyup handlers for additional order statuses
 			 */
-			do_action('spe_ajax_keyup_handlers_after');
+			do_action('smartproductemails_ajax_keyup_handlers_after');
 			?>
 
 			var allHidden = false;
@@ -796,7 +796,7 @@ class SPE_Product_Data_Admin {
 		}
 
 		/**
-		 * Hook: spe_save_status_fields_before_processing
+		 * Hook: smartproductemails_save_status_fields_before_processing
 		 *
 		 * Allows PRO version to save additional order status fields before Processing
 		 * (e.g., On-Hold status)
@@ -804,10 +804,10 @@ class SPE_Product_Data_Admin {
 		 * @param WC_Product $product The product object
 		 * @param int $post_id The product ID
 		 */
-		do_action('spe_save_status_fields_before_processing', $product, $post_id);
+		do_action('smartproductemails_save_status_fields_before_processing', $product, $post_id);
 
 		/**
-		 * Hook: spe_save_status_fields_processing
+		 * Hook: smartproductemails_save_status_fields_processing
 		 *
 		 * Allows PRO version to override Processing status save logic
 		 * If PRO handles it, it should return true to prevent free version from saving
@@ -815,8 +815,8 @@ class SPE_Product_Data_Admin {
 		 * @param WC_Product $product The product object
 		 * @param int $post_id The product ID
 		 */
-		$pro_handled_processing = apply_filters( 'spe_pro_override_processing_save', false, $product, $post_id );
-		do_action( 'spe_save_status_fields_processing', $product, $post_id );
+		$pro_handled_processing = apply_filters( 'smartproductemails_pro_override_processing_save', false, $product, $post_id );
+		do_action( 'smartproductemails_save_status_fields_processing', $product, $post_id );
 
 		// Only save Processing if PRO didn't handle it
 		if ( ! $pro_handled_processing ) {
@@ -835,7 +835,7 @@ class SPE_Product_Data_Admin {
 		}
 
 		/**
-		 * Hook: spe_save_status_fields_after_processing
+		 * Hook: smartproductemails_save_status_fields_after_processing
 		 *
 		 * Allows PRO version to save additional order status fields after Processing
 		 * (e.g., Completed status)
@@ -843,7 +843,7 @@ class SPE_Product_Data_Admin {
 		 * @param WC_Product $product The product object
 		 * @param int $post_id The product ID
 		 */
-		do_action('spe_save_status_fields_after_processing', $product, $post_id);
+		do_action('smartproductemails_save_status_fields_after_processing', $product, $post_id);
 
 		// Save the product - this handles both HPOS and legacy storage
     	$product->save();
@@ -855,7 +855,7 @@ class SPE_Product_Data_Admin {
 	 *
 	 * @return string HTML for separator
 	 */
-	public function get_separator_html() {
+	public function smartproductemails_get_separator_html() {
 		$settings = get_option( 'SmartProductEmails_settings_name', array() );
 
 		$separator_type = isset($settings['content_separator']) ? $settings['content_separator'] : 'none';

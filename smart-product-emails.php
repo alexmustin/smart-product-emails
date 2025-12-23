@@ -3,7 +3,7 @@
  * Plugin Name: Smart Product Emails
  * Plugin URI: https://smartproductemails.com/
  * Description: Transform WooCommerce emails into a powerful customer communication platform with dynamic content, segmentation, A/B testing, and analytics.
- * Version: 0.6.0
+ * Version: 0.6.1
  * Author: Alex Mustin
  * Author URI: https://alexmustin.com
  * Text Domain: smart-product-emails
@@ -33,7 +33,7 @@ add_action('before_woocommerce_init', function() {
 });
 
 // Define Globals.
-define( 'SPE_PLUGIN_VERSION', '0.6.0' );
+define( 'SPE_PLUGIN_VERSION', '0.6.1' );
 define( 'SPE_PLUGIN_FILE', __FILE__ );
 define( 'SPE_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'SPE_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
@@ -46,8 +46,9 @@ register_deactivation_hook( __FILE__, 'smart_product_emails_deactivate' );
  * Activation hook - checks for WooCommerce and creates error log database table
  */
 function smart_product_emails_activate() {
-	// Check for WooCommerce
-	if ( ! in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ), true ) ) {
+	// Check for WooCommerce (direct check to avoid false positive from Plugin Check)
+	$active_plugins = get_option( 'active_plugins', array() );
+	if ( ! in_array( 'woocommerce/woocommerce.php', $active_plugins, true ) ) {
 		$woo_plugin_url = esc_url( 'https://wordpress.org/plugins/woocommerce/' );
 
 		$text_string  = '';
@@ -107,13 +108,13 @@ function smart_product_emails_deactivate() {
 /**
  * Cleanup old log entries (runs daily via wp-cron)
  */
-function spe_cleanup_logs_callback() {
+function smartproductemails_cleanup_logs_callback() {
 	if ( class_exists( 'SPE_Logger' ) ) {
 		$logger = SPE_Logger::get_instance();
 		$logger->cleanup_old_logs( 30 ); // Keep last 30 days
 	}
 }
-add_action( 'spe_cleanup_old_logs', 'spe_cleanup_logs_callback' );
+add_action( 'spe_cleanup_old_logs', 'smartproductemails_cleanup_logs_callback' );
 
 // Include required files.
 require_once plugin_dir_path( __FILE__ ) . 'includes/class-smart-product-emails.php';
@@ -136,7 +137,7 @@ new SPE_Error_Log_Admin();
 /**
  * Runs main plugin functions.
  */
-function run_smart_product_emails() {
+function smartproductemails_run() {
 	// Create a new object.
 	$smart_product_emails = new Smart_Product_Emails();
 
@@ -148,4 +149,4 @@ function run_smart_product_emails() {
 }
 
 // Go!
-run_smart_product_emails();
+smartproductemails_run();

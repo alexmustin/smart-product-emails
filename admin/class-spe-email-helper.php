@@ -1,5 +1,5 @@
 <?php
-class SPE_Email_Helper {
+class Smart_Product_Emails_Email_Helper {
 
     /**
 	 * Get WooCommerce email color settings
@@ -88,7 +88,7 @@ class SPE_Email_Helper {
 	 * 
 	 * @return string HTML for separator
 	 */
-	public static function get_separator_html() {
+	public static function smartproductemails_get_separator_html() {
 		$settings = get_option( 'SmartProductEmails_settings_name', array() );
 
 		$separator_type = isset($settings['content_separator']) ? $settings['content_separator'] : 'none';

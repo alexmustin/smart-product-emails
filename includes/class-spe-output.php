@@ -46,12 +46,12 @@ class Smart_Product_Emails_Output {
 		$shown_messages = array();
 
 		/**
-		 * Hook: spe_register_order_status_actions_before_processing
+		 * Hook: smartproductemails_register_order_status_actions_before_processing
 		 *
 		 * Allows PRO version to register order status actions before Processing
 		 * (e.g., On-Hold status actions)
 		 */
-		do_action('spe_register_order_status_actions_before_processing', $this);
+		do_action('smartproductemails_register_order_status_actions_before_processing', $this);
 
 		// PROCESSING STATUS.
 		add_action( 'woocommerce_order_status_cancelled_to_processing_notification', array( $this, 'status_action_processing' ), 10 );
@@ -64,12 +64,12 @@ class Smart_Product_Emails_Output {
 		add_action( 'woocommerce_order_status_pending_to_processing_notification', array( $this, 'smart_product_emails_insert_content' ), 10, 2 );
 
 		/**
-		 * Hook: spe_register_order_status_actions_after_processing
+		 * Hook: smartproductemails_register_order_status_actions_after_processing
 		 *
 		 * Allows PRO version to register order status actions after Processing
 		 * (e.g., Completed status actions)
 		 */
-		do_action('spe_register_order_status_actions_after_processing', $this);
+		do_action('smartproductemails_register_order_status_actions_after_processing', $this);
 
 		/*
 		// FAILED STATUS
@@ -91,8 +91,8 @@ class Smart_Product_Emails_Output {
 	 * Adds a flag for when the current status is set to 'processing'.
 	 */
 	public function status_action_processing() {
-		global $this_order_status_action;
-		$this_order_status_action = 'woocommerce_order_status_processing';
+		global $smartproductemails_order_status_action;
+		$smartproductemails_order_status_action = 'woocommerce_order_status_processing';
 	}
 
 	/**
@@ -109,15 +109,15 @@ class Smart_Product_Emails_Output {
 			$shown_messages = array();
 		}
 
-		global $this_order_status_action;
+		global $smartproductemails_order_status_action;
 
 		/**
 		 * Get separator HTML based on settings
 		 *
 		 * @return string HTML for separator
 		 */
-		if ( ! function_exists( 'get_separator_html' ) ) {
-			function get_separator_html() {
+		if ( ! function_exists( 'smartproductemails_get_separator_html' ) ) {
+			function smartproductemails_get_separator_html() {
 				$settings = get_option( 'SmartProductEmails_settings_name', array() );
 
 				$separator_type = isset($settings['content_separator']) ? $settings['content_separator'] : 'none';
@@ -168,7 +168,7 @@ class Smart_Product_Emails_Output {
 					$shown_messages = array();
 				}
 
-				global $this_order_status_action;
+				global $smartproductemails_order_status_action;
 
 				// Get items in this order using HPOS-compatible method
     			$items = $order->get_items();
@@ -198,7 +198,7 @@ class Smart_Product_Emails_Output {
 					$this_email_template_location = (string) current_action();
 
 					/**
-					 * Hook: spe_output_message_before_processing
+					 * Hook: smartproductemails_output_message_before_processing
 					 *
 					 * Allows PRO version to output messages for additional order statuses before "Processing"
 					 * (e.g., On-Hold status)
@@ -208,10 +208,10 @@ class Smart_Product_Emails_Output {
 					 * @param array $shown_messages Array of already shown message IDs
 					 * @param string $this_email_template_location Current email template location
 					 */
-					do_action('spe_output_message_before_processing', $product, $order, $sent_to_admin, $shown_messages, $this_email_template_location);
+					do_action('smartproductemails_output_message_before_processing', $product, $order, $sent_to_admin, $shown_messages, $this_email_template_location);
 
 					/**
-					 * Hook: spe_output_message_processing
+					 * Hook: smartproductemails_output_message_processing
 					 *
 					 * Allows PRO version to handle Processing status output with multiple messages.
 					 * If PRO doesn't handle it, the free version's logic below will run.
@@ -222,12 +222,12 @@ class Smart_Product_Emails_Output {
 					 * @param array $shown_messages Array of already shown message IDs
 					 * @param string $this_email_template_location Current email template location
 					 */
-					do_action('spe_output_message_processing', $product, $order, $sent_to_admin, $shown_messages, $this_email_template_location);
+					do_action('smartproductemails_output_message_processing', $product, $order, $sent_to_admin, $shown_messages, $this_email_template_location);
 
 					// PROCESSING Status.
 					// --------------------------------
 					// Allow PRO to override Processing output (for multiple messages support)
-					$pro_handles_processing = apply_filters('spe_pro_override_processing_output', false, $product, $order);
+					$pro_handles_processing = apply_filters('smartproductemails_pro_override_processing_output', false, $product, $order);
 
 					// Only run free version logic if PRO is not handling it
 					if (!$pro_handles_processing) {
@@ -246,7 +246,7 @@ class Smart_Product_Emails_Output {
 						}
 
 						// Begin logic for adding message content
-						if ( 'woocommerce_order_status_processing' === $this_order_status_action && !empty( $spemail_id_processing ) ) {
+						if ( 'woocommerce_order_status_processing' === $smartproductemails_order_status_action && !empty( $spemail_id_processing ) ) {
 
 						// If there is an email assigned for 'Processing' status and this message is not already shown,
 						// AND if the message location set for the 'Processing' message is the current email template location...
@@ -260,7 +260,7 @@ class Smart_Product_Emails_Output {
 							$output = '';
 
 							// Get separator content.
-							$separator = get_separator_html();
+							$separator = smartproductemails_get_separator_html();
 
 							// Output custom separator.
 							$output .= $separator;
@@ -287,7 +287,7 @@ class Smart_Product_Emails_Output {
 					} // End: if (!$pro_handles_processing)
 
 					/**
-					 * Hook: spe_output_message_after_processing
+					 * Hook: smartproductemails_output_message_after_processing
 					 *
 					 * Allows PRO version to output messages for additional order statuses after "Processing"
 					 * (e.g., Completed status)
@@ -297,7 +297,7 @@ class Smart_Product_Emails_Output {
 					 * @param array $shown_messages Array of already shown message IDs
 					 * @param string $this_email_template_location Current email template location
 					 */
-					do_action('spe_output_message_after_processing', $product, $order, $sent_to_admin, $shown_messages, $this_email_template_location);
+					do_action('smartproductemails_output_message_after_processing', $product, $order, $sent_to_admin, $shown_messages, $this_email_template_location);
 
 				}
 
@@ -509,7 +509,7 @@ class Smart_Product_Emails_Output {
 		 * @param WC_Order $order The order object
 		 * @param WC_Product|null $product The product object (if provided)
 		 */
-		$placeholders = apply_filters('spe_email_placeholders', $placeholders, $order, $product);
+		$placeholders = apply_filters('smartproductemails_email_placeholders', $placeholders, $order, $product);
 
 		// Replace all placeholders
 		$replaced_text = str_replace(

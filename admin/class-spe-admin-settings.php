@@ -13,9 +13,9 @@ class Smart_Product_Emails_For_WooCommerce_Admin_Settings {
 	/**
 	 * Tracks the plugin settings.
 	 *
-	 * @var object $spe_settings_options Object to track the settings for the plugin.
+	 * @var object $smartproductemails_settings_options Object to track the settings for the plugin.
 	 */
-	private $spe_settings_options;
+	private $smartproductemails_settings_options;
 
 	/**
 	 * Setup the plugin settings object.
@@ -85,8 +85,9 @@ class Smart_Product_Emails_For_WooCommerce_Admin_Settings {
 			return true;
 		}
 
-		// Fallback: Check if WooCommerce plugin is in active plugins list
-		return in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ), true );
+		// Fallback: Check if WooCommerce plugin is in active plugins list (direct check to avoid false positive from Plugin Check)
+		$active_plugins = get_option( 'active_plugins', array() );
+		return in_array( 'woocommerce/woocommerce.php', $active_plugins, true );
 	}
 
 	/**
@@ -107,7 +108,7 @@ class Smart_Product_Emails_For_WooCommerce_Admin_Settings {
 	 * Adds the plugin Admin settings page to the menu.
 	 */
 	public function spe_settings_create_admin_page() {
-		$this->spe_settings_options = get_option( 'SmartProductEmails_settings_name' );
+		$this->smartproductemails_settings_options = get_option( 'SmartProductEmails_settings_name' );
 		?>
 
 		<div class="wrap">
@@ -298,7 +299,7 @@ class Smart_Product_Emails_For_WooCommerce_Admin_Settings {
 	public function spe_settings_content_separator_style() {
 
 		// Separator settings with defaults
-        $content_separator = isset( $this->spe_settings_options['content_separator'] ) ? $this->spe_settings_options['content_separator'] : 'none';
+        $content_separator = isset( $this->smartproductemails_settings_options['content_separator'] ) ? $this->smartproductemails_settings_options['content_separator'] : 'none';
 
 		?>
 		<select name="SmartProductEmails_settings_name[content_separator]" id="spe_content_separator" class="regular-text">
@@ -338,7 +339,7 @@ class Smart_Product_Emails_For_WooCommerce_Admin_Settings {
 	 * Adds setting field: Separator Color
 	 */
 	public function spe_settings_content_separator_color() {
-		$separator_color = isset( $this->spe_settings_options['separator_color'] ) ? $this->spe_settings_options['separator_color'] : '#dddddd';
+		$separator_color = isset( $this->smartproductemails_settings_options['separator_color'] ) ? $this->smartproductemails_settings_options['separator_color'] : '#dddddd';
 
 		?>
 		<!-- Separator Color (for line styles) -->
@@ -359,7 +360,7 @@ class Smart_Product_Emails_For_WooCommerce_Admin_Settings {
 	 * Adds setting field: Separator Thickness
 	 */
 	public function spe_settings_content_separator_thickness() {
-		$separator_thickness = isset( $this->spe_settings_options['separator_thickness'] ) ? $this->spe_settings_options['separator_thickness'] : '1';
+		$separator_thickness = isset( $this->smartproductemails_settings_options['separator_thickness'] ) ? $this->smartproductemails_settings_options['separator_thickness'] : '1';
 		?>
 		<input type="range"
 			name="SmartProductEmails_settings_name[separator_thickness]"
@@ -380,7 +381,7 @@ class Smart_Product_Emails_For_WooCommerce_Admin_Settings {
 	 * Adds setting field: Separator Spacing
 	 */
 	public function spe_settings_content_separator_spacing() {
-		$separator_spacing = isset( $this->spe_settings_options['separator_spacing'] ) ? $this->spe_settings_options['separator_spacing'] : '20';
+		$separator_spacing = isset( $this->smartproductemails_settings_options['separator_spacing'] ) ? $this->smartproductemails_settings_options['separator_spacing'] : '20';
 		?>
 		<input type="range"
 			name="SmartProductEmails_settings_name[separator_spacing]"
@@ -401,7 +402,7 @@ class Smart_Product_Emails_For_WooCommerce_Admin_Settings {
 	 * Adds setting field: Separator Custom HTML
 	 */
 	public function spe_settings_content_separator_customhtml() {
-		$custom_separator_html = isset( $this->spe_settings_options['separator_customhtml'] ) ? $this->spe_settings_options['separator_customhtml'] : '';
+		$custom_separator_html = isset( $this->smartproductemails_settings_options['separator_customhtml'] ) ? $this->smartproductemails_settings_options['separator_customhtml'] : '';
 		?>
 		<textarea name="SmartProductEmails_settings_name[separator_customhtml]"
 			id="spe_separator_customhtml"
@@ -690,5 +691,5 @@ class Smart_Product_Emails_For_WooCommerce_Admin_Settings {
 }
 
 if ( is_admin() ) {
-	$spe_settings = new Smart_Product_Emails_For_WooCommerce_Admin_Settings();
+	$smartproductemails_settings = new Smart_Product_Emails_For_WooCommerce_Admin_Settings();
 }

@@ -24,7 +24,7 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 /**
  * Clean up plugin data on uninstall
  */
-function spe_uninstall_cleanup() {
+function smartproductemails_uninstall_cleanup() {
 	global $wpdb;
 
 	// 1. Delete all SPE Message posts (custom post type: smartproductemails)
@@ -102,4 +102,4 @@ function spe_uninstall_cleanup() {
 }
 
 // Run the cleanup
-spe_uninstall_cleanup();
+smartproductemails_uninstall_cleanup();

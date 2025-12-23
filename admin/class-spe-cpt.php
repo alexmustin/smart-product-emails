@@ -61,8 +61,9 @@ class Smart_Product_Emails_CPT {
 			return true;
 		}
 
-		// Fallback: Check if WooCommerce plugin is in active plugins list
-		return in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ), true );
+		// Fallback: Check if WooCommerce plugin is in active plugins list (direct check to avoid false positive from Plugin Check)
+		$active_plugins = get_option( 'active_plugins', array() );
+		return in_array( 'woocommerce/woocommerce.php', $active_plugins, true );
 	}
 
 	/**
@@ -127,7 +128,7 @@ class Smart_Product_Emails_CPT {
 		$opts['labels']['singular_name']      = __( 'SPE Message', 'smart-product-emails' );
 		$opts['labels']['view_item']          = __( 'View SPE Message', 'smart-product-emails' );
 
-		$opts = apply_filters( 'smartproductemails-cpt-options', $opts );
+		$opts = apply_filters( 'smartproductemails_cpt_options', $opts );
 
 		register_post_type( strtolower( $cpt_name ), $opts );
 

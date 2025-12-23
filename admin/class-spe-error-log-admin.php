@@ -93,7 +93,7 @@ class SPE_Error_Log_Admin {
 		}
 
 		// Get filters from request
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only filtering, no state changes
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonces not required for GET-based filtering per WordPress documentation (https://developer.wordpress.org/apis/security/nonces/#when-to-use-nonces). This is read-only display filtering with no state changes, and users may bookmark filtered URLs.
 		$filters = array(
 			'log_level'  => isset( $_GET['log_level'] ) ? sanitize_text_field( wp_unslash( $_GET['log_level'] ) ) : '',
 			'error_type' => isset( $_GET['error_type'] ) ? sanitize_text_field( wp_unslash( $_GET['error_type'] ) ) : '',
@@ -101,7 +101,7 @@ class SPE_Error_Log_Admin {
 		);
 
 		// Get current page
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only pagination, no state changes
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonces not required for GET-based pagination per WordPress documentation. Read-only display with no state changes.
 		$current_page = isset( $_GET['paged'] ) ? absint( $_GET['paged'] ) : 1;
 
 		// Get logs
