@@ -52,21 +52,21 @@ Include everything in the one email customers actually want to open: their order
 
 **See How Other Stores Are Using It:**
 
-**Electronics Store:** Include setup videos and warranty registration links in your receipt. Result: 60% fewer "how do I set this up?" support tickets.
+🔌 **Electronics Store:** Include setup videos and warranty registration links in your receipt. Result: 60% fewer "how do I set this up?" support tickets.
 
-**Supplement Shop:** Add dosage instructions and a link to subscribe-and-save for the product they just bought. Result: Higher repeat purchase rate without sending separate email campaigns.
+💊 **Supplement Shop:** Add dosage instructions and a link to subscribe-and-save for the product they just bought. Result: Higher repeat purchase rate without sending separate email campaigns.
 
-**Clothing Store:** Automatically send care instructions for delicate fabrics and suggest matching accessories. Result: Reduced returns from washing damage and increased average order value.
+👕 **Clothing Store:** Automatically send care instructions for delicate fabrics and suggest matching accessories. Result: Reduced returns from washing damage and increased average order value.
 
-**Software/SaaS:** Deliver license keys, installation guides, and onboarding resources instantly. Result: Faster customer activation and fewer support requests.
+💻 **Software/SaaS:** Deliver license keys, installation guides, and onboarding resources instantly. Result: Faster customer activation and fewer support requests.
 
-**Handmade/Craft Store:** Share the story behind each product and care tips for handmade items. Result: Stronger emotional connection and more customer reviews.
+🎨 **Handmade/Craft Store:** Share the story behind each product and care tips for handmade items. Result: Stronger emotional connection and more customer reviews.
 
-**Fitness Equipment:** Send workout guides, form tutorials, and nutrition tips specific to the equipment purchased. Result: Better customer results lead to more referrals and testimonials.
+💪 **Fitness Equipment:** Send workout guides, form tutorials, and nutrition tips specific to the equipment purchased. Result: Better customer results lead to more referrals and testimonials.
 
-**Beauty Products:** Include application tips, ingredient information, and a personalized discount on complementary products. Result: Educated customers who buy more and complain less.
+💄 **Beauty Products:** Include application tips, ingredient information, and a personalized discount on complementary products. Result: Educated customers who buy more and complain less.
 
-**Print-on-Demand:** Automatically explain production timelines and care instructions based on the product type. Result: Realistic expectations = fewer refund requests.
+🖨️ **Print-on-Demand:** Automatically explain production timelines and care instructions based on the product type. Result: Realistic expectations = fewer refund requests.
 
 **What You Can Accomplish:**
 
