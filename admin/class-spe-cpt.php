@@ -5,6 +5,11 @@
  * @package SmartProductEmails
  */
 
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Smart_Product_Emails_CPT is a class for creating the 'smartproductemails' Custom Post Type.
  */

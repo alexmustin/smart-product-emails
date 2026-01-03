@@ -48,9 +48,11 @@ function smartproductemails_uninstall_cleanup() {
 	// 3. Delete all product meta data created by the plugin
 	// Current meta keys used by the plugin
 	$meta_keys = array(
+		'smartproductemails_message_id_processing',
+		'smartproductemails_location_processing',
+		// Legacy meta keys from older versions (for backward compatibility cleanup)
 		'spemail_id_processing',
 		'location_processing',
-		// Legacy meta keys from older versions (for backward compatibility cleanup)
 		'order_status',
 		'location',
 		'custom_content',
@@ -95,7 +97,7 @@ function smartproductemails_uninstall_cleanup() {
 	$wpdb->query( "DROP TABLE IF EXISTS {$error_log_table}" );
 
 	// 5. Clear scheduled cron event
-	wp_clear_scheduled_hook( 'spe_cleanup_old_logs' );
+	wp_clear_scheduled_hook( 'smartproductemails_cleanup_old_logs' );
 
 	// 6. Clear any cached data
 	wp_cache_flush();

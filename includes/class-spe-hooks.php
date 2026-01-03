@@ -8,10 +8,15 @@
  * @package SmartProductEmails
  */
 
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
- * SPE_Hooks class manages all extensibility points
+ * SmartProductEmails_Hooks class manages all extensibility points
  */
-class SPE_Hooks {
+class SmartProductEmails_Hooks {
 
 	/**
 	 * Initialize hooks

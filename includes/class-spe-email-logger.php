@@ -7,12 +7,17 @@
  * @package SmartProductEmails
  */
 
-class SPE_Email_Logger {
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+class SmartProductEmails_Email_Logger {
 
 	/**
 	 * Logger instance
 	 *
-	 * @var SPE_Logger
+	 * @var SmartProductEmails_Logger
 	 */
 	private $logger;
 
@@ -20,7 +25,7 @@ class SPE_Email_Logger {
 	 * Constructor - Initialize hooks
 	 */
 	public function __construct() {
-		$this->logger = SPE_Logger::get_instance();
+		$this->logger = SmartProductEmails_Logger::get_instance();
 		$this->init_hooks();
 	}
 

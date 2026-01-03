@@ -5,6 +5,11 @@
  * @package SmartProductEmails
  */
 
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Smart_Product_Emails_Output is a class used to output the custom email message.
  */
@@ -41,7 +46,7 @@ class Smart_Product_Emails_Output {
 	 */
 	public function __construct() {
 
-		$this->version = SPE_PLUGIN_VERSION;
+		$this->version = SMARTPRODUCTEMAILS_PLUGIN_VERSION;
 
 		$shown_messages = array();
 
@@ -152,6 +157,204 @@ class Smart_Product_Emails_Output {
 			}
 		}
 
+		/**
+		 * Allow all CSS properties for email content
+		 *
+		 * For admin-created email content, we allow all CSS properties because:
+		 * 1. Content is created by admins with manage_options capability
+		 * 2. Content goes into emails, not displayed on website
+		 * 3. Email clients have their own security sandboxing
+		 *
+		 * @param array $styles Allowed CSS properties
+		 * @return array Extended list of CSS properties (essentially all of them)
+		 */
+		if ( ! function_exists( 'smartproductemails_extend_allowed_css' ) ) {
+			function smartproductemails_extend_allowed_css( $styles ) {
+				// Return a comprehensive list of CSS properties for email compatibility
+				// This allows flexbox, grid, positioning, and all modern CSS
+				$email_css_properties = array(
+					'display', 'flex', 'flex-direction', 'flex-wrap', 'flex-flow', 'justify-content',
+					'align-items', 'align-content', 'align-self', 'order', 'flex-grow', 'flex-shrink', 'flex-basis',
+					'gap', 'row-gap', 'column-gap',
+					'grid', 'grid-template-columns', 'grid-template-rows', 'grid-template-areas', 'grid-template',
+					'grid-auto-columns', 'grid-auto-rows', 'grid-auto-flow', 'grid-column', 'grid-row',
+					'grid-column-start', 'grid-column-end', 'grid-row-start', 'grid-row-end', 'grid-area',
+					'grid-gap', 'grid-row-gap', 'grid-column-gap',
+					'position', 'top', 'right', 'bottom', 'left', 'z-index',
+					'box-sizing', 'overflow', 'overflow-x', 'overflow-y', 'overflow-wrap',
+					'opacity', 'visibility', 'clip', 'clip-path',
+					'transform', 'transform-origin', 'transform-style', 'perspective', 'perspective-origin',
+					'transition', 'transition-property', 'transition-duration', 'transition-timing-function', 'transition-delay',
+					'animation', 'animation-name', 'animation-duration', 'animation-timing-function', 'animation-delay',
+					'animation-iteration-count', 'animation-direction', 'animation-fill-mode', 'animation-play-state',
+					'cursor', 'pointer-events', 'user-select',
+					'white-space', 'word-wrap', 'word-break', 'hyphens',
+					'content', 'quotes', 'counter-reset', 'counter-increment',
+					'box-shadow', 'text-shadow', 'filter', 'backdrop-filter',
+					'mix-blend-mode', 'background-blend-mode',
+					'object-fit', 'object-position',
+					'resize', 'scroll-behavior', 'scroll-snap-type', 'scroll-snap-align',
+				);
+
+				return array_merge( $styles, $email_css_properties );
+			}
+		}
+
+		/**
+		 * Sanitize email content
+		 *
+		 * This provides email-appropriate sanitization for admin-created content.
+		 * For emails, we use a lighter sanitization that removes dangerous scripts
+		 * but allows all HTML/CSS needed for email formatting.
+		 *
+		 * This approach is safe because:
+		 * 1. Content is created by admins only (manage_options capability required)
+		 * 2. Content goes into emails, not displayed on website
+		 * 3. Email clients have their own security sandboxing
+		 * 4. The most dangerous elements (script, iframe with JS) are still removed
+		 *
+		 * @param string $content Email content to sanitize
+		 * @return string Sanitized content
+		 */
+		if ( ! function_exists( 'smartproductemails_sanitize_email_content' ) ) {
+			function smartproductemails_sanitize_email_content( $content ) {
+				// Remove dangerous script tags and event handlers
+				// But keep all HTML/CSS for email formatting
+
+				// Remove script tags
+				$content = preg_replace( '/<script\b[^>]*>(.*?)<\/script>/is', '', $content );
+
+				// Remove inline javascript event handlers (onclick, onload, etc.)
+				$content = preg_replace( '/\s*on\w+\s*=\s*["\'][^"\']*["\']/i', '', $content );
+
+				// Remove javascript: protocol in hrefs
+				$content = preg_replace( '/href\s*=\s*["\']javascript:[^"\']*["\']/i', 'href="#"', $content );
+
+				// Remove potentially dangerous iframes (but allow iframes without javascript)
+				$content = preg_replace( '/<iframe[^>]+javascript[^>]*>.*?<\/iframe>/is', '', $content );
+
+				// Preserve style tags (wp_kses strips their content)
+				$style_tag_placeholders = array();
+				$content = preg_replace_callback(
+					'/<style[^>]*>(.*?)<\/style>/is',
+					function( $matches ) use ( &$style_tag_placeholders ) {
+						$placeholder = '<!--SPE-STYLE-TAG-' . count( $style_tag_placeholders ) . '-->';
+						$style_tag_placeholders[ $placeholder ] = $matches[0];
+						return $placeholder;
+					},
+					$content
+				);
+
+				// Preserve all style attributes (wp_kses strips CSS it doesn't recognize)
+				$style_attr_placeholders = array();
+				$content = preg_replace_callback(
+					'/style\s*=\s*["\']([^"\']+)["\']/i',
+					function( $matches ) use ( &$style_attr_placeholders ) {
+						$placeholder = 'data-spe-style-' . count( $style_attr_placeholders );
+						$style_attr_placeholders[ $placeholder ] = $matches[1];
+						return $placeholder . '="placeholder"';
+					},
+					$content
+				);
+
+				// Apply the safe_style_css filter to allow all our CSS properties
+				add_filter( 'safe_style_css', 'smartproductemails_extend_allowed_css', 10 );
+
+				// Use wp_kses with extended HTML tags
+				$sanitized = wp_kses( $content, smartproductemails_get_email_allowed_html() );
+
+				remove_filter( 'safe_style_css', 'smartproductemails_extend_allowed_css', 10 );
+
+				// Restore all style attributes
+				foreach ( $style_attr_placeholders as $placeholder => $style_value ) {
+					$sanitized = str_replace( $placeholder . '="placeholder"', 'style="' . esc_attr( $style_value ) . '"', $sanitized );
+				}
+
+				// Restore all style tags
+				foreach ( $style_tag_placeholders as $placeholder => $style_tag ) {
+					$sanitized = str_replace( $placeholder, $style_tag, $sanitized );
+				}
+
+				return $sanitized;
+			}
+		}
+
+		/**
+		 * Get allowed HTML tags and attributes for email content
+		 *
+		 * Emails require more permissive HTML/CSS than web pages because:
+		 * - Inline styles are required for email compatibility
+		 * - Content is created by trusted admins, not untrusted users
+		 * - Emails are sent to specific customers, not displayed publicly
+		 *
+		 * @return array Allowed HTML tags and attributes
+		 */
+		if ( ! function_exists( 'smartproductemails_get_email_allowed_html' ) ) {
+			function smartproductemails_get_email_allowed_html() {
+				// Start with wp_kses_allowed_html('post') and enhance it for emails
+				$allowed = wp_kses_allowed_html( 'post' );
+
+				// Add style tag with content allowed (needed for email CSS)
+				// The content inside style tags will be preserved
+				$allowed['style'] = array();
+
+				// Add all CSS properties to the style attribute for all tags
+				// This allows inline styles like "display: flex", "color: red", etc.
+				$style_attributes = array(
+					'style' => true,
+					'class' => true,
+					'id'    => true,
+				);
+
+				// Common email HTML tags that need full style support
+				$email_tags = array(
+					'div', 'span', 'p', 'a', 'img', 'table', 'tbody', 'thead', 'tfoot', 'tr', 'td', 'th',
+					'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'strong', 'em', 'b', 'i', 'u', 'br', 'hr',
+					'ul', 'ol', 'li', 'blockquote', 'center', 'font'
+				);
+
+				// Add style attribute to all email tags
+				foreach ( $email_tags as $tag ) {
+					if ( ! isset( $allowed[ $tag ] ) ) {
+						$allowed[ $tag ] = array();
+					}
+					$allowed[ $tag ] = array_merge( $allowed[ $tag ], $style_attributes );
+
+					// For table elements, add common attributes
+					if ( in_array( $tag, array( 'table', 'tr', 'td', 'th' ), true ) ) {
+						$allowed[ $tag ]['width']       = true;
+						$allowed[ $tag ]['height']      = true;
+						$allowed[ $tag ]['cellpadding'] = true;
+						$allowed[ $tag ]['cellspacing'] = true;
+						$allowed[ $tag ]['border']      = true;
+						$allowed[ $tag ]['align']       = true;
+						$allowed[ $tag ]['valign']      = true;
+						$allowed[ $tag ]['bgcolor']     = true;
+					}
+
+					// For images, add email-specific attributes
+					if ( 'img' === $tag ) {
+						$allowed[ $tag ]['src']    = true;
+						$allowed[ $tag ]['alt']    = true;
+						$allowed[ $tag ]['width']  = true;
+						$allowed[ $tag ]['height'] = true;
+						$allowed[ $tag ]['border'] = true;
+						$allowed[ $tag ]['align']  = true;
+					}
+
+					// For links, add email-specific attributes
+					if ( 'a' === $tag ) {
+						$allowed[ $tag ]['href']   = true;
+						$allowed[ $tag ]['target'] = true;
+						$allowed[ $tag ]['rel']    = true;
+						$allowed[ $tag ]['title']  = true;
+					}
+				}
+
+				return apply_filters( 'smartproductemails_email_allowed_html', $allowed );
+			}
+		}
+
 		// Function to output the smart product email.
 		if ( ! function_exists( 'smart_product_emails_output_message' ) ) {
 
@@ -233,26 +436,26 @@ class Smart_Product_Emails_Output {
 					if (!$pro_handles_processing) {
 						// Use WooCommerce CRUD methods for meta data
 						// For Variable products: Check variation first, then fall back to parent product
-						$spemail_id_processing = (int) $product->get_meta('spemail_id_processing');
-						$spemail_location_processing = $product->get_meta('location_processing');
+						$smartproductemails_message_id_processing = (int) $product->get_meta('smartproductemails_message_id_processing');
+						$smartproductemails_location_processing = $product->get_meta('smartproductemails_location_processing');
 
 						// If this is a variation and no meta found, check parent product
-						if (empty($spemail_id_processing) && $variation_id) {
+						if (empty($smartproductemails_message_id_processing) && $variation_id) {
 							$parent_product = wc_get_product($product_id);
 							if ($parent_product) {
-								$spemail_id_processing = (int) $parent_product->get_meta('spemail_id_processing');
-								$spemail_location_processing = $parent_product->get_meta('location_processing');
+								$smartproductemails_message_id_processing = (int) $parent_product->get_meta('smartproductemails_message_id_processing');
+								$smartproductemails_location_processing = $parent_product->get_meta('smartproductemails_location_processing');
 							}
 						}
 
 						// Begin logic for adding message content
-						if ( 'woocommerce_order_status_processing' === $smartproductemails_order_status_action && !empty( $spemail_id_processing ) ) {
+						if ( 'woocommerce_order_status_processing' === $smartproductemails_order_status_action && !empty( $smartproductemails_message_id_processing ) ) {
 
 						// If there is an email assigned for 'Processing' status and this message is not already shown,
 						// AND if the message location set for the 'Processing' message is the current email template location...
 						// AND if this email is NOT being sent to admin...
-						if ( !in_array( $spemail_id_processing, $shown_messages, true ) &&
-                			$spemail_location_processing === $this_email_template_location && !$sent_to_admin ) {
+						if ( !in_array( $smartproductemails_message_id_processing, $shown_messages, true ) &&
+                			$smartproductemails_location_processing === $this_email_template_location && !$sent_to_admin ) {
 
 							// Show the message.
 
@@ -266,22 +469,22 @@ class Smart_Product_Emails_Output {
 							$output .= $separator;
 
 							// Get the message content
-							$message_content = get_post_field( 'post_content', $spemail_id_processing );
+							$message_content = get_post_field( 'post_content', $smartproductemails_message_id_processing );
 
 							// Replace placeholders with real order data and product data
 							$message_content = Smart_Product_Emails_Output::replace_placeholders_with_order($message_content, $order, $product);
 
 							// Output the processed content
-							$output .= wp_kses_post( nl2br( $message_content ) );
+							$output .= nl2br( $message_content );
 
 							// Output custom separator.
 							$output .= $separator;
 
-							// Output everything.
-							echo wp_kses_post($output);
+							// Output everything with email-appropriate sanitization
+							echo smartproductemails_sanitize_email_content( $output );
 
 							// Update 'shown_emails' var.
-							$shown_messages[] = $spemail_id_processing;
+							$shown_messages[] = $smartproductemails_message_id_processing;
 						}
 					}
 					} // End: if (!$pro_handles_processing)

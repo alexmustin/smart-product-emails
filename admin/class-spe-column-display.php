@@ -5,6 +5,11 @@
  * @package SmartProductEmails
  */
 
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Smart_Product_Emails_Column_Display is a class for displaying extra table columns on the SPE Messages page.
  */

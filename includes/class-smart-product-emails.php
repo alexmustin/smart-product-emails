@@ -5,6 +5,11 @@
  * @package SmartProductEmails
  */
 
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * The Smart_Product_Emails class handles the structure of the plugin.
  */
@@ -37,7 +42,7 @@ class Smart_Product_Emails {
 	public function __construct() {
 
 		$this->plugin_slug = 'smart-product-emails';
-		$this->version     = SPE_PLUGIN_VERSION;
+		$this->version     = SMARTPRODUCTEMAILS_PLUGIN_VERSION;
 
 		$this->smart_product_emails_load_dependencies();
 		$this->smart_product_emails_define_admin_hooks();
@@ -64,7 +69,7 @@ class Smart_Product_Emails {
 	 * @return void
 	 */
 	private function smart_product_emails_define_admin_hooks() {
-		$spe_product_data_admin = new SPE_Product_Data_Admin( $this->get_version() );
+		$spe_product_data_admin = new SmartProductEmails_Product_Data_Admin( $this->get_version() );
 
 		$this->loader->add_action( 'admin_head-post.php', $spe_product_data_admin, 'spe_custom_admin_style' );
 		$this->loader->add_action( 'admin_head-post-new.php', $spe_product_data_admin, 'spe_custom_admin_style' );
@@ -77,7 +82,7 @@ class Smart_Product_Emails {
 		$this->loader->add_action( 'admin_footer', $spe_product_data_admin, 'ajax_spe_fetch_script' );
 
 		// Add AJAX Fetch Function (admin only - removed nopriv for security).
-		$this->loader->add_action( 'wp_ajax_spe_data_fetch', $spe_product_data_admin, 'spe_data_fetch' );
+		$this->loader->add_action( 'wp_ajax_smartproductemails_data_fetch', $spe_product_data_admin, 'spe_data_fetch' );
 
 	}
 
@@ -99,7 +104,7 @@ class Smart_Product_Emails {
 		$this->loader->run();
 
 		// Initialize extensibility hooks and notify extensions that Free version is loaded
-		SPE_Hooks::init();
+		SmartProductEmails_Hooks::init();
 	}
 
 }

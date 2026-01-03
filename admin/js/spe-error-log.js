@@ -9,11 +9,11 @@ jQuery(document).ready(function($) {
 		}
 
 		$.ajax({
-			url: speErrorLog.ajaxurl,
+			url: smartproductemailsErrorLog.ajaxurl,
 			type: 'POST',
 			data: {
-				action: 'spe_clear_logs',
-				nonce: speErrorLog.nonce
+				action: 'smartproductemails_clear_logs',
+				nonce: smartproductemailsErrorLog.nonce
 			},
 			success: function(response) {
 				if (response.success) {
@@ -36,19 +36,19 @@ jQuery(document).ready(function($) {
 		// Create form and submit to trigger download
 		var form = $('<form>', {
 			'method': 'POST',
-			'action': speErrorLog.ajaxurl
+			'action': smartproductemailsErrorLog.ajaxurl
 		});
 
 		form.append($('<input>', {
 			'type': 'hidden',
 			'name': 'action',
-			'value': 'spe_export_logs'
+			'value': 'smartproductemails_export_logs'
 		}));
 
 		form.append($('<input>', {
 			'type': 'hidden',
 			'name': 'nonce',
-			'value': speErrorLog.nonce
+			'value': smartproductemailsErrorLog.nonce
 		}));
 
 		$('body').append(form);

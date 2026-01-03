@@ -7,12 +7,17 @@
  * @package SmartProductEmails
  */
 
-class SPE_Error_Log_Admin {
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+class SmartProductEmails_Error_Log_Admin {
 
 	/**
 	 * Logger instance
 	 *
-	 * @var SPE_Logger
+	 * @var SmartProductEmails_Logger
 	 */
 	private $logger;
 
@@ -20,7 +25,7 @@ class SPE_Error_Log_Admin {
 	 * Constructor - Initialize hooks
 	 */
 	public function __construct() {
-		$this->logger = SPE_Logger::get_instance();
+		$this->logger = SmartProductEmails_Logger::get_instance();
 		$this->init_hooks();
 	}
 
@@ -30,8 +35,8 @@ class SPE_Error_Log_Admin {
 	private function init_hooks() {
 		add_action( 'admin_menu', array( $this, 'add_admin_menu' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
-		add_action( 'wp_ajax_spe_clear_logs', array( $this, 'ajax_clear_logs' ) );
-		add_action( 'wp_ajax_spe_export_logs', array( $this, 'ajax_export_logs' ) );
+		add_action( 'wp_ajax_smartproductemails_clear_logs', array( $this, 'ajax_clear_logs' ) );
+		add_action( 'wp_ajax_smartproductemails_export_logs', array( $this, 'ajax_export_logs' ) );
 	}
 
 	/**
@@ -43,7 +48,7 @@ class SPE_Error_Log_Admin {
 			__( 'Error Log', 'smart-product-emails' ),
 			__( 'Error Log', 'smart-product-emails' ),
 			'manage_options',
-			'spe-error-log',
+			'smartproductemails-error-log',
 			array( $this, 'render_admin_page' )
 		);
 	}
@@ -54,31 +59,31 @@ class SPE_Error_Log_Admin {
 	 * @param string $hook Current admin page hook
 	 */
 	public function enqueue_scripts( $hook ) {
-		if ( 'smartproductemails_page_spe-error-log' !== $hook ) {
+		if ( 'smartproductemails_page_smartproductemails-error-log' !== $hook ) {
 			return;
 		}
 
 		wp_enqueue_style(
-			'spe-error-log',
-			SPE_PLUGIN_URL . 'admin/css/spe-error-log.css',
+			'smartproductemails-error-log',
+			SMARTPRODUCTEMAILS_PLUGIN_URL . 'admin/css/smartproductemails-error-log.css',
 			array(),
-			SPE_PLUGIN_VERSION
+			SMARTPRODUCTEMAILS_PLUGIN_VERSION
 		);
 
 		wp_enqueue_script(
-			'spe-error-log',
-			SPE_PLUGIN_URL . 'admin/js/spe-error-log.js',
+			'smartproductemails-error-log',
+			SMARTPRODUCTEMAILS_PLUGIN_URL . 'admin/js/smartproductemails-error-log.js',
 			array( 'jquery' ),
-			SPE_PLUGIN_VERSION,
+			SMARTPRODUCTEMAILS_PLUGIN_VERSION,
 			true
 		);
 
 		wp_localize_script(
-			'spe-error-log',
-			'speErrorLog',
+			'smartproductemails-error-log',
+			'smartproductemailsErrorLog',
 			array(
 				'ajaxurl' => admin_url( 'admin-ajax.php' ),
-				'nonce'   => wp_create_nonce( 'spe_error_log_nonce' ),
+				'nonce'   => wp_create_nonce( 'smartproductemails_error_log_nonce' ),
 			)
 		);
 	}
@@ -115,14 +120,14 @@ class SPE_Error_Log_Admin {
 		$total_pages = ceil( $total_logs / 20 );
 
 		?>
-		<div class="wrap spe-error-log-wrap">
+		<div class="wrap smartproductemails-error-log-wrap">
 			<h1><?php esc_html_e( 'Smart Product Emails - Error Log', 'smart-product-emails' ); ?></h1>
 
 			<!-- Filters -->
 			<div class="spe-log-filters">
 				<form method="get" action="">
 					<input type="hidden" name="post_type" value="smartproductemails">
-					<input type="hidden" name="page" value="spe-error-log">
+					<input type="hidden" name="page" value="smartproductemails-error-log">
 
 					<!-- Log Level Filter -->
 					<select name="log_level" id="spe-log-level-filter">
@@ -146,7 +151,7 @@ class SPE_Error_Log_Admin {
 					<input type="search" name="s" value="<?php echo esc_attr( $filters['search'] ); ?>" placeholder="<?php esc_attr_e( 'Search logs...', 'smart-product-emails' ); ?>">
 
 					<button type="submit" class="button"><?php esc_html_e( 'Filter', 'smart-product-emails' ); ?></button>
-					<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=smartproductemails&page=spe-error-log' ) ); ?>" class="button"><?php esc_html_e( 'Reset', 'smart-product-emails' ); ?></a>
+					<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=smartproductemails&page=smartproductemails-error-log' ) ); ?>" class="button"><?php esc_html_e( 'Reset', 'smart-product-emails' ); ?></a>
 				</form>
 
 				<!-- Actions -->
@@ -259,7 +264,7 @@ class SPE_Error_Log_Admin {
 	 * AJAX: Clear all logs
 	 */
 	public function ajax_clear_logs() {
-		check_ajax_referer( 'spe_error_log_nonce', 'nonce' );
+		check_ajax_referer( 'smartproductemails_error_log_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_send_json_error( array( 'message' => __( 'Unauthorized', 'smart-product-emails' ) ) );
@@ -278,7 +283,7 @@ class SPE_Error_Log_Admin {
 	 * AJAX: Export logs as CSV
 	 */
 	public function ajax_export_logs() {
-		check_ajax_referer( 'spe_error_log_nonce', 'nonce' );
+		check_ajax_referer( 'smartproductemails_error_log_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_die( esc_html__( 'Unauthorized', 'smart-product-emails' ) );
@@ -294,7 +299,7 @@ class SPE_Error_Log_Admin {
 		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSV headers, safe hardcoded values
 		header( 'Content-Type: text/csv; charset=utf-8' );
 		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSV filename with sanitized date
-		header( 'Content-Disposition: attachment; filename=spe-error-log-' . gmdate( 'Y-m-d-His' ) . '.csv' );
+		header( 'Content-Disposition: attachment; filename=smartproductemails-error-log-' . gmdate( 'Y-m-d-His' ) . '.csv' );
 
 		// Open output stream
 		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen -- Streaming CSV output

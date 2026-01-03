@@ -5,6 +5,11 @@
  * @package SmartProductEmails
  */
 
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Smart_Product_Emails_For_WooCommerce_Admin_Settings is a class for adding the Admin Settings for the plugin.
  */
@@ -47,7 +52,7 @@ class Smart_Product_Emails_For_WooCommerce_Admin_Settings {
 	public function spe_woocommerce_missing_notice() {
 		// Only show on SPE settings page
 		$screen = get_current_screen();
-		if ( ! $screen || strpos( $screen->id, 'smartproductemails_page_spe-settings' ) === false ) {
+		if ( ! $screen || strpos( $screen->id, 'smartproductemails_page_smartproductemails-settings' ) === false ) {
 			return;
 		}
 
@@ -99,7 +104,7 @@ class Smart_Product_Emails_For_WooCommerce_Admin_Settings {
 			__( 'SPE Settings', 'smart-product-emails' ), // page title.
 			__( 'SPE Settings', 'smart-product-emails' ), // menu title.
 			'manage_options', // capability.
-			'spe-settings', // menu slug.
+			'smartproductemails-settings', // menu slug.
 			array( $this, 'spe_settings_create_admin_page' ) // callback function.
 		);
 	}
@@ -116,14 +121,14 @@ class Smart_Product_Emails_For_WooCommerce_Admin_Settings {
 
 			<hr>
 
-			<p class="howto"><?php echo esc_html( 'Settings for the Smart Product Emails plugin.', 'smart-product-emails' ); ?></p>
+			<p class="howto"><?php echo esc_html__( 'Settings for the Smart Product Emails plugin.', 'smart-product-emails' ); ?></p>
 
 			<?php settings_errors(); ?>
 
 			<?php
 			// Nonce check for tab parameter (only if tab is set in URL)
 			$nonce_verified = false;
-			if (isset($_GET['_wpnonce']) && wp_verify_nonce(sanitize_key($_GET['_wpnonce']), 'spe_admin_nonce')) {
+			if (isset($_GET['_wpnonce']) && wp_verify_nonce(sanitize_key($_GET['_wpnonce']), 'smartproductemails_admin_nonce')) {
 				$nonce_verified = true;
 			}
 
@@ -137,11 +142,11 @@ class Smart_Product_Emails_For_WooCommerce_Admin_Settings {
 			if ( isset( $_GET['page'] ) ) {
 				$page = sanitize_text_field( wp_unslash( $_GET['page'] ) );
 			} else {
-				$page = 'spe-settings';
+				$page = 'smartproductemails-settings';
 			}
 
 			// Update the tab links to include nonces:
-			$nonce_url = wp_create_nonce('spe_admin_nonce');
+			$nonce_url = wp_create_nonce('smartproductemails_admin_nonce');
 			?>
 			<h2 class="nav-tab-wrapper">
 				<a href="?post_type=smartproductemails&page=<?php echo esc_attr( $page ); ?>&tab=display_settings&_wpnonce=<?php echo esc_attr($nonce_url); ?>" class="nav-tab <?php echo 'display_settings' === $active_tab ? 'nav-tab-active' : ''; ?>"><?php esc_html_e( 'Display Settings', 'smart-product-emails' ); ?></a>
@@ -150,8 +155,8 @@ class Smart_Product_Emails_For_WooCommerce_Admin_Settings {
 			<form method="post" action="options.php">
 				<?php
 				if ( 'display_settings' === $active_tab ) {
-					settings_fields( 'spe_settings_option_group' );
-					do_settings_sections( 'spe-settings-admin' );
+					settings_fields( 'smartproductemails_settings_option_group' );
+					do_settings_sections( 'smartproductemails-settings-admin' );
 					submit_button();
 				}
 				?>
@@ -167,86 +172,86 @@ class Smart_Product_Emails_For_WooCommerce_Admin_Settings {
 	 */
 	public function spe_settings_page_init() {
 		register_setting(
-			'spe_settings_option_group', // option_group.
+			'smartproductemails_settings_option_group', // option_group.
 			'SmartProductEmails_settings_name', // option_name.
 			array( $this, 'spe_settings_sanitize' ) // sanitize_callback.
 		);
 
 		add_settings_section(
-			'spe_settings_content_separator_section', // id.
+			'smartproductemails_settings_content_separator_section', // id.
 			__('Content Separator', 'smart-product-emails'), // title.
 			array( $this, 'spe_settings_section_info' ), // callback.
-			'spe-settings-admin' // page.
+			'smartproductemails-settings-admin' // page.
 		);
 
 		// Add settings field: Separator Styles
 		add_settings_field(
-			'spe_content_separator_style_field', // Field ID
+			'smartproductemails_content_separator_style_field', // Field ID
 			__('Separator Style', 'smart-product-emails'), // Field title
 			array( $this, 'spe_settings_content_separator_style'), // Callback function
-			'spe-settings-admin', // Page slug
-			'spe_settings_content_separator_section' // Section ID
+			'smartproductemails-settings-admin', // Page slug
+			'smartproductemails_settings_content_separator_section' // Section ID
 		);
 
 		// Add settings field: Separator Color
 		add_settings_field(
-			'spe_content_separator_color_field', // Field ID
+			'smartproductemails_content_separator_color_field', // Field ID
 			__('Separator Color', 'smart-product-emails'), // Field title
 			array( $this, 'spe_settings_content_separator_color'), // Callback function
-			'spe-settings-admin', // Page slug
-			'spe_settings_content_separator_section', // Section ID
+			'smartproductemails-settings-admin', // Page slug
+			'smartproductemails_settings_content_separator_section', // Section ID
 			array(
-				'label_for' => 'spe_content_separator_color_field', // Associates the label with the input field
+				'label_for' => 'smartproductemails_content_separator_color_field', // Associates the label with the input field
 				'class'     => 'spe_separator_color_row', // CSS class to be added to the <tr> element
 			)
 		);
 
 		// Add settings field: Separator Thickness
 		add_settings_field(
-			'spe_content_separator_thickness_field', // Field ID
+			'smartproductemails_content_separator_thickness_field', // Field ID
 			__('Line Thickness', 'smart-product-emails'), // Field title
 			array( $this, 'spe_settings_content_separator_thickness'), // Callback function
-			'spe-settings-admin', // Page slug
-			'spe_settings_content_separator_section', // Section ID
+			'smartproductemails-settings-admin', // Page slug
+			'smartproductemails_settings_content_separator_section', // Section ID
 			array(
-				'label_for' => 'spe_content_separator_thickness_field', // Associates the label with the input field
+				'label_for' => 'smartproductemails_content_separator_thickness_field', // Associates the label with the input field
 				'class'     => 'spe_separator_thickness_row', // CSS class to be added to the <tr> element
 			)
 		);
 
 		// Add settings field: Separator Spacing
 		add_settings_field(
-			'spe_content_separator_spacing_field', // Field ID
+			'smartproductemails_content_separator_spacing_field', // Field ID
 			__('Spacing', 'smart-product-emails'), // Field title
 			array( $this, 'spe_settings_content_separator_spacing'), // Callback function
-			'spe-settings-admin', // Page slug
-			'spe_settings_content_separator_section', // Section ID
+			'smartproductemails-settings-admin', // Page slug
+			'smartproductemails_settings_content_separator_section', // Section ID
 			array(
-				'label_for' => 'spe_content_separator_spacing_field', // Associates the label with the input field
+				'label_for' => 'smartproductemails_content_separator_spacing_field', // Associates the label with the input field
 				'class'     => 'spe_separator_spacing_row', // CSS class to be added to the <tr> element
 			)
 		);
 
 		// Add settings field: Custom HTML
 		add_settings_field(
-			'spe_content_separator_customhtml_field', // Field ID
+			'smartproductemails_content_separator_customhtml_field', // Field ID
 			__('Custom Separator HTML', 'smart-product-emails'), // Field title
 			array( $this, 'spe_settings_content_separator_customhtml'), // Callback function
-			'spe-settings-admin', // Page slug
-			'spe_settings_content_separator_section', // Section ID
+			'smartproductemails-settings-admin', // Page slug
+			'smartproductemails_settings_content_separator_section', // Section ID
 			array(
-				'label_for' => 'spe_content_separator_customhtml_field', // Associates the label with the input field
+				'label_for' => 'smartproductemails_content_separator_customhtml_field', // Associates the label with the input field
 				'class'     => 'spe_separator_customhtml_row', // CSS class to be added to the <tr> element
 			)
 		);
 
 		// Add settings field: Live Preview
 		add_settings_field(
-			'spe_content_separator_livepreview', // Field ID
+			'smartproductemails_content_separator_livepreview', // Field ID
 			__('Live Preview', 'smart-product-emails'), // Field title
 			array( $this, 'spe_settings_content_separator_livepreview'), // Callback function
-			'spe-settings-admin', // Page slug
-			'spe_settings_content_separator_section' // Section ID
+			'smartproductemails-settings-admin', // Page slug
+			'smartproductemails_settings_content_separator_section' // Section ID
 		);
 	}
 

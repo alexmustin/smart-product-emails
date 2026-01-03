@@ -3,7 +3,7 @@
  * Plugin Name: Smart Product Emails
  * Plugin URI: https://smartproductemails.com/
  * Description: Transform WooCommerce emails into a powerful customer communication platform with dynamic content, segmentation, A/B testing, and analytics.
- * Version: 0.6.1
+ * Version: 0.6.4
  * Author: Alex Mustin
  * Author URI: https://alexmustin.com
  * Text Domain: smart-product-emails
@@ -33,10 +33,10 @@ add_action('before_woocommerce_init', function() {
 });
 
 // Define Globals.
-define( 'SPE_PLUGIN_VERSION', '0.6.1' );
-define( 'SPE_PLUGIN_FILE', __FILE__ );
-define( 'SPE_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
-define( 'SPE_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
+define( 'SMARTPRODUCTEMAILS_PLUGIN_VERSION', '0.6.4' );
+define( 'SMARTPRODUCTEMAILS_PLUGIN_FILE', __FILE__ );
+define( 'SMARTPRODUCTEMAILS_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
+define( 'SMARTPRODUCTEMAILS_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 
 // Add a check for WooCommerce on plugin activation.
 register_activation_hook( __FILE__, 'smart_product_emails_activate' );
@@ -92,8 +92,8 @@ function smart_product_emails_activate() {
 	dbDelta( $sql );
 
 	// Schedule log cleanup event (daily)
-	if ( ! wp_next_scheduled( 'spe_cleanup_old_logs' ) ) {
-		wp_schedule_event( time(), 'daily', 'spe_cleanup_old_logs' );
+	if ( ! wp_next_scheduled( 'smartproductemails_cleanup_old_logs' ) ) {
+		wp_schedule_event( time(), 'daily', 'smartproductemails_cleanup_old_logs' );
 	}
 }
 
@@ -102,19 +102,19 @@ function smart_product_emails_activate() {
  */
 function smart_product_emails_deactivate() {
 	// Clear scheduled cron event for log cleanup
-	wp_clear_scheduled_hook( 'spe_cleanup_old_logs' );
+	wp_clear_scheduled_hook( 'smartproductemails_cleanup_old_logs' );
 }
 
 /**
  * Cleanup old log entries (runs daily via wp-cron)
  */
 function smartproductemails_cleanup_logs_callback() {
-	if ( class_exists( 'SPE_Logger' ) ) {
-		$logger = SPE_Logger::get_instance();
+	if ( class_exists( 'SmartProductEmails_Logger' ) ) {
+		$logger = SmartProductEmails_Logger::get_instance();
 		$logger->cleanup_old_logs( 30 ); // Keep last 30 days
 	}
 }
-add_action( 'spe_cleanup_old_logs', 'smartproductemails_cleanup_logs_callback' );
+add_action( 'smartproductemails_cleanup_old_logs', 'smartproductemails_cleanup_logs_callback' );
 
 // Include required files.
 require_once plugin_dir_path( __FILE__ ) . 'includes/class-smart-product-emails.php';
@@ -130,9 +130,9 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/class-spe-email-logger.php'
 require_once plugin_dir_path( __FILE__ ) . 'admin/class-spe-error-log-admin.php';
 
 // Initialize error handlers
-new SPE_Error_Handler();
-new SPE_Email_Logger();
-new SPE_Error_Log_Admin();
+new SmartProductEmails_Error_Handler();
+new SmartProductEmails_Email_Logger();
+new SmartProductEmails_Error_Log_Admin();
 
 /**
  * Runs main plugin functions.

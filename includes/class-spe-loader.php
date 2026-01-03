@@ -5,6 +5,11 @@
  * @package SmartProductEmails
  */
 
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * The Smart_Product_Emails_Loader class is responsible for
  * coordinating actions and filters between the core plugin and the

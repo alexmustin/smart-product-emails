@@ -17,12 +17,17 @@
  * @package SmartProductEmails
  */
 
-class SPE_Logger {
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+class SmartProductEmails_Logger {
 
 	/**
 	 * Singleton instance
 	 *
-	 * @var SPE_Logger
+	 * @var SmartProductEmails_Logger
 	 */
 	private static $instance = null;
 
@@ -44,7 +49,7 @@ class SPE_Logger {
 	/**
 	 * Get singleton instance
 	 *
-	 * @return SPE_Logger
+	 * @return SmartProductEmails_Logger
 	 */
 	public static function get_instance() {
 		if ( null === self::$instance ) {

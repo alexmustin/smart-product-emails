@@ -5,10 +5,15 @@
  * @package SmartProductEmails
  */
 
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
- * SPE_Product_Data_Admin is a class for adding the Smart Product Email Admin settings for each Product.
+ * SmartProductEmails_Product_Data_Admin is a class for adding the Smart Product Email Admin settings for each Product.
  */
-class SPE_Product_Data_Admin {
+class SmartProductEmails_Product_Data_Admin {
 
 	public function __construct() {
 		// Free version: Pro features (preview/test) removed
@@ -135,8 +140,8 @@ class SPE_Product_Data_Admin {
 			return;
 		}
 
-		wp_register_style( 'spe_custom_admin_css', plugins_url( 'css/smart-product-emails-admin-styles.css', __FILE__ ), null, '1.0' );
-		wp_enqueue_style( 'spe_custom_admin_css' );
+		wp_register_style( 'smartproductemails-custom-admin-css', plugins_url( 'css/smart-product-emails-admin-styles.css', __FILE__ ), null, '1.0' );
+		wp_enqueue_style( 'smartproductemails-custom-admin-css' );
 
 		include_once dirname( __FILE__ ) . '/css/smart-product-emails-admin-styles.css';
 
@@ -237,7 +242,7 @@ class SPE_Product_Data_Admin {
 						}
 
 						// Use WooCommerce CRUD methods instead of get_post_meta
-						$spemail_id_currentstatus = $product->get_meta('spemail_id_' . $status_name);
+						$smartproductemails_message_id_currentstatus = $product->get_meta('smartproductemails_message_id_' . $status_name);
 
 						// Legacy support - still use get_post_meta for old data structure
 						$spemail_id = get_post_meta($post_id, 'spemail_id', true);
@@ -279,19 +284,19 @@ class SPE_Product_Data_Admin {
 						<div class="form-field spemail_search_field">
 							<?php
 							// If an SPE email is saved for this Order Status...
-							if ( ! empty( $spemail_id_currentstatus ) ) {
+							if ( ! empty( $smartproductemails_message_id_currentstatus ) ) {
 
-								echo wp_kses( smartproductemails_get_message_title( $spemail_id_currentstatus, $status_name ), $kses_allowed_html );
+								echo wp_kses( smartproductemails_get_message_title( $smartproductemails_message_id_currentstatus, $status_name ), $kses_allowed_html );
 
 								$hidden_buttons = '<!-- Hidden fields to store data -->
             					<input type="hidden" class="spe-preview-status" value="' . esc_attr($status_name) . '" />
-            					<input type="hidden" class="spe-preview-message-id" value="' . esc_attr($spemail_id_currentstatus) . '" />';
+            					<input type="hidden" class="spe-preview-message-id" value="' . esc_attr($smartproductemails_message_id_currentstatus) . '" />';
 
 								// FREE VERSION: Preview and Test buttons removed
 								// Pro version adds these via 'smartproductemails_product_admin_action_buttons' filter
-								$pro_buttons = apply_filters('smartproductemails_product_admin_action_buttons', '', $status_name, $spemail_id_currentstatus, $post_id);
+								$pro_buttons = apply_filters('smartproductemails_product_admin_action_buttons', '', $status_name, $smartproductemails_message_id_currentstatus, $post_id);
 
-								$edit_url   = admin_url( 'post.php?post=' . $spemail_id_currentstatus . '&action=edit' );
+								$edit_url   = admin_url( 'post.php?post=' . $smartproductemails_message_id_currentstatus . '&action=edit' );
 								$edit_btn   = '<a href="' . $edit_url . '" target="_blank" class="button edit-spemail" alt="' . __( 'Edit', 'smart-product-emails' ) . '" title="' . __( 'Edit', 'smart-product-emails' ) . '"><span class="dashicons dashicons-edit"></span></a>';
 
 								$remove_btn = '<a href="#" class="button remove-spemail" alt="' . __( 'Remove', 'smart-product-emails' ) . '" title="' . __( 'Remove', 'smart-product-emails' ) . '"><span class="dashicons dashicons-no"></span></a>';
@@ -318,14 +323,14 @@ class SPE_Product_Data_Admin {
 						$hidden_field_val = '';
 
 						// If data is saved for this Order Status...
-						if ( ! empty( $spemail_id_currentstatus ) ) {
-							$hidden_field_val = $spemail_id_currentstatus;
+						if ( ! empty( $smartproductemails_message_id_currentstatus ) ) {
+							$hidden_field_val = $smartproductemails_message_id_currentstatus;
 						}
 						if ( ( 'woocommerce_order_status_' . $status_slug ) === $customcontent_orderstatus ) {
 							$hidden_field_val = $spemail_id;
 						}
 						?>
-						<input class="spemail_search_field_hidden" type="hidden" name="spemail_id_<?php echo esc_attr( $status_name ); ?>" id="spemail_id_<?php echo esc_attr( $status_name ); ?>" value="<?php echo esc_attr( $hidden_field_val ); ?>" />
+						<input class="spemail_search_field_hidden" type="hidden" name="smartproductemails_message_id_<?php echo esc_attr( $status_name ); ?>" id="smartproductemails_message_id_<?php echo esc_attr( $status_name ); ?>" value="<?php echo esc_attr( $hidden_field_val ); ?>" />
 						<?php
 					}
 
@@ -445,7 +450,7 @@ class SPE_Product_Data_Admin {
 						</div>
 						<?php
 						// Create a nonce.
-						wp_nonce_field( 'status_processing_action', 'spemail_processing_nonce' );
+						wp_nonce_field( 'status_processing_action', 'smartproductemails_processing_nonce' );
 						?>
 					</div>
 
@@ -495,7 +500,7 @@ class SPE_Product_Data_Admin {
 				url: '<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>',
 				type: 'post',
 				data: {
-					action: 'spe_data_fetch',
+					action: 'smartproductemails_data_fetch',
 					keyword: jQuery('#spemail_search_processing').val(),
 					ajax_nonce: jQuery('#ajax_nonce').val(),
 				},
@@ -663,7 +668,7 @@ class SPE_Product_Data_Admin {
 	 * @return void
 	 */
 	public function spe_data_fetch() {
-		$logger = SPE_Logger::get_instance();
+		$logger = SmartProductEmails_Logger::get_instance();
 
 		try {
 			// Security: Check user capabilities - must be able to edit products
@@ -821,16 +826,16 @@ class SPE_Product_Data_Admin {
 		// Only save Processing if PRO didn't handle it
 		if ( ! $pro_handled_processing ) {
 			// PROCESSING.
-			if (isset($_POST['spemail_id_processing'], $_POST['spemail_processing_nonce']) &&
-				wp_verify_nonce(sanitize_key($_POST['spemail_processing_nonce']), 'status_processing_action')) {
-				$msg_processing_id = sanitize_text_field(wp_unslash($_POST['spemail_id_processing']));
-				$product->update_meta_data('spemail_id_processing', $msg_processing_id);
+			if (isset($_POST['smartproductemails_message_id_processing'], $_POST['smartproductemails_processing_nonce']) &&
+				wp_verify_nonce(sanitize_key($_POST['smartproductemails_processing_nonce']), 'status_processing_action')) {
+				$msg_processing_id = sanitize_text_field(wp_unslash($_POST['smartproductemails_message_id_processing']));
+				$product->update_meta_data('smartproductemails_message_id_processing', $msg_processing_id);
 			}
 
-			if (isset($_POST['processing-location'], $_POST['spemail_processing_nonce']) &&
-				wp_verify_nonce(sanitize_key($_POST['spemail_processing_nonce']), 'status_processing_action')) {
+			if (isset($_POST['processing-location'], $_POST['smartproductemails_processing_nonce']) &&
+				wp_verify_nonce(sanitize_key($_POST['smartproductemails_processing_nonce']), 'status_processing_action')) {
 				$msg_processing_location = sanitize_text_field(wp_unslash($_POST['processing-location']));
-				$product->update_meta_data('location_processing', $msg_processing_location);
+				$product->update_meta_data('smartproductemails_location_processing', $msg_processing_location);
 			}
 		}
 

@@ -7,12 +7,17 @@
  * @package SmartProductEmails
  */
 
-class SPE_Error_Handler {
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+class SmartProductEmails_Error_Handler {
 
 	/**
 	 * Logger instance
 	 *
-	 * @var SPE_Logger
+	 * @var SmartProductEmails_Logger
 	 */
 	private $logger;
 
@@ -20,7 +25,7 @@ class SPE_Error_Handler {
 	 * Constructor - Initialize and register handlers
 	 */
 	public function __construct() {
-		$this->logger = SPE_Logger::get_instance();
+		$this->logger = SmartProductEmails_Logger::get_instance();
 		$this->register_handlers();
 	}
 
@@ -121,8 +126,8 @@ class SPE_Error_Handler {
 	 */
 	private function is_plugin_file( $file ) {
 		// Check if file path contains our plugin directory
-		$plugin_dir = defined( 'SPE_PLUGIN_DIR' ) ? SPE_PLUGIN_DIR : '';
-		$pro_plugin_dir = defined( 'SPE_PRO_PLUGIN_DIR' ) ? SPE_PRO_PLUGIN_DIR : '';
+		$plugin_dir = defined( 'SMARTPRODUCTEMAILS_PLUGIN_DIR' ) ? SMARTPRODUCTEMAILS_PLUGIN_DIR : '';
+		$pro_plugin_dir = defined( 'SMARTPRODUCTEMAILS_PRO_PLUGIN_DIR' ) ? SMARTPRODUCTEMAILS_PRO_PLUGIN_DIR : '';
 
 		return ( ! empty( $plugin_dir ) && strpos( $file, $plugin_dir ) !== false ) ||
 		       ( ! empty( $pro_plugin_dir ) && strpos( $file, $pro_plugin_dir ) !== false );
