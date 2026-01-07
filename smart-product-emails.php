@@ -148,5 +148,54 @@ function smartproductemails_run() {
 	new smart_product_emails_Output();
 }
 
+/**
+ * Check if PRO version is active
+ */
+function smartproductemails_is_pro_active() {
+	// Check for PRO version constant
+	if ( defined( 'SPE_PRO_VERSION' ) ) {
+		return true;
+	}
+
+	// Check if PRO plugin is active by checking active plugins list
+	$active_plugins = get_option( 'active_plugins', array() );
+	foreach ( $active_plugins as $plugin ) {
+		// Check for common PRO plugin paths
+		if ( strpos( $plugin, 'smart-product-emails-pro' ) !== false ) {
+			return true;
+		}
+	}
+
+	// Check multisite network activated plugins
+	if ( is_multisite() ) {
+		$network_plugins = get_site_option( 'active_sitewide_plugins', array() );
+		foreach ( array_keys( $network_plugins ) as $plugin ) {
+			if ( strpos( $plugin, 'smart-product-emails-pro' ) !== false ) {
+				return true;
+			}
+		}
+	}
+
+	// Allow PRO version to filter
+	return apply_filters( 'spe_is_pro_active', false );
+}
+
+/**
+ * Add plugin action links (Upgrade to PRO link on Plugins page)
+ */
+function smartproductemails_plugin_action_links( $links ) {
+	// Only add the upgrade link if PRO is not active
+	if ( ! smartproductemails_is_pro_active() ) {
+		$upgrade_link = sprintf(
+			'<a href="%s" target="_blank" rel="noopener noreferrer" style="color: #9459DC; font-weight: bold;">%s</a>',
+			esc_url( 'https://smartproductemails.com/pro/' ),
+			esc_html__( 'Upgrade to PRO', 'smart-product-emails' )
+		);
+		$links[] = $upgrade_link;
+	}
+	return $links;
+}
+add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), 'smartproductemails_plugin_action_links' );
+
 // Go!
 smartproductemails_run();

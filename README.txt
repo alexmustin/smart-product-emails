@@ -236,8 +236,8 @@ If you are having any issues, please post in the WordPress Plugin Support Forum.
 == Screenshots ==
 
 1. Plugin menu: "Smart Product Emails"
-2. 'Smart Product Emails' Settings page
-3. 'Smart Product Email' example - using the Classic Editor
+2. Smart Product Emails Settings page
+3. 'SPE Message' example - using the Classic Editor
 4. New Tab in the WooCommerce Product Data section: "Smart Product Emails"
 5. Use the search fields to find your SPE Message, then assign it to the Order Status email. Click the Title of your Message to assign it, then Update/Publish the Product to save your settings.
 6. Smart Email Message in the Customer email 
