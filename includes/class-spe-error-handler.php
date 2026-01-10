@@ -75,8 +75,10 @@ class SmartProductEmails_Error_Handler {
 		);
 
 		// Add E_STRICT if it exists (deprecated in PHP 8.0+, removed in PHP 8.4+)
-		if ( defined( 'E_STRICT' ) ) {
-			$error_types[ E_STRICT ] = 'info';
+		// Suppress deprecation warning when checking if constant exists
+		if ( @defined( 'E_STRICT' ) ) {
+			// phpcs:ignore PHPCompatibility.Constants.RemovedConstants.e_strictDeprecated
+			$error_types[ @constant( 'E_STRICT' ) ] = 'info';
 		}
 
 		$log_level = isset( $error_types[ $errno ] ) ? $error_types[ $errno ] : 'error';
