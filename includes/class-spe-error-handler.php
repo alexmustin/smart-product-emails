@@ -69,11 +69,15 @@ class SmartProductEmails_Error_Handler {
 			E_USER_ERROR        => 'error',
 			E_USER_WARNING      => 'warning',
 			E_USER_NOTICE       => 'info',
-			E_STRICT            => 'info',
 			E_RECOVERABLE_ERROR => 'error',
 			E_DEPRECATED        => 'warning',
 			E_USER_DEPRECATED   => 'warning',
 		);
+
+		// Add E_STRICT if it exists (deprecated in PHP 8.0+, removed in PHP 8.4+)
+		if ( defined( 'E_STRICT' ) ) {
+			$error_types[ E_STRICT ] = 'info';
+		}
 
 		$log_level = isset( $error_types[ $errno ] ) ? $error_types[ $errno ] : 'error';
 
