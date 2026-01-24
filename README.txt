@@ -6,8 +6,8 @@ Tags: woocommerce emails, custom emails, product emails, per product, targeted e
 Requires at least: 6.8
 Tested up to: 6.9
 Requires PHP: 8.2
-Stable tag: 0.6.4
-Version: 0.6.4
+Stable tag: 0.7.0
+Version: 0.7.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -245,6 +245,13 @@ If you are having any issues, please post in the WordPress Plugin Support Forum.
 8. Insert Dynamic Tags at cursor position
 
 == Changelog ==
+
+### 0.7.0 - 2026-01-23
+* New: Dynamic Tags button above the SPE Message editor
+* New: Modal window displaying all 41 placeholders organized by category
+* New: Click-to-insert functionality for adding tags at cursor position
+* New: Real-time search to quickly find tags by name, description, or example
+* New: PRO extensibility hooks for adding custom buttons and tags
 
 ### 0.6.4 - 2026-01-02 - Initial Release
 * Complete product-based email customization system
