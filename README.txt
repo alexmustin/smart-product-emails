@@ -242,6 +242,7 @@ If you are having any issues, please post in the WordPress Plugin Support Forum.
 5. Use the search fields to find your SPE Message, then assign it to the Order Status email. Click the Title of your Message to assign it, then Update/Publish the Product to save your settings.
 6. Smart Email Message in the Customer email 
 7. Error Log system to diagnose issues
+8. Insert Dynamic Tags at cursor position
 
 == Changelog ==
 
