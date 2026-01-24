@@ -213,6 +213,11 @@ If you are having any issues, please post in the WordPress Plugin Support Forum.
 
 ## Changelog
 
+### 0.7.1 - 2026-01-23
+* New: Dynamic Tags documentation tab in SPE Settings page
+* New: Full reference guide with all 41 placeholders, examples, and best practices
+* Improved: Dynamic Tags modal now links to documentation page
+
 ### 0.7.0 - 2026-01-23
 * New: Dynamic Tags button above the SPE Message editor
 * New: Modal window displaying all 41 placeholders organized by category

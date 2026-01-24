@@ -168,7 +168,18 @@ class SmartProductEmails_Dynamic_Tags {
 				</div>
 
 				<div class="spe-modal-footer">
-					<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=smartproductemails&page=smartproductemails-settings#placeholders' ) ); ?>" target="_blank" class="spe-docs-link">
+					<?php
+					$docs_url = add_query_arg(
+						array(
+							'post_type' => 'smartproductemails',
+							'page'      => 'smartproductemails-settings',
+							'tab'       => 'placeholders',
+							'_wpnonce'  => wp_create_nonce( 'smartproductemails_admin_nonce' ),
+						),
+						admin_url( 'edit.php' )
+					) . '#placeholders';
+					?>
+					<a href="<?php echo esc_url( $docs_url ); ?>" target="_blank" class="spe-docs-link">
 						<span class="dashicons dashicons-external"></span>
 						<?php esc_html_e( 'View Full Documentation', 'smart-product-emails' ); ?>
 					</a>

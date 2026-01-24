@@ -150,17 +150,20 @@ class Smart_Product_Emails_For_WooCommerce_Admin_Settings {
 			?>
 			<h2 class="nav-tab-wrapper">
 				<a href="?post_type=smartproductemails&page=<?php echo esc_attr( $page ); ?>&tab=display_settings&_wpnonce=<?php echo esc_attr($nonce_url); ?>" class="nav-tab <?php echo 'display_settings' === $active_tab ? 'nav-tab-active' : ''; ?>"><?php esc_html_e( 'Display Settings', 'smart-product-emails' ); ?></a>
+				<a href="?post_type=smartproductemails&page=<?php echo esc_attr( $page ); ?>&tab=placeholders&_wpnonce=<?php echo esc_attr($nonce_url); ?>#placeholders" class="nav-tab <?php echo 'placeholders' === $active_tab ? 'nav-tab-active' : ''; ?>"><?php esc_html_e( 'Dynamic Tags', 'smart-product-emails' ); ?></a>
 			</h2>
 
+			<?php if ( 'display_settings' === $active_tab ) : ?>
 			<form method="post" action="options.php">
 				<?php
-				if ( 'display_settings' === $active_tab ) {
-					settings_fields( 'smartproductemails_settings_option_group' );
-					do_settings_sections( 'smartproductemails-settings-admin' );
-					submit_button();
-				}
+				settings_fields( 'smartproductemails_settings_option_group' );
+				do_settings_sections( 'smartproductemails-settings-admin' );
+				submit_button();
 				?>
 			</form>
+			<?php elseif ( 'placeholders' === $active_tab ) : ?>
+				<?php $this->render_placeholders_documentation(); ?>
+			<?php endif; ?>
 		</div>
 		<?php
 
@@ -430,6 +433,650 @@ class Smart_Product_Emails_For_WooCommerce_Admin_Settings {
 				<code>&lt;div style="height: 2px; background: linear-gradient(to right, #0c88d9, #9459dc); margin: 20px 0;"&gt;&lt;/div&gt;</code>
 			</div>
 		</details>
+		<?php
+	}
+
+	/**
+	 * Renders the Dynamic Tags / Placeholders documentation page
+	 */
+	public function render_placeholders_documentation() {
+		?>
+		<div id="placeholders" class="spe-placeholders-docs">
+			<div class="spe-docs-intro">
+				<h2><?php esc_html_e( 'Dynamic Tags Reference', 'smart-product-emails' ); ?></h2>
+				<p><?php esc_html_e( 'Use dynamic tags in your SPE Messages to personalize emails with real customer and order data. Simply type the tag (including curly braces) anywhere in your message content.', 'smart-product-emails' ); ?></p>
+				<div class="spe-docs-tip">
+					<span class="dashicons dashicons-lightbulb"></span>
+					<p><?php esc_html_e( 'Tip: Use the "Dynamic Tags" button above the editor when creating SPE Messages to quickly insert tags at your cursor position.', 'smart-product-emails' ); ?></p>
+				</div>
+			</div>
+
+			<!-- Site & Store -->
+			<div class="spe-docs-category">
+				<h3>
+					<span class="dashicons dashicons-store"></span>
+					<?php esc_html_e( 'Site & Store', 'smart-product-emails' ); ?>
+				</h3>
+				<table class="widefat spe-docs-table">
+					<thead>
+						<tr>
+							<th><?php esc_html_e( 'Tag', 'smart-product-emails' ); ?></th>
+							<th><?php esc_html_e( 'Description', 'smart-product-emails' ); ?></th>
+							<th><?php esc_html_e( 'Example Output', 'smart-product-emails' ); ?></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td><code>{site_title}</code></td>
+							<td><?php esc_html_e( 'Your website/store name', 'smart-product-emails' ); ?></td>
+							<td><em>My Awesome Store</em></td>
+						</tr>
+						<tr>
+							<td><code>{site_address}</code></td>
+							<td><?php esc_html_e( 'Your website domain', 'smart-product-emails' ); ?></td>
+							<td><em>mystore.com</em></td>
+						</tr>
+						<tr>
+							<td><code>{site_url}</code></td>
+							<td><?php esc_html_e( 'Full website URL', 'smart-product-emails' ); ?></td>
+							<td><em>https://mystore.com</em></td>
+						</tr>
+						<tr>
+							<td><code>{store_email}</code></td>
+							<td><?php esc_html_e( 'Store contact email', 'smart-product-emails' ); ?></td>
+							<td><em>hello@mystore.com</em></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+			<!-- Order Information -->
+			<div class="spe-docs-category">
+				<h3>
+					<span class="dashicons dashicons-clipboard"></span>
+					<?php esc_html_e( 'Order Information', 'smart-product-emails' ); ?>
+				</h3>
+				<table class="widefat spe-docs-table">
+					<thead>
+						<tr>
+							<th><?php esc_html_e( 'Tag', 'smart-product-emails' ); ?></th>
+							<th><?php esc_html_e( 'Description', 'smart-product-emails' ); ?></th>
+							<th><?php esc_html_e( 'Example Output', 'smart-product-emails' ); ?></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td><code>{order_number}</code></td>
+							<td><?php esc_html_e( 'Order number/ID', 'smart-product-emails' ); ?></td>
+							<td><em>12345</em></td>
+						</tr>
+						<tr>
+							<td><code>{order_id}</code></td>
+							<td><?php esc_html_e( 'Order ID (same as order_number)', 'smart-product-emails' ); ?></td>
+							<td><em>12345</em></td>
+						</tr>
+						<tr>
+							<td><code>{order_date}</code></td>
+							<td><?php esc_html_e( 'Date order was placed', 'smart-product-emails' ); ?></td>
+							<td><em>December 4, 2025</em></td>
+						</tr>
+						<tr>
+							<td><code>{order_time}</code></td>
+							<td><?php esc_html_e( 'Time order was placed', 'smart-product-emails' ); ?></td>
+							<td><em>2:30 PM</em></td>
+						</tr>
+						<tr>
+							<td><code>{order_status}</code></td>
+							<td><?php esc_html_e( 'Current order status', 'smart-product-emails' ); ?></td>
+							<td><em>Processing</em></td>
+						</tr>
+						<tr>
+							<td><code>{payment_method}</code></td>
+							<td><?php esc_html_e( 'How customer paid', 'smart-product-emails' ); ?></td>
+							<td><em>Credit Card</em></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+			<!-- Customer Information -->
+			<div class="spe-docs-category">
+				<h3>
+					<span class="dashicons dashicons-admin-users"></span>
+					<?php esc_html_e( 'Customer Information', 'smart-product-emails' ); ?>
+				</h3>
+				<table class="widefat spe-docs-table">
+					<thead>
+						<tr>
+							<th><?php esc_html_e( 'Tag', 'smart-product-emails' ); ?></th>
+							<th><?php esc_html_e( 'Description', 'smart-product-emails' ); ?></th>
+							<th><?php esc_html_e( 'Example Output', 'smart-product-emails' ); ?></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td><code>{customer_first_name}</code></td>
+							<td><?php esc_html_e( 'Customer\'s first name', 'smart-product-emails' ); ?></td>
+							<td><em>John</em></td>
+						</tr>
+						<tr>
+							<td><code>{customer_last_name}</code></td>
+							<td><?php esc_html_e( 'Customer\'s last name', 'smart-product-emails' ); ?></td>
+							<td><em>Doe</em></td>
+						</tr>
+						<tr>
+							<td><code>{customer_name}</code></td>
+							<td><?php esc_html_e( 'Full name', 'smart-product-emails' ); ?></td>
+							<td><em>John Doe</em></td>
+						</tr>
+						<tr>
+							<td><code>{customer_email}</code></td>
+							<td><?php esc_html_e( 'Customer\'s email address', 'smart-product-emails' ); ?></td>
+							<td><em>john@example.com</em></td>
+						</tr>
+						<tr>
+							<td><code>{customer_phone}</code></td>
+							<td><?php esc_html_e( 'Customer\'s phone number', 'smart-product-emails' ); ?></td>
+							<td><em>(555) 123-4567</em></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+			<!-- Billing Address -->
+			<div class="spe-docs-category">
+				<h3>
+					<span class="dashicons dashicons-location"></span>
+					<?php esc_html_e( 'Billing Address', 'smart-product-emails' ); ?>
+				</h3>
+				<table class="widefat spe-docs-table">
+					<thead>
+						<tr>
+							<th><?php esc_html_e( 'Tag', 'smart-product-emails' ); ?></th>
+							<th><?php esc_html_e( 'Description', 'smart-product-emails' ); ?></th>
+							<th><?php esc_html_e( 'Example Output', 'smart-product-emails' ); ?></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td><code>{billing_address}</code></td>
+							<td><?php esc_html_e( 'Complete formatted billing address', 'smart-product-emails' ); ?></td>
+							<td><em>123 Main St, New York, NY 10001</em></td>
+						</tr>
+						<tr>
+							<td><code>{billing_city}</code></td>
+							<td><?php esc_html_e( 'Billing city', 'smart-product-emails' ); ?></td>
+							<td><em>New York</em></td>
+						</tr>
+						<tr>
+							<td><code>{billing_state}</code></td>
+							<td><?php esc_html_e( 'Billing state/province', 'smart-product-emails' ); ?></td>
+							<td><em>NY</em></td>
+						</tr>
+						<tr>
+							<td><code>{billing_postcode}</code></td>
+							<td><?php esc_html_e( 'Billing ZIP/postal code', 'smart-product-emails' ); ?></td>
+							<td><em>10001</em></td>
+						</tr>
+						<tr>
+							<td><code>{billing_country}</code></td>
+							<td><?php esc_html_e( 'Billing country name', 'smart-product-emails' ); ?></td>
+							<td><em>United States</em></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+			<!-- Shipping Address -->
+			<div class="spe-docs-category">
+				<h3>
+					<span class="dashicons dashicons-car"></span>
+					<?php esc_html_e( 'Shipping Address', 'smart-product-emails' ); ?>
+				</h3>
+				<table class="widefat spe-docs-table">
+					<thead>
+						<tr>
+							<th><?php esc_html_e( 'Tag', 'smart-product-emails' ); ?></th>
+							<th><?php esc_html_e( 'Description', 'smart-product-emails' ); ?></th>
+							<th><?php esc_html_e( 'Example Output', 'smart-product-emails' ); ?></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td><code>{shipping_address}</code></td>
+							<td><?php esc_html_e( 'Complete formatted shipping address', 'smart-product-emails' ); ?></td>
+							<td><em>456 Oak Ave, Los Angeles, CA 90001</em></td>
+						</tr>
+						<tr>
+							<td><code>{shipping_city}</code></td>
+							<td><?php esc_html_e( 'Shipping city', 'smart-product-emails' ); ?></td>
+							<td><em>Los Angeles</em></td>
+						</tr>
+						<tr>
+							<td><code>{shipping_state}</code></td>
+							<td><?php esc_html_e( 'Shipping state/province', 'smart-product-emails' ); ?></td>
+							<td><em>CA</em></td>
+						</tr>
+						<tr>
+							<td><code>{shipping_postcode}</code></td>
+							<td><?php esc_html_e( 'Shipping ZIP/postal code', 'smart-product-emails' ); ?></td>
+							<td><em>90001</em></td>
+						</tr>
+						<tr>
+							<td><code>{shipping_country}</code></td>
+							<td><?php esc_html_e( 'Shipping country name', 'smart-product-emails' ); ?></td>
+							<td><em>United States</em></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+			<!-- Order Totals -->
+			<div class="spe-docs-category">
+				<h3>
+					<span class="dashicons dashicons-money-alt"></span>
+					<?php esc_html_e( 'Order Totals', 'smart-product-emails' ); ?>
+				</h3>
+				<p class="spe-docs-note"><?php esc_html_e( 'All monetary values are automatically formatted with the order\'s currency symbol.', 'smart-product-emails' ); ?></p>
+				<table class="widefat spe-docs-table">
+					<thead>
+						<tr>
+							<th><?php esc_html_e( 'Tag', 'smart-product-emails' ); ?></th>
+							<th><?php esc_html_e( 'Description', 'smart-product-emails' ); ?></th>
+							<th><?php esc_html_e( 'Example Output', 'smart-product-emails' ); ?></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td><code>{order_subtotal}</code></td>
+							<td><?php esc_html_e( 'Order subtotal (before tax/shipping)', 'smart-product-emails' ); ?></td>
+							<td><em>$85.00</em></td>
+						</tr>
+						<tr>
+							<td><code>{order_total}</code></td>
+							<td><?php esc_html_e( 'Final order total', 'smart-product-emails' ); ?></td>
+							<td><em>$99.99</em></td>
+						</tr>
+						<tr>
+							<td><code>{order_tax}</code></td>
+							<td><?php esc_html_e( 'Total tax amount', 'smart-product-emails' ); ?></td>
+							<td><em>$7.50</em></td>
+						</tr>
+						<tr>
+							<td><code>{order_shipping}</code></td>
+							<td><?php esc_html_e( 'Shipping cost', 'smart-product-emails' ); ?></td>
+							<td><em>$7.49</em></td>
+						</tr>
+						<tr>
+							<td><code>{order_discount}</code></td>
+							<td><?php esc_html_e( 'Total discount amount', 'smart-product-emails' ); ?></td>
+							<td><em>$10.00</em></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+			<!-- Product Information -->
+			<div class="spe-docs-category">
+				<h3>
+					<span class="dashicons dashicons-products"></span>
+					<?php esc_html_e( 'Product Information', 'smart-product-emails' ); ?>
+				</h3>
+				<p class="spe-docs-note"><?php esc_html_e( 'Product tags display information about the specific product that triggered the SPE Message. Price values are automatically formatted with currency.', 'smart-product-emails' ); ?></p>
+				<table class="widefat spe-docs-table">
+					<thead>
+						<tr>
+							<th><?php esc_html_e( 'Tag', 'smart-product-emails' ); ?></th>
+							<th><?php esc_html_e( 'Description', 'smart-product-emails' ); ?></th>
+							<th><?php esc_html_e( 'Example Output', 'smart-product-emails' ); ?></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td><code>{product_id}</code></td>
+							<td><?php esc_html_e( 'Product ID number', 'smart-product-emails' ); ?></td>
+							<td><em>1234</em></td>
+						</tr>
+						<tr>
+							<td><code>{product_name}</code></td>
+							<td><?php esc_html_e( 'Product name/title', 'smart-product-emails' ); ?></td>
+							<td><em>Premium Wireless Headphones</em></td>
+						</tr>
+						<tr>
+							<td><code>{product_sku}</code></td>
+							<td><?php esc_html_e( 'Product SKU code', 'smart-product-emails' ); ?></td>
+							<td><em>WH-2000</em></td>
+						</tr>
+						<tr>
+							<td><code>{product_url}</code></td>
+							<td><?php esc_html_e( 'Product page URL', 'smart-product-emails' ); ?></td>
+							<td><em>https://mystore.com/product/headphones</em></td>
+						</tr>
+						<tr>
+							<td><code>{product_price}</code></td>
+							<td><?php esc_html_e( 'Current product price', 'smart-product-emails' ); ?></td>
+							<td><em>$79.99</em></td>
+						</tr>
+						<tr>
+							<td><code>{product_regular_price}</code></td>
+							<td><?php esc_html_e( 'Regular (non-sale) price', 'smart-product-emails' ); ?></td>
+							<td><em>$99.99</em></td>
+						</tr>
+						<tr>
+							<td><code>{product_sale_price}</code></td>
+							<td><?php esc_html_e( 'Sale price (if on sale)', 'smart-product-emails' ); ?></td>
+							<td><em>$79.99</em></td>
+						</tr>
+						<tr>
+							<td><code>{product_short_description}</code></td>
+							<td><?php esc_html_e( 'Product short description', 'smart-product-emails' ); ?></td>
+							<td><em>Premium sound quality...</em></td>
+						</tr>
+						<tr>
+							<td><code>{product_description}</code></td>
+							<td><?php esc_html_e( 'Full product description', 'smart-product-emails' ); ?></td>
+							<td><em>Experience crystal-clear audio...</em></td>
+						</tr>
+						<tr>
+							<td><code>{product_categories}</code></td>
+							<td><?php esc_html_e( 'Product categories (comma-separated)', 'smart-product-emails' ); ?></td>
+							<td><em>Electronics, Audio, Headphones</em></td>
+						</tr>
+						<tr>
+							<td><code>{product_tags}</code></td>
+							<td><?php esc_html_e( 'Product tags (comma-separated)', 'smart-product-emails' ); ?></td>
+							<td><em>wireless, bluetooth, premium</em></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+			<!-- Usage Examples -->
+			<div class="spe-docs-category spe-docs-examples">
+				<h3>
+					<span class="dashicons dashicons-editor-code"></span>
+					<?php esc_html_e( 'Usage Examples', 'smart-product-emails' ); ?>
+				</h3>
+
+				<div class="spe-example-box">
+					<h4><?php esc_html_e( 'Personalized Greeting', 'smart-product-emails' ); ?></h4>
+					<div class="spe-example-code">
+						<code>Hi {customer_first_name},
+
+Thank you for your order #{order_number}!
+Your order total of {order_total} will be processed shortly.
+
+Best regards,
+{site_title}</code>
+					</div>
+				</div>
+
+				<div class="spe-example-box">
+					<h4><?php esc_html_e( 'Product-Specific Message', 'smart-product-emails' ); ?></h4>
+					<div class="spe-example-code">
+						<code>Thank you for purchasing {product_name}!
+
+Here are some helpful resources to get started:
+- Setup Guide: https://example.com/setup
+- Video Tutorial: https://example.com/video
+
+Need help? Reply to this email or contact us at {store_email}</code>
+					</div>
+				</div>
+
+				<div class="spe-example-box">
+					<h4><?php esc_html_e( 'Shipping Information', 'smart-product-emails' ); ?></h4>
+					<div class="spe-example-code">
+						<code>Your order will be shipped to:
+
+{shipping_address}
+
+Expected delivery: 3-5 business days after processing.</code>
+					</div>
+				</div>
+			</div>
+
+			<!-- Tips & Best Practices -->
+			<div class="spe-docs-category spe-docs-tips">
+				<h3>
+					<span class="dashicons dashicons-info"></span>
+					<?php esc_html_e( 'Tips & Best Practices', 'smart-product-emails' ); ?>
+				</h3>
+				<div class="spe-tips-grid">
+					<div class="spe-tip-do">
+						<h4><?php esc_html_e( 'Do', 'smart-product-emails' ); ?></h4>
+						<ul>
+							<li><?php esc_html_e( 'Use customer first names for a personal touch', 'smart-product-emails' ); ?></li>
+							<li><?php esc_html_e( 'Include order numbers for easy reference', 'smart-product-emails' ); ?></li>
+							<li><?php esc_html_e( 'Test with real orders before going live', 'smart-product-emails' ); ?></li>
+							<li><?php esc_html_e( 'Combine multiple tags for rich, dynamic content', 'smart-product-emails' ); ?></li>
+						</ul>
+					</div>
+					<div class="spe-tip-dont">
+						<h4><?php esc_html_e( 'Don\'t', 'smart-product-emails' ); ?></h4>
+						<ul>
+							<li><?php esc_html_e( 'Rely solely on tags - add context around them', 'smart-product-emails' ); ?></li>
+							<li><?php esc_html_e( 'Assume all data will always be present (some fields may be empty)', 'smart-product-emails' ); ?></li>
+							<li><?php esc_html_e( 'Use tags in product descriptions (they only work in SPE Messages)', 'smart-product-emails' ); ?></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+
+		</div>
+
+		<style>
+		.spe-placeholders-docs {
+			max-width: 900px;
+			margin-top: 20px;
+		}
+
+		.spe-docs-intro {
+			background: #fff;
+			padding: 20px;
+			border: 1px solid #c3c4c7;
+			border-radius: 4px;
+			margin-bottom: 20px;
+		}
+
+		.spe-docs-intro h2 {
+			margin-top: 0;
+			color: #1d2327;
+		}
+
+		.spe-docs-tip {
+			display: flex;
+			align-items: flex-start;
+			gap: 10px;
+			background: #f0f6fc;
+			border-left: 4px solid #2271b1;
+			padding: 12px 16px;
+			margin-top: 15px;
+			border-radius: 0 4px 4px 0;
+		}
+
+		.spe-docs-tip .dashicons {
+			color: #2271b1;
+			margin-top: 2px;
+		}
+
+		.spe-docs-tip p {
+			margin: 0;
+			color: #1d2327;
+		}
+
+		.spe-docs-category {
+			background: #fff;
+			border: 1px solid #c3c4c7;
+			border-radius: 4px;
+			margin-bottom: 20px;
+			overflow: hidden;
+		}
+
+		.spe-docs-category h3 {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			margin: 0;
+			padding: 15px 20px;
+			background: #f6f7f7;
+			border-bottom: 1px solid #c3c4c7;
+			font-size: 14px;
+		}
+
+		.spe-docs-category h3 .dashicons {
+			color: #9459DC;
+		}
+
+		.spe-docs-note {
+			margin: 0;
+			padding: 10px 20px;
+			background: #fffbeb;
+			border-bottom: 1px solid #f0e6c8;
+			font-size: 13px;
+			color: #6b5900;
+		}
+
+		.spe-docs-table {
+			border: none;
+			border-radius: 0;
+			box-shadow: none;
+		}
+
+		.spe-docs-table thead th {
+			background: #f9f9f9;
+			font-weight: 600;
+			padding: 12px 20px;
+		}
+
+		.spe-docs-table tbody td {
+			padding: 10px 20px;
+			vertical-align: middle;
+		}
+
+		.spe-docs-table code {
+			background: #f0e8fa;
+			color: #9459DC;
+			padding: 4px 8px;
+			border-radius: 3px;
+			font-size: 12px;
+			font-weight: 500;
+		}
+
+		.spe-docs-table em {
+			color: #646970;
+			font-style: normal;
+		}
+
+		/* Examples Section */
+		.spe-docs-examples {
+			padding: 20px;
+		}
+
+		.spe-docs-examples h3 {
+			border-bottom: none;
+			padding: 0 0 15px 0;
+			background: transparent;
+		}
+
+		.spe-example-box {
+			background: #f9f9f9;
+			border: 1px solid #e0e0e0;
+			border-radius: 4px;
+			margin-bottom: 15px;
+			overflow: hidden;
+		}
+
+		.spe-example-box:last-child {
+			margin-bottom: 0;
+		}
+
+		.spe-example-box h4 {
+			margin: 0;
+			padding: 10px 15px;
+			background: #f0f0f1;
+			border-bottom: 1px solid #e0e0e0;
+			font-size: 13px;
+			font-weight: 600;
+		}
+
+		.spe-example-code {
+			padding: 15px;
+		}
+
+		.spe-example-code code {
+			display: block;
+			background: #fff;
+			border: 1px solid #e0e0e0;
+			padding: 15px;
+			border-radius: 4px;
+			font-size: 12px;
+			line-height: 1.6;
+			white-space: pre-wrap;
+			color: #1d2327;
+		}
+
+		/* Tips Section */
+		.spe-docs-tips {
+			padding: 20px;
+		}
+
+		.spe-docs-tips h3 {
+			border-bottom: none;
+			padding: 0 0 15px 0;
+			background: transparent;
+		}
+
+		.spe-tips-grid {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: 20px;
+		}
+
+		.spe-tip-do,
+		.spe-tip-dont {
+			padding: 15px;
+			border-radius: 4px;
+		}
+
+		.spe-tip-do {
+			background: #edfaef;
+			border: 1px solid #46b450;
+		}
+
+		.spe-tip-do h4 {
+			color: #1e7e34;
+			margin: 0 0 10px 0;
+		}
+
+		.spe-tip-dont {
+			background: #fef1f1;
+			border: 1px solid #dc3232;
+		}
+
+		.spe-tip-dont h4 {
+			color: #a00;
+			margin: 0 0 10px 0;
+		}
+
+		.spe-tip-do ul,
+		.spe-tip-dont ul {
+			margin: 0;
+			padding-left: 20px;
+		}
+
+		.spe-tip-do li,
+		.spe-tip-dont li {
+			margin-bottom: 6px;
+			font-size: 13px;
+		}
+
+		@media screen and (max-width: 782px) {
+			.spe-tips-grid {
+				grid-template-columns: 1fr;
+			}
+		}
+		</style>
 		<?php
 	}
 
