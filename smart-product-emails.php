@@ -3,7 +3,7 @@
  * Plugin Name: Smart Product Emails
  * Plugin URI: https://smartproductemails.com/
  * Description: Transform WooCommerce emails into a powerful customer communication platform with dynamic content, segmentation, A/B testing, and analytics.
- * Version: 0.6.4
+ * Version: 0.7.0
  * Author: Alex Mustin
  * Author URI: https://alexmustin.com
  * Text Domain: smart-product-emails
@@ -33,7 +33,7 @@ add_action('before_woocommerce_init', function() {
 });
 
 // Define Globals.
-define( 'SMARTPRODUCTEMAILS_PLUGIN_VERSION', '0.6.4' );
+define( 'SMARTPRODUCTEMAILS_PLUGIN_VERSION', '0.7.0' );
 define( 'SMARTPRODUCTEMAILS_PLUGIN_FILE', __FILE__ );
 define( 'SMARTPRODUCTEMAILS_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'SMARTPRODUCTEMAILS_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
@@ -128,6 +128,9 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/class-spe-logger.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/class-spe-error-handler.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/class-spe-email-logger.php';
 require_once plugin_dir_path( __FILE__ ) . 'admin/class-spe-error-log-admin.php';
+
+// Load Dynamic Tags (editor button/modal)
+require_once plugin_dir_path( __FILE__ ) . 'admin/class-spe-dynamic-tags.php';
 
 // Initialize error handlers
 new SmartProductEmails_Error_Handler();
