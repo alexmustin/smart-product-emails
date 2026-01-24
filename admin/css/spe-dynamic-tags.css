@@ -32,6 +32,7 @@
 	width: 16px;
 	height: 16px;
 	line-height: 16px;
+	align-items: center;
 }
 
 #spe-dynamic-tags-btn {
@@ -39,6 +40,7 @@
 	border-color: #7B4FBF;
 	color: #fff;
 	box-shadow: 0 1px 3px rgba(148, 89, 220, 0.3);
+	display: inline-flex;
 }
 
 #spe-dynamic-tags-btn:hover {
