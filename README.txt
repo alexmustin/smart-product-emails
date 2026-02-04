@@ -140,7 +140,7 @@ The free version is powerful on its own, but if you need advanced features, chec
 - **Error Log & Debugging** -- Built-in error logging system captures PHP errors, AJAX failures, and email sending issues. View, filter, search, and export logs from the admin panel to quickly diagnose and resolve issues.
 
 **The PRO Version Adds:**
-- **Additional Order Status Support** -- Customize customer emails for **On-Hold**, **Completed**, and **Refunded** order statuses to improve communication throughout the entire order lifecycle.
+- **Additional Order Status Support** -- Customize customer emails for **On-Hold**, **Completed**, and **Refunded** order statuses to improve communication throughout the entire order lifecycle. Plus, full integration with third-party custom order status plugins like: Custom Order Status for WooCommerce, Bright Plugins Custom Order Status for WooCommerce, YITH WooCommerce Custom Order Status, and others.
 - **Visual Email Customizer** -- Design perfect customer emails with an intuitive visual interface. See exactly how your emails will look using real WooCommerce templates, assign multiple messages per product to different template locations (header, before order table, after order table, etc.), and control message hierarchy with simple up/down arrows. Includes live preview showing your messages positioned exactly where they'll appear in customer emails.
 - **Advanced Conditional Logic** -- Display or hide messages based on complex rules such as cart value, customer type, product combinations, and more.
 - **Send Test Emails** -- Send test emails to yourself or your team to verify formatting, links, and dynamic placeholders before going live.
