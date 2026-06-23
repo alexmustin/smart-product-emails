@@ -4,10 +4,10 @@ Author: alexmustin
 Author URI: https://alexmustin.com/
 Tags: woocommerce emails, custom emails, product emails, per product, targeted emails
 Requires at least: 6.8
-Tested up to: 6.9
+Tested up to: 7.0
 Requires PHP: 8.2
-Stable tag: 0.7.1
-Version: 0.7.1
+Stable tag: 0.7.2
+Version: 0.7.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -245,6 +245,10 @@ If you are having any issues, please post in the WordPress Plugin Support Forum.
 8. Insert Dynamic Tags at cursor position
 
 == Changelog ==
+
+### 0.7.2 - 2026-06-23
+* Confirmed compatibility with WordPress 7.0
+* Updated "Tested up to" to WordPress 7.0
 
 ### 0.7.1 - 2026-01-23
 * New: Dynamic Tags documentation tab in SPE Settings page
