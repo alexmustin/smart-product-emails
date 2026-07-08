@@ -34,6 +34,8 @@ Include everything in the one email customers actually want to open: their order
 
 **Future-Proof Technology** — Fully compatible with WooCommerce High-Performance Order Storage (HPOS) for optimal performance and reliability.
 
+**Import from Woo Custom Emails** — Migrating from the old plugin? A built-in wizard finds and imports your existing Custom Emails messages and product assignments automatically — no manual re-entry required.
+
 ### How It Works
 
 1. **Create a Message** – Write your custom content using WordPress's Classic Editor or HTML
@@ -102,6 +104,18 @@ Include everything in the one email customers actually want to open: their order
 
 **Completely Free Forever** — Create unlimited messages, assign them to unlimited products, and send unlimited emails. The free version has everything you need to get started.
 
+### Coming From Woo Custom Emails?
+
+If you previously used **Woo Custom Emails** (the plugin this one replaced), you don't have to start over. Smart Product Emails includes a built-in **Import Wizard** that finds your old Custom Emails messages and product assignments — even if Woo Custom Emails isn't active anymore — and migrates them in for you automatically.
+
+- **No file exports, no manual re-creation** — the wizard reads directly from your site's database and rebuilds everything as native Smart Product Emails messages.
+- **Nothing is guessed** — a full preview shows exactly what will be imported, including anything that conflicts with settings you've already configured, before anything is written.
+- **Safe to run more than once** — already-imported items are automatically skipped on a re-run, so you can import new products as you add them without creating duplicates.
+- **Survives interruptions** — if your connection drops or the browser closes mid-import, reopening the wizard picks up right where it left off.
+- **Nothing is deleted** — your original Woo Custom Emails data is left completely untouched; the import is entirely additive.
+
+Find it under **Smart Product Emails → Import**.
+
 ---
 
 ### Want More? Upgrade to PRO
@@ -116,9 +130,11 @@ The free version is powerful on its own, but if you need advanced features, chec
 - **🛡️ Duplicate Prevention** -- Automatically prevents the same message from appearing multiple times in a single email, ensuring clean and professional communication.
 - **🔍 Error Log & Debugging** -- Built-in error logging system captures PHP errors, AJAX failures, and email sending issues. View, filter, search, and export logs from the admin panel to quickly diagnose and resolve issues.
 - **⚡ HPOS Compatibility** -- Fully compatible with WooCommerce High-Performance Order Storage (HPOS) for reliable performance and future-proof data handling.
+- **📥 Import from Woo Custom Emails** -- Automatically migrate your existing Custom Emails messages and product assignments from the discontinued Woo Custom Emails plugin — no manual re-entry, no file exports.
 
 **⭐ The PRO Version Adds:**
 - **📦 Additional Order Status Support** -- Customize customer emails for **On-Hold**, **Completed**, and **Refunded** order statuses to improve communication throughout the entire order lifecycle. Plus, full integration with third-party custom order status plugins like: Custom Order Status for WooCommerce, Bright Plugins Custom Order Status for WooCommerce, YITH WooCommerce Custom Order Status, and others.
+- **⚡ Instant Activation for Imported Content** -- On-Hold and Completed messages imported from Woo Custom Emails are ready to go the moment you activate PRO — no need to re-run the import.
 - **✨ Visual Email Customizer** -- Design perfect customer emails with an intuitive visual interface. See exactly how your emails will look using real WooCommerce templates, assign multiple messages per product to different template locations (header, before order table, after order table, etc.), and control message hierarchy with simple up/down arrows. Includes live preview showing your messages positioned exactly where they'll appear in customer emails.
 - **⚙️ Advanced Conditional Logic** -- Display or hide messages based on complex rules such as cart value, customer type, product combinations, and more.
 - **🧪 Send Test Emails** -- Send test emails to yourself or your team to verify formatting, links, and dynamic placeholders before going live.
@@ -208,10 +224,23 @@ Have you found something wrong with the plugin? Thought of a helpful feature to 
 ### Haven’t I seen this plugin before?
 Yes! This plugin was previously released under the name *“Woo Custom Emails Per Product.”* The original version was removed due to copyright concerns around its name. The new version, now called **Smart Product Emails**, has been rebuilt with improved functionality, better performance, and enhanced features, making it more powerful than ever!
 
+**Already have Custom Emails set up in the old plugin?** You don't need to recreate anything by hand. Use the built-in **Import Wizard** (**Smart Product Emails → Import**) to automatically bring over your existing messages and product assignments — see "Coming From Woo Custom Emails?" above for details.
+
 ### Something Else?
 If you are having any issues, please post in the WordPress Plugin Support Forum.
 
 ## Changelog
+
+### 0.8.0 - 2026-07-07
+* New: Import from Woo Custom Emails - a guided wizard that scans for leftover Woo Custom Emails data on your site and migrates it into Smart Product Emails, no file export/import needed
+* New: Import is idempotent and resumable - safe to re-run, and safely resumes if a batch is interrupted by a dropped connection or closed browser tab
+* New: Conflict detection shows exactly which products already have their own Smart Product Emails configuration, with your choice to overwrite or leave them as-is
+* New: On-Hold and Completed content is imported immediately even without PRO, so it's ready to activate the instant you upgrade
+* Fixed: Icon/text vertical alignment on the Dynamic Tags button
+
+### 0.7.2 - 2026-06-23
+* Confirmed compatibility with WordPress 7.0
+* Updated "Tested up to" to WordPress 7.0
 
 ### 0.7.1 - 2026-01-23
 * New: Dynamic Tags documentation tab in SPE Settings page
