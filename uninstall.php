@@ -45,6 +45,10 @@ function smartproductemails_uninstall_cleanup() {
 	// 2. Delete plugin settings option
 	delete_option( 'SmartProductEmails_settings_name' );
 
+	// 2a. Delete Import from Woo Custom Emails options
+	delete_option( 'smartproductemails_import_last_run' );
+	delete_option( 'smartproductemails_import_job' );
+
 	// 3. Delete all product meta data created by the plugin
 	// Current meta keys used by the plugin
 	$meta_keys = array(
@@ -57,6 +61,20 @@ function smartproductemails_uninstall_cleanup() {
 		'location',
 		'custom_content',
 		'spemail_id',
+		// Import from Woo Custom Emails - internal tracking meta
+		'smartproductemails_message_id_onhold',
+		'smartproductemails_message_id_completed',
+		'location_onhold',
+		'location_completed',
+		'_spe_import_status_processing',
+		'_spe_import_status_onhold',
+		'_spe_import_status_completed',
+		'_spe_import_conflict_backup_processing',
+		'_spe_import_conflict_backup_onhold',
+		'_spe_import_conflict_backup_completed',
+		'_spe_imported_legacy_content_post',
+		'_spe_imported_to',
+		'_spe_imported_from_wce',
 	);
 
 	foreach ( $meta_keys as $meta_key ) {

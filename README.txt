@@ -6,8 +6,8 @@ Tags: woocommerce emails, custom emails, product emails, per product, targeted e
 Requires at least: 6.8
 Tested up to: 7.0
 Requires PHP: 8.2
-Stable tag: 0.7.2
-Version: 0.7.2
+Stable tag: 0.8.0
+Version: 0.8.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -245,6 +245,13 @@ If you are having any issues, please post in the WordPress Plugin Support Forum.
 8. Insert Dynamic Tags at cursor position
 
 == Changelog ==
+
+### 0.8.0 - 2026-07-07
+* New: Import from Woo Custom Emails - a guided wizard that scans for leftover Woo Custom Emails data on your site and migrates it into Smart Product Emails, no file export/import needed
+* New: Import is idempotent and resumable - safe to re-run, and safely resumes if a batch is interrupted by a dropped connection or closed browser tab
+* New: Conflict detection shows exactly which products already have their own Smart Product Emails configuration, with your choice to overwrite or leave them as-is
+* New: On-Hold and Completed content is imported immediately even without PRO, so it's ready to activate the instant you upgrade
+* Fixed: Icon/text vertical alignment on the Dynamic Tags button
 
 ### 0.7.2 - 2026-06-23
 * Confirmed compatibility with WordPress 7.0

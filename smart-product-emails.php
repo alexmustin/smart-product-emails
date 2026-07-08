@@ -3,7 +3,7 @@
  * Plugin Name: Smart Product Emails
  * Plugin URI: https://smartproductemails.com/
  * Description: Transform WooCommerce emails into a powerful customer communication platform with dynamic content, segmentation, A/B testing, and analytics.
- * Version: 0.7.2
+ * Version: 0.8.0
  * Author: Alex Mustin
  * Author URI: https://alexmustin.com
  * Text Domain: smart-product-emails
@@ -33,7 +33,7 @@ add_action('before_woocommerce_init', function() {
 });
 
 // Define Globals.
-define( 'SMARTPRODUCTEMAILS_PLUGIN_VERSION', '0.7.2' );
+define( 'SMARTPRODUCTEMAILS_PLUGIN_VERSION', '0.8.0' );
 define( 'SMARTPRODUCTEMAILS_PLUGIN_FILE', __FILE__ );
 define( 'SMARTPRODUCTEMAILS_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'SMARTPRODUCTEMAILS_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
@@ -132,10 +132,18 @@ require_once plugin_dir_path( __FILE__ ) . 'admin/class-spe-error-log-admin.php'
 // Load Dynamic Tags (editor button/modal)
 require_once plugin_dir_path( __FILE__ ) . 'admin/class-spe-dynamic-tags.php';
 
+// Load Import from Woo Custom Emails classes
+require_once plugin_dir_path( __FILE__ ) . 'includes/class-spe-import-tracker.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/class-spe-import-scanner.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/class-spe-import-job.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/class-spe-import-engine.php';
+require_once plugin_dir_path( __FILE__ ) . 'admin/class-spe-import-admin.php';
+
 // Initialize error handlers
 new SmartProductEmails_Error_Handler();
 new SmartProductEmails_Email_Logger();
 new SmartProductEmails_Error_Log_Admin();
+new SmartProductEmails_Import_Admin();
 
 /**
  * Runs main plugin functions.
